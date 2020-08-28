@@ -3,16 +3,19 @@
 class GameEngine {
     constructor() {
         this.entities = [];
-        this.showOutlines = false;
         this.ctx = null;
-        this.click = null;
-        this.mouse = null;
-        this.wheel = null;
         this.surfaceWidth = null;
         this.surfaceHeight = null;
+
+        this.left = null;
+        this.right = null;
+        this.up = null;
+        this.down = null;
+        this.A = null;
+        this.B = null;
     };
 
-    init(ctx) {
+    init(ctx) { // called after page has loaded
         this.ctx = ctx;
         this.surfaceWidth = this.ctx.canvas.width;
         this.surfaceHeight = this.ctx.canvas.height;
@@ -31,34 +34,60 @@ class GameEngine {
     startInput() {
         var that = this;
 
-        var getXandY = function (e) {
-            var x = e.clientX - that.ctx.canvas.getBoundingClientRect().left;
-            var y = e.clientY - that.ctx.canvas.getBoundingClientRect().top;
-
-            return { x: x, y: y };
-        }
-
-        this.ctx.canvas.addEventListener("mousemove", function (e) {
-            //console.log(getXandY(e));
-            that.mouse = getXandY(e);
+        this.ctx.canvas.addEventListener("keydown", function (e) {
+            switch (e.code) {
+                case "ArrowLeft":
+                case "KeyA":
+                    this.left = true;
+                    break;
+                case "ArrowRight":
+                case "KeyD":
+                    this.right = true;
+                    break;
+                case "ArrowUp":
+                case "KeyW":
+                    this.up = true;
+                    break;
+                case "ArrowDown":
+                case "KeyS":
+                    this.up = true;
+                    break;
+                case "AltLeft":
+                case "AltRight":
+                    this.B = true;
+                    break;
+                case "Space":
+                    this.A = true;
+                    break;
+            }
         }, false);
 
-        this.ctx.canvas.addEventListener("click", function (e) {
-            //console.log(getXandY(e));
-            that.click = getXandY(e);
-        }, false);
-
-        this.ctx.canvas.addEventListener("wheel", function (e) {
-            //console.log(getXandY(e));
-            that.wheel = e;
-            //       console.log(e.wheelDelta);
-            e.preventDefault();
-        }, false);
-
-        this.ctx.canvas.addEventListener("contextmenu", function (e) {
-            //console.log(getXandY(e));
-            that.rightclick = getXandY(e);
-            e.preventDefault();
+        this.ctx.canvas.addEventListener("keyup", function (e) {
+            switch (e.code) {
+                case "ArrowLeft":
+                case "KeyA":
+                    this.left = false;
+                    break;
+                case "ArrowRight":
+                case "KeyD":
+                    this.right = false;
+                    break;
+                case "ArrowUp":
+                case "KeyW":
+                    this.up = false;
+                    break;
+                case "ArrowDown":
+                case "KeyS":
+                    this.up = false;
+                    break;
+                case "AltLeft":
+                case "AltRight":
+                    this.B = false;
+                    break;
+                case "Space":
+                    this.A = false;
+                    break;
+            }
         }, false);
     };
 
