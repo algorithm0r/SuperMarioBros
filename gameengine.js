@@ -38,26 +38,26 @@ class GameEngine {
             switch (e.code) {
                 case "ArrowLeft":
                 case "KeyA":
-                    this.left = true;
+                    that.left = true;
                     break;
                 case "ArrowRight":
                 case "KeyD":
-                    this.right = true;
+                    that.right = true;
                     break;
                 case "ArrowUp":
                 case "KeyW":
-                    this.up = true;
+                    that.up = true;
                     break;
                 case "ArrowDown":
                 case "KeyS":
-                    this.up = true;
+                    that.up = true;
                     break;
                 case "AltLeft":
                 case "AltRight":
-                    this.B = true;
+                    that.B = true;
                     break;
                 case "Space":
-                    this.A = true;
+                    that.A = true;
                     break;
             }
         }, false);
@@ -66,26 +66,26 @@ class GameEngine {
             switch (e.code) {
                 case "ArrowLeft":
                 case "KeyA":
-                    this.left = false;
+                    that.left = false;
                     break;
                 case "ArrowRight":
                 case "KeyD":
-                    this.right = false;
+                    that.right = false;
                     break;
                 case "ArrowUp":
                 case "KeyW":
-                    this.up = false;
+                    that.up = false;
                     break;
                 case "ArrowDown":
                 case "KeyS":
-                    this.up = false;
+                    that.up = false;
                     break;
                 case "AltLeft":
                 case "AltRight":
-                    this.B = false;
+                    that.B = false;
                     break;
                 case "Space":
-                    this.A = false;
+                    that.A = false;
                     break;
             }
         }, false);
