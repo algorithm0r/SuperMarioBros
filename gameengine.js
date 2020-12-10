@@ -52,11 +52,10 @@ class GameEngine {
                 case "KeyS":
                     that.up = true;
                     break;
-                case "AltLeft":
-                case "AltRight":
+                case "KeyZ":
                     that.B = true;
                     break;
-                case "Space":
+                case "KeyX":
                     that.A = true;
                     break;
             }
@@ -80,11 +79,10 @@ class GameEngine {
                 case "KeyS":
                     that.up = false;
                     break;
-                case "AltLeft":
-                case "AltRight":
+                case "KeyZ":
                     that.B = false;
                     break;
-                case "Space":
+                case "KeyX":
                     that.A = false;
                     break;
             }

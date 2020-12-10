@@ -3,20 +3,34 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Game Project Title Goes Here</title>
-
+    <title>Super Mario Brothers</title>
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Press+Start+2P">
+    <style>
+        body {
+            font-family: 'Press Start 2P', serif;
+            font-size: 24px;
+        }
+    </style>
     <script type="text/javascript" src="./assetmanager.js"></script>
     <script type="text/javascript" src="./timer.js"></script>
     <script type="text/javascript" src="./gameengine.js"></script>
     <script type="text/javascript" src="./animator.js"></script>
     <script type="text/javascript" src="./mario.js"></script>
     <script type="text/javascript" src="./bricks.js"></script>
+    <script type="text/javascript" src="./enemies.js"></script>
     <script type="text/javascript" src="./background.js"></script>
     <script type="text/javascript" src="./sceneManager.js"></script>
     <script type="text/javascript" src="./util.js"></script>
+    <script type="text/javascript" src="./boundingbox.js"></script>
     <script type="text/javascript" src="./main.js"></script>
 </head>
 <body>
-    <canvas id="gameWorld" width="1200" height="800" style="background: #049cd8;" tabindex="1"></canvas>
+    <canvas id="gameWorld" width="768" height="768" style="background: #049cd8;" tabindex="1"></canvas>
+    <br />
+    <div>
+        <br />
+        Super Mario Brothers
+    </div>
 </body>
 </html>

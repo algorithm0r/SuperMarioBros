@@ -2,6 +2,8 @@ class Mario {
     constructor(game, x, y, luigi) {
         Object.assign(this, { game, x, y });
 
+        this.game.mario = this;
+
         // spritesheet
         this.spritesheet = ASSET_MANAGER.getAsset("./sprites/mario.png");
         if (luigi) this.spritesheet = ASSET_MANAGER.getAsset("./sprites/luigi.png");
@@ -11,8 +13,10 @@ class Mario {
         this.facing = 0; // 0 = right, 1 = left
         this.state = 0; // 0 = idle, 1 = walking, 2 = running, 3 = skidding, 4 = jumping/falling, 
 
-        this.velocityX = 0;
-        this.velocityY = 0;
+        this.velocity = { x: 0, y: 0 };
+        this.fallAcc = 562.5;
+
+        this.updateBB();
 
         this.loadAnimations(this.spritesheet);
     };
@@ -121,84 +125,158 @@ class Mario {
         this.duckAnim[2][1] = new Animator(spritesheet, 0, 118, 16, 32, 1, 0.33, 14, false, true);
     };
 
-    update() {
+    updateBB() {
+        if (this.size === 0 || this.size === 3) {
+            this.BB = new BoundingBox(this.x, this.y, PARAMS.BLOCKWIDTH, PARAMS.BLOCKWIDTH);
+        }
+        else {
+            this.BB = new BoundingBox(this.x, this.y, PARAMS.BLOCKWIDTH, PARAMS.BLOCKWIDTH * 2);
+        }
+    };
 
-        const speedFactor = 2 * PARAMS.SCALE;
+    update() {
 
         const TICK = this.game.clockTick;
 
+        // I used this page to approximate my constants
+        // https://web.archive.org/web/20130807122227/http://i276.photobucket.com/albums/kk21/jdaster64/smb_playerphysics.png
+        // I converted these values from hex and into units of pixels and seconds.
+        
         const MIN_WALK = 4.453125;
         const MAX_WALK = 93.75;
         const MAX_RUN = 153.75;
-        const ACC_WALK = 2.2265625;
-        const ACC_RUN = 3.33984375;
-        const DEC_REL = 3.046875;
-        const DEC_SKID = 6.796875;
+        const ACC_WALK = 133.59375;
+        const ACC_RUN = 200.390625;
+        const DEC_REL = 182.8125;
+        const DEC_SKID = 365.625;
         const MIN_SKID = 33.75;
+
+        const STOP_FALL = 1575;
+        const WALK_FALL = 1800;
+        const RUN_FALL = 2025;
+        const STOP_FALL_A = 450;
+        const WALK_FALL_A = 421.875;
+        const RUN_FALL_A = 562.5;
+
+        const MAX_FALL = 270;
 
         // update velocity
 
-        if (this.game.left) { console.log("left");}
-
-        // ground physics
         if (this.state < 4) { // not jumping
-            if (Math.abs(this.velocityX) < MIN_WALK) {  // slower than a walk // starting, stopping or turning around
-                this.velocityX = 0;
+            // ground physics
+            if (Math.abs(this.velocity.x) < MIN_WALK) {  // slower than a walk // starting, stopping or turning around
+                this.velocity.x = 0;
                 this.state = 0;
                 if (this.game.left) {
-                    this.velocityX -= MIN_WALK;
+                    this.velocity.x -= MIN_WALK;
                 }
                 if (this.game.right) {
-                    this.velocityX += MIN_WALK;
+                    this.velocity.x += MIN_WALK;
                 }
             }
-            else if (Math.abs(this.velocityX) >= MIN_WALK) {  // faster than a walk // accelerating or decelerating
+            else if (Math.abs(this.velocity.x) >= MIN_WALK) {  // faster than a walk // accelerating or decelerating
                 if (this.facing === 0) {
                     if (this.game.right && !this.game.left) {
                         if (this.game.B) {
-                            this.velocityX += ACC_RUN * TICK * speedFactor;
-                        } else this.velocityX += ACC_WALK * TICK * speedFactor;
+                            this.velocity.x += ACC_RUN * TICK;
+                        } else this.velocity.x += ACC_WALK * TICK;
                     } else if (this.game.left && !this.game.right) {
-                        this.velocityX -= DEC_SKID * TICK * speedFactor;
+                        this.velocity.x -= DEC_SKID * TICK;
                         this.state = 3;
                     } else {
-                        this.velocityX -= DEC_REL * TICK * speedFactor;
+                        this.velocity.x -= DEC_REL * TICK;
                     }
                 }
                 if (this.facing === 1) {
                     if (this.game.left && !this.game.right) {
                         if (this.game.B) {
-                            this.velocityX -= ACC_RUN * TICK * speedFactor;
-                        } else this.velocityX -= ACC_WALK * TICK * speedFactor;
+                            this.velocity.x -= ACC_RUN * TICK;
+                        } else this.velocity.x -= ACC_WALK * TICK;
                     } else if (this.game.right && !this.game.left) {
-                        this.velocityX += DEC_SKID * TICK * speedFactor;
+                        this.velocity.x += DEC_SKID * TICK;
                         this.state = 3;
                     } else {
-                        this.velocityX += DEC_REL * TICK * speedFactor;
+                        this.velocity.x += DEC_REL * TICK;
                     }
                 }
             }
 
-            // max speed calculation
-            if (this.velocityX >= MAX_RUN) this.velocityX = MAX_RUN;
-            if (this.velocityX <= -MAX_RUN) this.velocityX = -MAX_RUN;
-            if (this.velocityX >= MAX_WALK && !this.game.B) this.velocityX = MAX_WALK;
-            if (this.velocityX <= -MAX_WALK && !this.game.B) this.velocityX = -MAX_WALK;
+            this.velocity.y += this.fallAcc * TICK;
+
+            if (this.game.A) { // jump
+                if (Math.abs(this.velocity.x) < 16) {
+                    this.velocity.y = -240;
+                    this.fallAcc = STOP_FALL;
+                }
+                else if (Math.abs(this.velocity.x) < 40) {
+                    this.velocity.y = -240;
+                    this.fallAcc = WALK_FALL;
+                }
+                else {
+                    this.velocity.y = -300;
+                    this.fallAcc = RUN_FALL;
+                }
+                this.state = 4;
+            }
+        } else {
+            // air physics
+            if (this.velocity.y < 0 && this.game.A) {
+                if (this.fallAcc === STOP_FALL) this.velocity.y -= (STOP_FALL - STOP_FALL_A) * TICK;
+                if (this.fallAcc === WALK_FALL) this.velocity.y -= (WALK_FALL - WALK_FALL_A) * TICK;
+                if (this.fallAcc === RUN_FALL) this.velocity.y -= (RUN_FALL - RUN_FALL_A) * TICK;
+            }
+
+            this.velocity.y += this.fallAcc * TICK;
 
         }
+
+        // max speed calculation
+        if (this.velocity.y >= MAX_FALL) this.velocity.y = MAX_FALL;
+        if (this.velocity.y <= -MAX_FALL) this.velocity.y = -MAX_FALL;
+
+        if (this.velocity.x >= MAX_RUN) this.velocity.x = MAX_RUN;
+        if (this.velocity.x <= -MAX_RUN) this.velocity.x = -MAX_RUN;
+        if (this.velocity.x >= MAX_WALK && !this.game.B) this.velocity.x = MAX_WALK;
+        if (this.velocity.x <= -MAX_WALK && !this.game.B) this.velocity.x = -MAX_WALK;
+
+
         // update position
-        this.x += this.velocityX * TICK * speedFactor;
-        this.y += this.velocityY * TICK * speedFactor;
+        this.x += this.velocity.x * TICK * PARAMS.SCALE;
+        this.y += this.velocity.y * TICK * PARAMS.SCALE;
+        this.updateBB();
+
+        // collision
+        var that = this;
+        this.game.entities.forEach(function (entity) {
+            if (entity.BB && that.BB.collide(entity.BB)) {
+                // landing
+                if (that.velocity.y > 0) {
+                    if ((entity instanceof Ground || entity instanceof Brick || entity instanceof Block || entity instanceof QuestionBox || entity instanceof Tube)
+                        && (that.BB.bottom - that.velocity.y * TICK * PARAMS.SCALE) <= entity.BB.top) {
+                        if (that.size === 0 || that.size === 3) {
+                            that.y = entity.BB.top - PARAMS.BLOCKWIDTH;
+                            that.velocity.y === 0;
+                        } else {
+                            that.y = entity.BB.top - 2 * PARAMS.BLOCKWIDTH;
+                            that.velocity.y === 0;
+                        }
+                        that.state = 0;
+                        that.updateBB();
+                    }
+                }
+            }
+        });
+
 
         // update state
-        if (this.state != 3) {
-            if (Math.abs(this.velocityX) > MAX_WALK) this.state = 2;
-            else if (Math.abs(this.velocityX) >= MIN_WALK) this.state = 1;
+        if (this.state < 3) {
+            if (Math.abs(this.velocity.x) > MAX_WALK) this.state = 2;
+            else if (Math.abs(this.velocity.x) >= MIN_WALK) this.state = 1;
             else this.state = 0;
         }
 
-        if (this.velocityX < 0) this.facing = 1;
-        if (this.velocityX > 0) this.facing = 0;
+        if (this.velocity.x < 0) this.facing = 1;
+        if (this.velocity.x > 0) this.facing = 0;
 
 
     };
@@ -218,6 +296,13 @@ class Mario {
 
         if (this.state === 3) {
             this.slideAnim[this.size][this.facing].drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x, this.y, PARAMS.SCALE);
+        }
+        if (this.state === 4) {
+            this.jumpAnim[this.size][this.facing].drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x, this.y, PARAMS.SCALE);
+        }
+        if (PARAMS.DEBUG) {
+            ctx.strokeStyle = 'Red';
+            ctx.strokeRect(this.BB.x - this.game.camera.x, this.BB.y, this.BB.width, this.BB.height);
         }
     };
 };

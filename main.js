@@ -9,12 +9,15 @@ ASSET_MANAGER.queueDownload("./sprites/tiles.png");
 ASSET_MANAGER.queueDownload("./sprites/ground.png");
 ASSET_MANAGER.queueDownload("./sprites/bricks.png");
 ASSET_MANAGER.queueDownload("./sprites/items.png");
+ASSET_MANAGER.queueDownload("./sprites/bricks2.png");
 
 ASSET_MANAGER.downloadAll(function () {
 	PARAMS.BLOCKWIDTH = PARAMS.BITWIDTH * PARAMS.SCALE;
 
 	var canvas = document.getElementById('gameWorld');
 	var ctx = canvas.getContext('2d');
+
+	PARAMS.CANVAS_WIDTH = canvas.width;
 
 	gameEngine.init(ctx);
 
