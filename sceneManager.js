@@ -162,7 +162,9 @@ class SceneManager {
         tube = new Tube(this.game, 176 * PARAMS.BLOCKWIDTH, 12 * PARAMS.BLOCKWIDTH, 1);
         this.game.addEntity(tube);
 
-        let box = new QuestionBox(this.game, 21 * PARAMS.BLOCKWIDTH, 10 * PARAMS.BLOCKWIDTH, "Growth");
+        let box = new QuestionBox(this.game, 16 * PARAMS.BLOCKWIDTH, 10 * PARAMS.BLOCKWIDTH, "Coin");
+        this.game.addEntity(box);
+        box = new QuestionBox(this.game, 21 * PARAMS.BLOCKWIDTH, 10 * PARAMS.BLOCKWIDTH, "Growth");
         this.game.addEntity(box);
         box = new QuestionBox(this.game, 23 * PARAMS.BLOCKWIDTH, 10 * PARAMS.BLOCKWIDTH, "Coin");
         this.game.addEntity(box);

@@ -220,14 +220,12 @@ class Mario {
             }
         } else {
             // air physics
-            if (this.velocity.y < 0 && this.game.A) {
+            if (this.velocity.y < 0 && this.game.A) { // holding A while jumping jumps higher
                 if (this.fallAcc === STOP_FALL) this.velocity.y -= (STOP_FALL - STOP_FALL_A) * TICK;
                 if (this.fallAcc === WALK_FALL) this.velocity.y -= (WALK_FALL - WALK_FALL_A) * TICK;
                 if (this.fallAcc === RUN_FALL) this.velocity.y -= (RUN_FALL - RUN_FALL_A) * TICK;
             }
-
             this.velocity.y += this.fallAcc * TICK;
-
         }
 
         // max speed calculation
@@ -249,9 +247,8 @@ class Mario {
         var that = this;
         this.game.entities.forEach(function (entity) {
             if (entity.BB && that.BB.collide(entity.BB)) {
-                // landing
-                if (that.velocity.y > 0) {
-                    if ((entity instanceof Ground || entity instanceof Brick || entity instanceof Block || entity instanceof QuestionBox || entity instanceof Tube)
+                if (that.velocity.y > 0) { // falling
+                    if ((entity instanceof Ground || entity instanceof Brick || entity instanceof Block || entity instanceof QuestionBox || entity instanceof Tube) // landing
                         && (that.BB.bottom - that.velocity.y * TICK * PARAMS.SCALE) <= entity.BB.top) {
                         if (that.size === 0 || that.size === 3) {
                             that.y = entity.BB.top - PARAMS.BLOCKWIDTH;
@@ -263,6 +260,42 @@ class Mario {
                         that.state = 0;
                         that.updateBB();
                     }
+                    if ((entity instanceof Goomba) // squish Goomba
+                        && (that.BB.bottom - that.velocity.y * TICK * PARAMS.SCALE) <= entity.BB.top
+                        && !entity.dead) {
+                        entity.dead = true;
+                        that.velocity.y = -240; // bounce
+                    }
+                }
+                if (that.velocity.y < 0) { // jumping
+                    if ((entity instanceof Brick || entity instanceof QuestionBox) // hit ceiling
+                        && (that.BB.top - that.velocity.y * TICK * PARAMS.SCALE) >= entity.BB.bottom
+                        && that.BB.collide(entity.leftBB) && that.BB.collide(entity.rightBB)) {
+                        entity.bounce = true;
+                        that.velocity.y = 0;
+                    }
+                }
+                if (entity instanceof Brick && that.BB.collide(entity.topBB) && that.BB.collide(entity.bottomBB)) {
+                    if (that.BB.collide(entity.leftBB)) {
+                        that.x = entity.BB.left - PARAMS.BLOCKWIDTH;
+                    } else {
+                        that.x = entity.BB.right;
+                    }
+                    that.velocity.x = 0;
+                    that.updateBB();
+                }
+                if ((entity instanceof Tube || entity instanceof Block) && that.BB.bottom > entity.BB.top) {
+                    if (that.BB.collide(entity.leftBB)) {
+                        that.x = entity.BB.left - PARAMS.BLOCKWIDTH;
+                    } else {
+                        that.x = entity.BB.right;
+                    }
+                    if (!that.game.right && !that.game.left) {
+                        that.velocity.x = 0;
+                    } else {
+                        that.velocity.x = Math.pow(-1, that.facing) * MIN_WALK;
+                    }
+                    that.updateBB();
                 }
             }
         });
@@ -277,8 +310,6 @@ class Mario {
 
         if (this.velocity.x < 0) this.facing = 1;
         if (this.velocity.x > 0) this.facing = 0;
-
-
     };
 
     draw(ctx) {
