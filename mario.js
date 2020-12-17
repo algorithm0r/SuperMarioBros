@@ -248,7 +248,7 @@ class Mario {
         this.game.entities.forEach(function (entity) {
             if (entity.BB && that.BB.collide(entity.BB)) {
                 if (that.velocity.y > 0) { // falling
-                    if ((entity instanceof Ground || entity instanceof Brick || entity instanceof Block || entity instanceof QuestionBox || entity instanceof Tube) // landing
+                    if ((entity instanceof Ground || entity instanceof Brick || entity instanceof Block || entity instanceof Tube) // landing
                         && (that.BB.bottom - that.velocity.y * TICK * PARAMS.SCALE) <= entity.BB.top) {
                         if (that.size === 0 || that.size === 3) {
                             that.y = entity.BB.top - PARAMS.BLOCKWIDTH;
@@ -268,7 +268,7 @@ class Mario {
                     }
                 }
                 if (that.velocity.y < 0) { // jumping
-                    if ((entity instanceof Brick || entity instanceof QuestionBox) // hit ceiling
+                    if ((entity instanceof Brick) // hit ceiling
                         && (that.BB.top - that.velocity.y * TICK * PARAMS.SCALE) >= entity.BB.bottom
                         && that.BB.collide(entity.leftBB) && that.BB.collide(entity.rightBB)) {
                         entity.bounce = true;

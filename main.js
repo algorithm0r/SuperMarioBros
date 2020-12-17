@@ -9,7 +9,7 @@ ASSET_MANAGER.queueDownload("./sprites/tiles.png");
 ASSET_MANAGER.queueDownload("./sprites/ground.png");
 ASSET_MANAGER.queueDownload("./sprites/bricks.png");
 ASSET_MANAGER.queueDownload("./sprites/items.png");
-ASSET_MANAGER.queueDownload("./sprites/bricks2.png");
+ASSET_MANAGER.queueDownload("./sprites/coins.png");
 
 ASSET_MANAGER.downloadAll(function () {
 	PARAMS.BLOCKWIDTH = PARAMS.BITWIDTH * PARAMS.SCALE;

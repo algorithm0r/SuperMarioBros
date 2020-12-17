@@ -36,7 +36,7 @@ class Goomba {
                 if (entity.BB && that.BB.collide(entity.BB)) {
                     if (entity instanceof Mario) {
 
-                    } else if ((entity instanceof Ground || entity instanceof Brick || entity instanceof Block || entity instanceof QuestionBox || entity instanceof Tube)
+                    } else if ((entity instanceof Ground || entity instanceof Brick || entity instanceof Block || entity instanceof Tube)
                         && (that.BB.bottom - that.velocity.y * that.game.clockTick * PARAMS.SCALE) <= entity.BB.top) {
                         that.y = entity.BB.top - PARAMS.BLOCKWIDTH;
                         that.velocity.y = 0;
