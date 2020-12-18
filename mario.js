@@ -220,12 +220,27 @@ class Mario {
             }
         } else {
             // air physics
+            // vertical physics
             if (this.velocity.y < 0 && this.game.A) { // holding A while jumping jumps higher
                 if (this.fallAcc === STOP_FALL) this.velocity.y -= (STOP_FALL - STOP_FALL_A) * TICK;
                 if (this.fallAcc === WALK_FALL) this.velocity.y -= (WALK_FALL - WALK_FALL_A) * TICK;
                 if (this.fallAcc === RUN_FALL) this.velocity.y -= (RUN_FALL - RUN_FALL_A) * TICK;
             }
             this.velocity.y += this.fallAcc * TICK;
+
+            // horizontal physics
+            if (this.game.right && !this.game.left) {
+                if (Math.abs(this.velocity.x) > MAX_WALK) {
+                    this.velocity.x += ACC_RUN * TICK;
+                } else this.velocity.x += ACC_WALK * TICK;
+            } else if (this.game.left && !this.game.right) {
+                if (Math.abs(this.velocity.x) > MAX_WALK) {
+                    this.velocity.x -= ACC_RUN * TICK;
+                } else this.velocity.x -= ACC_WALK * TICK;
+            } else {
+
+            }
+
         }
 
         // max speed calculation

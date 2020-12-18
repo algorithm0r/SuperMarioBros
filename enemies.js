@@ -19,6 +19,7 @@ class Goomba {
         const FALL_ACC = 26.25;
         const MAX_FALL = 270;
         if (this.dead) {
+            if (this.deadCounter === 0) this.game.addEntity(new Score(this.game, this.x, this.y, 100));
             this.deadCounter += this.game.clockTick;
             if (this.deadCounter > 0.5) this.removeFromWorld = true;  // flicker for half a second
         }

@@ -132,6 +132,8 @@ class CoinPop {
     constructor(game, x, y) {
         Object.assign(this, { game, x, y });
 
+        this.game.camera.addCoin();
+
         this.velocity = -480;
 
         this.animation = new Animator(ASSET_MANAGER.getAsset("./sprites/coins.png"), 0, 112, 16, 16, 4, 0.1, 0, false, true);
@@ -145,8 +147,7 @@ class CoinPop {
 
         if (this.velocity > 400) {
             this.removeFromWorld = true;
-            this.game.addEntity(new Score(this.game, this.x + PARAMS.BLOCKWIDTH / 8, this.y + PARAMS.BLOCKWIDTH / 2, 200));
-            this.game.camera.score += 200;
+            this.game.addEntity(new Score(this.game, this.x, this.y + PARAMS.BLOCKWIDTH / 2, 200));
         }
     };
 
@@ -158,6 +159,8 @@ class CoinPop {
 class Score {
     constructor(game, x, y, score) {
         Object.assign(this, { game, x, y, score });
+
+        this.game.camera.score += this.score;
 
         this.velocity = -2 * PARAMS.BITWIDTH;
         this.elapsed = 0;
@@ -173,6 +176,6 @@ class Score {
     draw(ctx) {
         ctx.font = PARAMS.BLOCKWIDTH / 4 + 'px "Press Start 2P"';
         ctx.fillStyle = "White";
-        ctx.fillText(this.score, this.x - this.game.camera.x, this.y);
+        ctx.fillText(this.score, this.x + (this.score < 1000 ? PARAMS.BLOCKWIDTH / 8 : 0) - this.game.camera.x, this.y);
     };
 };
