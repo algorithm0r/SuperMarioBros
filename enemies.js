@@ -16,8 +16,8 @@ class Goomba {
     };
 
     update() {
-        const FALL_ACC = 26.25;
-        const MAX_FALL = 270;
+        const FALL_ACC = 1800;
+
         if (this.dead) {
             if (this.deadCounter === 0) this.game.addEntity(new Score(this.game, this.x, this.y, 100));
             this.deadCounter += this.game.clockTick;
@@ -43,7 +43,6 @@ class Goomba {
                         that.velocity.y = 0;
                         that.updateBB();
                     } else if (entity !== that) {
-                        console.log("collide");
                         that.velocity.x = -that.velocity.x;
                     }
                 };

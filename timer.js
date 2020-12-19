@@ -9,7 +9,7 @@ class Timer {
 
     tick() {
         var current = Date.now();
-        var delta = (current - this.lastTimestamp) / 1000;
+        var delta = (current - this.lastTimestamp) / 1000; // convert milliseconds to seconds
         this.lastTimestamp = current;
 
         var gameDelta = Math.min(delta, this.maxStep);

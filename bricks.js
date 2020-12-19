@@ -5,6 +5,8 @@ class Ground {
         this.spritesheet = ASSET_MANAGER.getAsset("./sprites/bricks.png");
 
         this.BB = new BoundingBox(this.x, this.y, this.w, PARAMS.BLOCKWIDTH * 2);
+        this.leftBB = new BoundingBox(this.x, this.y, PARAMS.BLOCKWIDTH, PARAMS.BLOCKWIDTH * 2)
+        this.rightBB = new BoundingBox(this.x + this.w - PARAMS.BLOCKWIDTH, this.y, PARAMS.BLOCKWIDTH, PARAMS.BLOCKWIDTH * 2)
     };
 
     update() {
@@ -31,11 +33,13 @@ class Brick { // type 0 = invis, 1 = brick, 2 = question, 3 = block
 
         this.velocity = 0;
 
+        this.startTime = 0;
+
         this.animation = [];
 
         this.animation.push(null);
         this.animation.push(new Animator(ASSET_MANAGER.getAsset("./sprites/bricks.png"), 16, 0, 16, 16, 1, 0.33, 0, false, true));
-        this.animation.push(new Animator(ASSET_MANAGER.getAsset("./sprites/coins.png"), 0, 80, 16, 16, 4, 1, 0, false, true));
+        this.animation.push(new Animator(ASSET_MANAGER.getAsset("./sprites/coins.png"), 0, 80, 16, 16, 4, 1/8, 0, false, true));
         this.animation.push(new Animator(ASSET_MANAGER.getAsset("./sprites/bricks.png"), 48, 0, 16, 16, 1, 1, 0, false, true));
 
         this.BB = new BoundingBox(this.x + PARAMS.BLOCKWIDTH / 8, this.y, PARAMS.BLOCKWIDTH * 3 / 4, PARAMS.BLOCKWIDTH);
@@ -55,10 +59,24 @@ class Brick { // type 0 = invis, 1 = brick, 2 = question, 3 = block
             this.bounce = false;
             this.velocity = - 80;
 
-            if (this.type === 2 && this.prize === "Coin") {
-                this.type = 3;
-                this.game.addEntity(new CoinPop(this.game, this.x, this.BB.top - PARAMS.BLOCKWIDTH));
+            switch (this.prize) {
+                case 'Coins':
+                    if (this.startTime === 0) this.startTime = Date.now();
+                    if (Date.now() - this.startTime < 3000) { 
+                        this.game.addEntity(new CoinPop(this.game, this.x, this.BB.top - PARAMS.BLOCKWIDTH));
+                        break;
+                    }
+                case 'Coin':
+                    this.game.addEntity(new CoinPop(this.game, this.x, this.BB.top - PARAMS.BLOCKWIDTH));
+                    this.type = 3;
+                    break;
+                case 'Growth':
+                    if (this.game.mario.size === 0) {
+                        this.game.addEntity(new Mushroom(this.game, this.x, this.BB.top, this));
+                    }
+                    this.type = 3;
             }
+        
         }
 
         if (this.y > this.BB.top) this.y = this.BB.top;
@@ -125,57 +143,5 @@ class Tube {
             ctx.strokeStyle = 'Red';
             ctx.strokeRect(this.BB.x - this.game.camera.x, this.BB.y, this.BB.width, this.BB.height);
         }
-    };
-};
-
-class CoinPop {
-    constructor(game, x, y) {
-        Object.assign(this, { game, x, y });
-
-        this.game.camera.addCoin();
-
-        this.velocity = -480;
-
-        this.animation = new Animator(ASSET_MANAGER.getAsset("./sprites/coins.png"), 0, 112, 16, 16, 4, 0.1, 0, false, true);
-    };
-
-    update() {
-        const FALL_ACC = 2025;
-
-        this.velocity += FALL_ACC * this.game.clockTick;
-        this.y += this.game.clockTick * this.velocity * PARAMS.SCALE;
-
-        if (this.velocity > 400) {
-            this.removeFromWorld = true;
-            this.game.addEntity(new Score(this.game, this.x, this.y + PARAMS.BLOCKWIDTH / 2, 200));
-        }
-    };
-
-    draw(ctx) {
-        this.animation.drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x, this.y, PARAMS.SCALE);
-    };
-};
-
-class Score {
-    constructor(game, x, y, score) {
-        Object.assign(this, { game, x, y, score });
-
-        this.game.camera.score += this.score;
-
-        this.velocity = -2 * PARAMS.BITWIDTH;
-        this.elapsed = 0;
-    };
-
-    update() {
-        this.elapsed += this.game.clockTick;
-        if (this.elapsed > 1) this.removeFromWorld = true;
-
-        this.y += this.game.clockTick * this.velocity * PARAMS.SCALE;
-    };
-
-    draw(ctx) {
-        ctx.font = PARAMS.BLOCKWIDTH / 4 + 'px "Press Start 2P"';
-        ctx.fillStyle = "White";
-        ctx.fillText(this.score, this.x + (this.score < 1000 ? PARAMS.BLOCKWIDTH / 8 : 0) - this.game.camera.x, this.y);
     };
 };

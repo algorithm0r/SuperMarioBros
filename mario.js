@@ -291,7 +291,7 @@ class Mario {
                     }
                 }
                 if (entity instanceof Brick && that.BB.collide(entity.topBB) && that.BB.collide(entity.bottomBB)) {
-                    if (that.BB.collide(entity.leftBB)) {
+                    if (that.game.mario.facing === 0) { // facing right
                         that.x = entity.BB.left - PARAMS.BLOCKWIDTH;
                     } else {
                         that.x = entity.BB.right;
@@ -299,7 +299,7 @@ class Mario {
                     that.velocity.x = 0;
                     that.updateBB();
                 }
-                if ((entity instanceof Tube || entity instanceof Block) && that.BB.bottom > entity.BB.top) {
+                if ((entity instanceof Tube || entity instanceof Block || entity instanceof Ground) && that.BB.bottom > entity.BB.top) {
                     if (that.BB.collide(entity.leftBB)) {
                         that.x = entity.BB.left - PARAMS.BLOCKWIDTH;
                     } else {
@@ -311,6 +311,12 @@ class Mario {
                         that.velocity.x = Math.pow(-1, that.facing) * MIN_WALK;
                     }
                     that.updateBB();
+                }
+                if (entity instanceof Mushroom && !entity.emerging) {
+                    entity.removeFromWorld = true;
+                    that.y -= PARAMS.BLOCKWIDTH;
+                    that.size = 1;
+                    that.game.addEntity(new Score(that.game, that.x, that.y, 1000));
                 }
             }
         });

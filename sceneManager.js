@@ -7,7 +7,7 @@ class SceneManager {
         this.coins = 0;
         this.lives = 3;
 
-        this.coinAnimation = new Animator(ASSET_MANAGER.getAsset("./sprites/coins.png"), 0, 160, 8, 8, 4, 0.25, 0, false, true);
+        this.coinAnimation = new Animator(ASSET_MANAGER.getAsset("./sprites/coins.png"), 0, 160, 8, 8, 4, 0.2, 0, false, true);
 
         this.loadLevelOne();
     };
