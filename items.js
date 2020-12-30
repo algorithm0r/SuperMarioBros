@@ -51,8 +51,8 @@ class Score {
 };
 
 class Mushroom {
-    constructor(game, x, y, brick) {
-        Object.assign(this, { game, x, y, brick });
+    constructor(game, x, y, brick, type) {
+        Object.assign(this, { game, x, y, brick, type });
 
         this.spritesheet = ASSET_MANAGER.getAsset("./sprites/items.png");
 
@@ -103,7 +103,11 @@ class Mushroom {
     };
 
     draw(ctx) {
-        ctx.drawImage(this.spritesheet, 184, 34, 16, 16, this.x - this.game.camera.x, this.y, PARAMS.BLOCKWIDTH, PARAMS.BLOCKWIDTH);
+        if (this.type === 'Growth') {
+            ctx.drawImage(this.spritesheet, 184, 34, 16, 16, this.x - this.game.camera.x, this.y, PARAMS.BLOCKWIDTH, PARAMS.BLOCKWIDTH);
+        } else {
+            ctx.drawImage(this.spritesheet, 214, 34, 16, 16, this.x - this.game.camera.x, this.y, PARAMS.BLOCKWIDTH, PARAMS.BLOCKWIDTH);
+        }
         if (this.emerging) this.brick.draw(ctx);
 
         if (PARAMS.DEBUG) {

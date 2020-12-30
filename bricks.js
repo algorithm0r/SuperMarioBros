@@ -72,8 +72,12 @@ class Brick { // type 0 = invis, 1 = brick, 2 = question, 3 = block
                     break;
                 case 'Growth':
                     if (this.game.mario.size === 0) {
-                        this.game.addEntity(new Mushroom(this.game, this.x, this.BB.top, this));
+                        this.game.addEntity(new Mushroom(this.game, this.x, this.BB.top, this, 'Growth'));
                     }
+                    this.type = 3;
+                    break;
+                case '1up':
+                    this.game.addEntity(new Mushroom(this.game, this.x, this.BB.top, this, '1up'));
                     this.type = 3;
             }
         

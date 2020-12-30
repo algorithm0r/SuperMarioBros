@@ -19,7 +19,13 @@ class SceneManager {
         }
     };
 
+    clearEntities() {
+        this.game.entities = [this];
+    };
+
     loadLevelOne() {
+        this.x = 0;
+
         let background = new BigHill(this.game, 0, 11.5 * PARAMS.BLOCKWIDTH);
         this.game.addEntity(background);
         background = new Bush(this.game, 11.5 * PARAMS.BLOCKWIDTH, 13 * PARAMS.BLOCKWIDTH, 3);
@@ -292,6 +298,11 @@ class SceneManager {
         let midpoint = PARAMS.CANVAS_WIDTH/2 - PARAMS.BLOCKWIDTH / 2;
 
         if (this.x < this.mario.x - midpoint) this.x = this.mario.x - midpoint;
+
+        if (this.mario.dead && this.mario.y > PARAMS.BLOCKWIDTH * 16) {
+            this.clearEntities();
+            this.loadLevelOne();
+        };
     };
 
     draw(ctx) {

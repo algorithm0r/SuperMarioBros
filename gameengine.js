@@ -7,12 +7,12 @@ class GameEngine {
         this.surfaceWidth = null;
         this.surfaceHeight = null;
 
-        this.left = null;
-        this.right = null;
-        this.up = null;
-        this.down = null;
-        this.A = null;
-        this.B = null;
+        this.left = false;
+        this.right = false;
+        this.up = false;
+        this.down = false;
+        this.A = false;
+        this.B = false;
     };
 
     init(ctx) { // called after page has loaded
