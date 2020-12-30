@@ -258,7 +258,9 @@ class SceneManager {
         block = new Block(this.game, 185 * PARAMS.BLOCKWIDTH, 6 * PARAMS.BLOCKWIDTH, 2 * PARAMS.BLOCKWIDTH);
         this.game.addEntity(block);
 
-        let goomba = new Goomba(this.game, 22 * PARAMS.BLOCKWIDTH, 13 * PARAMS.BLOCKWIDTH);
+        let goomba = new Koopa(this.game, 12 * PARAMS.BLOCKWIDTH, 12.5 * PARAMS.BLOCKWIDTH, 0);
+        this.game.addEntity(goomba);
+        goomba = new Goomba(this.game, 22 * PARAMS.BLOCKWIDTH, 13 * PARAMS.BLOCKWIDTH);
         this.game.addEntity(goomba);
         goomba = new Goomba(this.game, 40 * PARAMS.BLOCKWIDTH, 13 * PARAMS.BLOCKWIDTH);
         this.game.addEntity(goomba);

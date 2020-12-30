@@ -270,7 +270,7 @@ class Mario {
                             if(that.state === 4) that.state = 0;
                             that.updateBB();
                         }
-                        if ((entity instanceof Goomba) // squish Goomba
+                        if ((entity instanceof Goomba || entity instanceof Koopa) // squish Goomba
                             && (that.BB.bottom - that.velocity.y * TICK * PARAMS.SCALE) <= entity.BB.top
                             && !entity.dead) {
                             entity.dead = true;
