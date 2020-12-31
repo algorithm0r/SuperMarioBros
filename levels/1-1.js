@@ -5,7 +5,7 @@ class WorldOneOne {
 
     loadLevel() {
         this.x = 0;
-        
+
         // Load Enemies first to make sure they do not clip behind background elements
         this.loadEnemies();
 
@@ -64,8 +64,7 @@ class WorldOneOne {
             [162.5, 3, 1],
             [170.5, 4, 3],
             [179.5, 3, 2],
-            
-        ]
+        ];
 
         // Add all the background elements to this game 
         bigHills.forEach(bigHill => this.game.addEntity(new BigHill(this.game, bigHill[0] * this.width, bigHill[1] * this.width)));
@@ -80,7 +79,7 @@ class WorldOneOne {
             [71, 14, 15],
             [89, 14, 63],
             [154, 14, 69]
-        ]
+        ];
 
         grounds.forEach(ground => this.game.addEntity(new Ground(this.game, ground[0] * this.width, ground[1] * this.width, ground[2] * this.width)));
     };
@@ -123,7 +122,7 @@ class WorldOneOne {
 
         bricks.forEach(brick => this.game.addEntity(new Brick(this.game, brick[0] * this.width, brick[1] * this.width, brick[2], brick[3])));
 
-        // Loads entities in the same order the original fork does
+        // Loads entities in the same order the original author does
         this.loadTubes();
 
         bricks = [
@@ -141,7 +140,8 @@ class WorldOneOne {
             [128, 6, 2, 'Coin'],
             [129, 6, 2, 'Coin'],
             [169, 10, 2, 'Coin'],            
-        ]
+        ];
+
         bricks.forEach(brick => this.game.addEntity(new Brick(this.game, brick[0] * this.width, brick[1] * this.width, brick[2], brick[3])));
     };
 
