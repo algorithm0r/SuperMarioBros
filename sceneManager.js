@@ -8,7 +8,6 @@ class SceneManager {
         this.lives = 3;
 
         this.coinAnimation = new Animator(ASSET_MANAGER.getAsset("./sprites/coins.png"), 0, 160, 8, 8, 4, 0.2, 0, false, true);
-
         this.loadLevelOne();
     };
 
@@ -23,59 +22,14 @@ class SceneManager {
         this.game.entities = [this];
     };
 
-    async loadLevelFromFile(fileName) {
-        let width = PARAMS.BLOCKWIDTH;
-
-        await fetch(`levels/${fileName}`)
-            .then(response => response.text())        
-            .then((response) => {
-                response.split(/\r?\n/)
-                .forEach(element => {
-                    let line = element.split(" ");
-                    let item = line[0];
-                    switch(item) {
-                        case 'tube':
-                            this.game.addEntity(new Tube(this.game, line[1] * width, line[2] * width, line[3]));
-                            break;
-                        case 'bric':
-                            this.game.addEntity(new Brick(this.game, line[1] * width, line[2] * width, line[3], String(line[4])));
-                            break;
-                        case 'bloc':
-                            this.game.addEntity(new Block(this.game, line[1] * width, line[2] * width, line[3] * width));
-                            break;
-                        case 'grou':
-                            this.game.addEntity(new Ground(this.game, line[1] * width, line[2] * width, line[3] * width));
-                            break;
-                        case 'bush':
-                            this.game.addEntity(new Bush(this.game, line[1] * width, line[2] * width, line[3]));
-                            break;
-                        case 'hill':
-                            this.game.addEntity(new Hill(this.game, line[1] * width, line[2] * width));
-                            break;
-                        case 'bhil':
-                            this.game.addEntity(new BigHill(this.game, line[1] * width, line[2] * width));
-                            break;
-                        case 'clou':
-                            this.game.addEntity(new Cloud(this.game, line[1] * width, line[2] * width, line[3]));
-                            break;
-                        case 'koop':
-                            this.game.addEntity(new Koopa(this.game, line[1] * width, line[2] * width, line[3] * width));
-                            break;
-                        case 'goom':
-                            this.game.addEntity(new Goomba(this.game, line[1] * width, line[2] * width));
-                            break;
-                        default:
-                            break;
-                    }
-                });
-            }).catch(error => console.error(error));
-    }
-
     loadLevelOne() {
         let width = PARAMS.BLOCKWIDTH;        
-        this.loadLevelFromFile("1-1.txt");
+        this.x = 0;
         this.mario = new Mario(gameEngine, 2.5 * width, 0 * width);
-        gameEngine.addEntity(this.mario);   
+        this.game.addEntity(this.mario);
+
+        // Might need a variable for warping levels; not sure yet
+        let currLevel = new WorldOneOne(this.game, width, this.mario).loadLevel();
     };
 
     update() {

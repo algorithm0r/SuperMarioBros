@@ -79,6 +79,9 @@ class Brick { // type 0 = invis, 1 = brick, 2 = question, 3 = block
                 case '1up':
                     this.game.addEntity(new Mushroom(this.game, this.x, this.BB.top, this, '1up'));
                     this.type = 3;
+                    break;
+                default:
+                    break;
             }
         
         }
@@ -88,7 +91,7 @@ class Brick { // type 0 = invis, 1 = brick, 2 = question, 3 = block
     };
 
     draw(ctx) {
-        if (this.type) {
+        if (this.type > 0) {
             this.animation[this.type].drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x, this.y, PARAMS.SCALE);
         }
 

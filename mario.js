@@ -250,7 +250,7 @@ class Mario {
             this.y += this.velocity.y * TICK * PARAMS.SCALE;
             this.updateBB();
 
-            // if mario fell of the map he's dead
+            // if mario fell off the map he's dead
             if (this.y > PARAMS.BLOCKWIDTH * 16) this.die();
 
             // collision
