@@ -49,7 +49,6 @@ class Score {
         ctx.fillStyle = "White";
         ctx.fillText(this.score, this.x + (this.score < 1000 ? PARAMS.BLOCKWIDTH / 8 : 0) - this.game.camera.x, this.y);
         ctx.globalCompositeOperation = 'destination-over';
-
     };
 };
 

@@ -1,238 +1,217 @@
 class WorldOneOne {
     constructor(game, width, mario) {
-        this.width = width;
-        this.mario = mario;
-        this.game = game;
+        Object.assign(this, {game, width, mario});
     };
 
     loadLevel() {
         this.x = 0;
+        
+        // Load Enemies first to make sure they do not clip behind background elements
         this.loadEnemies();
+
+        // Load Bricks and Blocks next to make sure they do not clip with the background
         this.loadBricks();
         this.loadBlocks();
+
+        // Load ground and background last so they do not clip with the other entities
         this.loadGround();
         this.loadBackground();
     };
 
     loadBackground() {
-        var elements = [
-            "bhil 0 11.5",
-            "bush 11.5 13 3",
-            "hill 16 12.75",
-            "bush 23.5 13 1",
-            "clou 8.5 4 1",
-            "clou 19.5 3 1",
-            "clou 27.5 4 3",
-            "clou 36.5 3 2",
-            "bush 41.5 13 2",
-            "bhil 48 11.5",
-            "clou 56.5 4 1",
-            "bush 59.5 13 3",
-            "hill 64 12.75",
-            "clou 67.5 3 1",
-            "bush 71.5 13 1",
-            "clou 75.5 4 3",
-            "clou 83.5 3 2",
-            "bush 89.5 13 2",
-            "hill 111 12.75",
-            "clou 103.5 4 1",
-            "bush 106.5 13 3",
-            "bhil 95 11.5",
-            "clou 114.5 3 1",
-            "bush 118.5 13 1",
-            "clou 122.5 4 3",
-            "clou 131.5 3 2",
-            "bush 136.5 13 2",
-            "bhil 143 11.5",
-            "clou 151.5 4 1",
-            "bush 156.5 13 1",
-            "hill 159 12.75",
-            "clou 162.5 3 1",
-            "bush 166.5 13 1",
-            "clou 170.5 4 3",
-            "clou 179.5 3 2",
+        var bigHills = [
+            [0, 11.5],
+            [48, 11.5],
+            [95, 11.5],
+            [143, 11.5],
         ];
 
-        for (let i=0; i<elements.length; i++) {
-            let element = elements[i].split(" ");
-            switch(element[0]) {
-                case 'bush':
-                    this.game.addEntity(new Bush(this.game, element[1] * this.width, element[2] * this.width, element[3]));
-                    break;
-                case 'hill':
-                    this.game.addEntity(new Hill(this.game, element[1] * this.width, element[2] * this.width));
-                    break;
-                case 'bhil':
-                    this.game.addEntity(new BigHill(this.game, element[1] * this.width, element[2] * this.width));
-                    break;
-                case 'clou':
-                    this.game.addEntity(new Cloud(this.game, element[1] * this.width, element[2] * this.width, element[3]));
-                    break;
-                default:
-                    break;
-            }
-        }
+        var bushes = [
+            [11.5, 13, 3],
+            [23.5, 13, 1],
+            [41.5, 13, 2],
+            [59.5, 13, 3],
+            [71.5, 13, 1],
+            [89.5, 13, 2],
+            [106.5, 13, 3],
+            [118.5, 13, 1],
+            [136.5, 13, 2],
+            [156.5, 13, 1],
+            [166.5, 13, 1],   
+        ];
+
+        var hills = [
+            [16, 12.75],
+            [64, 12.75],
+            [111, 12.75],
+            [159, 12.75],
+        ];
+
+        var clouds = [
+            [8.5, 4, 1],
+            [19.5, 3, 1],
+            [27.5, 4, 3],
+            [36.5, 3, 2],
+            [56.5, 4, 1],
+            [67.5, 3, 1],
+            [75.5, 4, 3],
+            [83.5, 3, 2],
+            [103.5, 4, 1],
+            [114.5, 3, 1],
+            [122.5, 4, 3],
+            [131.5, 3, 2],
+            [151.5, 4, 1],
+            [162.5, 3, 1],
+            [170.5, 4, 3],
+            [179.5, 3, 2],
+            
+        ]
+
+        // Add all the background elements to this game 
+        bigHills.forEach(bigHill => this.game.addEntity(new BigHill(this.game, bigHill[0] * this.width, bigHill[1] * this.width)));
+        bushes.forEach(bush => this.game.addEntity(new Bush(this.game, bush[0] * this.width, bush[1] * this.width, bush[2])));
+        hills.forEach(hill => this.game.addEntity(new Hill(this.game, hill[0] * this.width, hill[1] * this.width)));
+        clouds.forEach(cloud => this.game.addEntity(new Cloud(this.game, cloud[0] * this.width, cloud[1] * this.width, cloud[2])));
     };
 
     loadGround() {
-        var elements = [
-            "grou 0 14 69",
-            "grou 71 14 15",
-            "grou 89 14 63",
-            "grou 154 14 69",
-        ];
+        var grounds = [
+            [0, 14, 69],
+            [71, 14, 15],
+            [89, 14, 63],
+            [154, 14, 69]
+        ]
 
-        for (let i=0; i<elements.length; i++) {
-            let element = elements[i].split(" ");
-            this.game.addEntity(new Ground(this.game, element[1] * this.width, element[2] * this.width, element[3] * this.width));
-        }
+        grounds.forEach(ground => this.game.addEntity(new Ground(this.game, ground[0] * this.width, ground[1] * this.width, ground[2] * this.width)));
     };
 
     loadBricks() {
-        var elements = [
-            'bric 20 10 1 None',
-            'bric 22 10 1 None',
-            'bric 24 10 1 None',
-            'bric 77 10 1 None',
-            'bric 79 10 1 None',
-            'bric 80 6 1 None',
-            'bric 81 6 1 None',
-            'bric 82 6 1 None',
-            'bric 83 6 1 None',
-            'bric 84 6 1 None',
-            'bric 85 6 1 None',
-            'bric 86 6 1 None',
-            'bric 87 6 1 None',
-            'bric 90 6 1 None',
-            'bric 91 6 1 None',
-            'bric 92 6 1 None',
-            'bric 93 10 1 Coins',
-            'bric 99 10 1 None',
-            'bric 100 10 1 Star',
-            'bric 117 10 1 None',
-            'bric 120 6 1 None',
-            'bric 121 6 1 None',
-            'bric 122 6 1 None',
-            'bric 127 6 1 None',
-            'bric 128 10 1 None',
-            'bric 129 10 1 None',
-            'bric 130 6 1 None',
-            'bric 167 10 1 None',
-            'bric 168 10 1 None',
-            'bric 170 10 1 None',
+        var bricks = [
+            [20, 10, 1, 'None'],
+            [22, 10, 1, 'None'],
+            [24, 10, 1, 'None'],
+            [77, 10, 1, 'None'],
+            [79, 10, 1, 'None'],
+            [80, 6, 1, 'None'],
+            [81, 6, 1, 'None'],
+            [82, 6, 1, 'None'],
+            [83, 6, 1, 'None'],
+            [84, 6, 1, 'None'],
+            [85, 6, 1, 'None'],
+            [86, 6, 1, 'None'],
+            [87, 6, 1, 'None'],
+            [88, 6, 1, 'None'],
+            [89, 6, 1, 'None'],
+            [90, 6, 1, 'None'],
+            [91, 6, 1, 'None'],
+            [92, 6, 1, 'None'],
+            [93, 10, 1, 'Coins'],
+            [99, 10, 1, 'None'],
+            [100, 10, 1, 'Star'],
+            [117, 10, 1, 'None'],
+            [120, 6, 1, 'None'],
+            [121, 6, 1, 'None'],
+            [122, 6, 1, 'None'],
+            [127, 6, 1, 'None'],
+            [128, 10, 1, 'None'],
+            [129, 10, 1, 'None'],
+            [130, 6, 1, 'None'],
+            [167, 10, 1, 'None'],
+            [168, 10, 1, 'None'],
+            [170, 10, 1, 'None'],
         ];
 
-        for (let i=0; i<elements.length; i++) {
-            let element = elements[i].split(" ");
-            this.game.addEntity(new Brick(this.game, element[1] * this.width, element[2] * this.width, element[3], String(element[4])));
-        }
+        bricks.forEach(brick => this.game.addEntity(new Brick(this.game, brick[0] * this.width, brick[1] * this.width, brick[2], brick[3])));
 
+        // Loads entities in the same order the original fork does
         this.loadTubes();
 
-        elements = [
-            'bric 16 10 2 Coin',
-            'bric 21 10 2 Growth',
-            'bric 23 10 2 Coin',
-            'bric 22 6 2 Coin',
-            'bric 64 9 0 1up',
-            'bric 78 10 2 Growth',
-            'bric 93 6 2 Growth',
-            'bric 105 10 2 Coin',
-            'bric 108 10 2 Coin',
-            'bric 108 6 2 Growth',
-            'bric 111 10 2 Coin',
-            'bric 128 6 2 Coin',
-            'bric 129 6 2 Coin',
-            'bric 169 10 2 Coin',
-        ];
-
-        for (let i=0; i<elements.length; i++) {
-            let element = elements[i].split(" ");
-            this.game.addEntity(new Brick(this.game, element[1] * this.width, element[2] * this.width, element[3], String(element[4])));
-        }
+        bricks = [
+            [16, 10, 2, 'Coin'],
+            [21, 10, 2, 'Growth'],
+            [23, 10, 2, 'Coin'],
+            [22, 6, 2, 'Coin'],
+            [64, 9, 0, '1up'],
+            [78, 10, 2, 'Growth'],
+            [93, 6, 2, 'Growth'],
+            [105, 10, 2, 'Coin'],
+            [108, 10, 2, 'Coin'],
+            [108, 6, 2, 'Growth'],
+            [111, 10, 2, 'Coin'],
+            [128, 6, 2, 'Coin'],
+            [129, 6, 2, 'Coin'],
+            [169, 10, 2, 'Coin'],            
+        ]
+        bricks.forEach(brick => this.game.addEntity(new Brick(this.game, brick[0] * this.width, brick[1] * this.width, brick[2], brick[3])));
     };
 
     loadBlocks() {
-        var elements = [
-            'bloc 133 13 4',
-            'bloc 134 12 3',
-            'bloc 135 11 2',
-            'bloc 136 10 1',
-            'bloc 139 13 4',
-            'bloc 139 12 3',
-            'bloc 139 11 2',
-            'bloc 139 10 1',
-            'bloc 147 13 5',
-            'bloc 148 12 4',
-            'bloc 149 11 3',
-            'bloc 150 10 2',
-            'bloc 154 13 4',
-            'bloc 154 12 3',
-            'bloc 154 11 2',
-            'bloc 154 10 1',
-            'bloc 178 13 9',
-            'bloc 179 12 8',
-            'bloc 180 11 7',
-            'bloc 181 10 6',
-            'bloc 182 9 5',
-            'bloc 183 8 4',
-            'bloc 184 7 3',
-            'bloc 185 6 2',
+        var blocks = [
+            [133, 13, 4],
+            [134, 12, 3],
+            [135, 11, 2],
+            [136, 10, 1],
+            [139, 13, 4],
+            [139, 12, 3],
+            [139, 11, 2],
+            [139, 10, 1],
+            [147, 13, 5],
+            [148, 12, 4],
+            [149, 11, 3],
+            [150, 10, 2],
+            [154, 13, 4],
+            [154, 12, 3],
+            [154, 11, 2],
+            [154, 10, 1],
+            [178, 13, 9],
+            [179, 12, 8],
+            [180, 11, 7],
+            [181, 10, 6],
+            [182, 9, 5],
+            [183, 8, 4],
+            [184, 7, 3],
+            [185, 6, 2],    
         ];
 
-        for (let i=0; i<elements.length; i++) {
-            let element = elements[i].split(" ");
-            this.game.addEntity(new Block(this.game, element[1] * this.width, element[2] * this.width, element[3] * this.width));
-        }
+        blocks.forEach(block => this.game.addEntity(new Block(this.game, block[0] * this.width, block[1] * this.width, block[2] * this.width)));
     };
 
     loadTubes() {
-        var elements = [
-            'tube 28 12 1',
-            'tube 38 11 2',
-            'tube 46 10 3',
-            'tube 57 10 3',
-            'tube 162 12 1',
-            'tube 176 12 1',
+        var tubes = [
+            [28, 12, 1],
+            [38, 11, 2],
+            [46, 10, 3],
+            [57, 10, 3],
+            [162, 12, 1],
+            [176, 12, 1],
         ];
 
-        for (let i=0; i<elements.length; i++) {
-            let element = elements[i].split(" ");
-            this.game.addEntity(new Tube(this.game, element[1] * this.width, element[2] * this.width, element[3]));
-        }
+        tubes.forEach(tube => this.game.addEntity(new Tube(this.game, tube[0] * this.width, tube[1] * this.width, tube[2])));
     };
 
     loadEnemies() {
-        var elements = [
-            'koop 12 12.5 0',
-            'goom 22 13',
-            'goom 40 13',
-            'goom 51 13',
-            'goom 52.5 13',
-            'goom 80 5',
-            'goom 82 5',
-            'goom 96 13',
-            'goom 97.5 13',
-            'goom 113 13',
-            'goom 114.5 13',
-            'goom 123 13',
-            'goom 124.5 13',
-            'goom 127 13',
-            'goom 128.5 13',
+        var koopas = [
+            [12, 12.5, 0],
         ];
 
-        for (let i=0; i<elements.length; i++) {
-            let element = elements[i].split(" ");
-            switch(element[0]) {
-                case 'koop':
-                    this.game.addEntity(new Koopa(this.game, element[1] * this.width, element[2] * this.width, element[3] * this.width));
-                    break;
-                case 'goom':
-                    this.game.addEntity(new Goomba(this.game, element[1] * this.width, element[2] * this.width));
-                    break;
-                default:
-                    break;
-            }
-        }
+        var goombas = [
+            [22, 13],
+            [40, 13],
+            [51, 13],
+            [52.5, 13], 
+            [80, 5],
+            [82, 5],
+            [96, 13],
+            [97.5, 13],
+            [113, 13],
+            [114.5, 13],
+            [123, 13],
+            [124.5, 13],
+            [127, 13],
+            [128.5, 13],
+        ];
+
+        koopas.forEach(koopa => this.game.addEntity(new Koopa(this.game, koopa[0] * this.width, koopa[1] * this.width, koopa[2] * this.width)));
+        goombas.forEach(goomba => this.game.addEntity(new Goomba(this.game, goomba[0] * this.width, goomba[1] * this.width)));
     };
 }
