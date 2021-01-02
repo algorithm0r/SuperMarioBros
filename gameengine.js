@@ -50,7 +50,7 @@ class GameEngine {
                     break;
                 case "ArrowDown":
                 case "KeyS":
-                    that.up = true;
+                    that.down = true;
                     break;
                 case "KeyZ":
                     that.B = true;
@@ -77,7 +77,7 @@ class GameEngine {
                     break;
                 case "ArrowDown":
                 case "KeyS":
-                    that.up = false;
+                    that.down = false;
                     break;
                 case "KeyZ":
                     that.B = false;

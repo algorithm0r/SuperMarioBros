@@ -118,6 +118,7 @@ class Koopa {
                         that.updateBB();
                     } else if (entity !== that) {
                         that.velocity.x = -that.velocity.x;
+                        that.facing = (that.facing + 1) % 2;
                     }
                 };
             });

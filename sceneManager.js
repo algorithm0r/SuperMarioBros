@@ -258,9 +258,7 @@ class SceneManager {
         block = new Block(this.game, 185 * PARAMS.BLOCKWIDTH, 6 * PARAMS.BLOCKWIDTH, 2 * PARAMS.BLOCKWIDTH);
         this.game.addEntity(block);
 
-        let goomba = new Koopa(this.game, 12 * PARAMS.BLOCKWIDTH, 12.5 * PARAMS.BLOCKWIDTH, 0);
-        this.game.addEntity(goomba);
-        goomba = new Goomba(this.game, 22 * PARAMS.BLOCKWIDTH, 13 * PARAMS.BLOCKWIDTH);
+        let goomba = new Goomba(this.game, 22 * PARAMS.BLOCKWIDTH, 13 * PARAMS.BLOCKWIDTH);
         this.game.addEntity(goomba);
         goomba = new Goomba(this.game, 40 * PARAMS.BLOCKWIDTH, 13 * PARAMS.BLOCKWIDTH);
         this.game.addEntity(goomba);
@@ -275,6 +273,8 @@ class SceneManager {
         goomba = new Goomba(this.game, 96 * PARAMS.BLOCKWIDTH, 13 * PARAMS.BLOCKWIDTH);
         this.game.addEntity(goomba);
         goomba = new Goomba(this.game, 97.5 * PARAMS.BLOCKWIDTH, 13 * PARAMS.BLOCKWIDTH);
+        this.game.addEntity(goomba);
+        goomba = new Koopa(this.game, 106 * PARAMS.BLOCKWIDTH, 12.5 * PARAMS.BLOCKWIDTH, 1);
         this.game.addEntity(goomba);
         goomba = new Goomba(this.game, 113 * PARAMS.BLOCKWIDTH, 13 * PARAMS.BLOCKWIDTH);
         this.game.addEntity(goomba);
@@ -321,10 +321,44 @@ class SceneManager {
         this.coinAnimation.drawFrame(this.game.clockTick, ctx, 6 * PARAMS.BLOCKWIDTH, 1 * PARAMS.BLOCKWIDTH, 3);
 
         if (PARAMS.DEBUG) {
-            let xV = "xV=" + this.game.mario.velocity.x;
-            let yV = "yV=" + this.game.mario.velocity.y;
-            ctx.fillText(xV, 1.5 * PARAMS.BLOCKWIDTH, 2 * PARAMS.BLOCKWIDTH);
-            ctx.fillText(yV, 1.5 * PARAMS.BLOCKWIDTH, 2.5 * PARAMS.BLOCKWIDTH);
+            let xV = "xV=" + Math.floor(this.game.mario.velocity.x);
+            let yV = "yV=" + Math.floor(this.game.mario.velocity.y);
+            ctx.fillText(xV, 1.5 * PARAMS.BLOCKWIDTH, 2.5 * PARAMS.BLOCKWIDTH);
+            ctx.fillText(yV, 1.5 * PARAMS.BLOCKWIDTH, 3 * PARAMS.BLOCKWIDTH);
+
+            ctx.strokeStyle = "White";
+            ctx.lineWidth = 2;
+            ctx.strokeStyle = this.game.left ? "White" : "Grey";
+            ctx.fillStyle = ctx.strokeStyle;
+            ctx.strokeRect(6 * PARAMS.BLOCKWIDTH - 2, 2.5 * PARAMS.BLOCKWIDTH - 2, 0.5 * PARAMS.BLOCKWIDTH + 2, 0.5 * PARAMS.BLOCKWIDTH + 2);
+            ctx.fillText("L", 6 * PARAMS.BLOCKWIDTH, 3 * PARAMS.BLOCKWIDTH);
+            ctx.strokeStyle = this.game.down ? "White" : "Grey";
+            ctx.fillStyle = ctx.strokeStyle;
+            ctx.strokeRect(6.5 * PARAMS.BLOCKWIDTH, 3 * PARAMS.BLOCKWIDTH, 0.5 * PARAMS.BLOCKWIDTH + 2, 0.5 * PARAMS.BLOCKWIDTH + 2);
+            ctx.fillText("D", 6.5 * PARAMS.BLOCKWIDTH + 2, 3.5 * PARAMS.BLOCKWIDTH + 2);
+            ctx.strokeStyle = this.game.up ? "White" : "Grey";
+            ctx.fillStyle = ctx.strokeStyle;
+            ctx.strokeRect(6.5 * PARAMS.BLOCKWIDTH, 2 * PARAMS.BLOCKWIDTH - 4, 0.5 * PARAMS.BLOCKWIDTH + 2, 0.5 * PARAMS.BLOCKWIDTH + 2);
+            ctx.fillText("U", 6.5 * PARAMS.BLOCKWIDTH + 2, 2.5 * PARAMS.BLOCKWIDTH - 2);
+            ctx.strokeStyle = this.game.right ? "White" : "Grey";
+            ctx.fillStyle = ctx.strokeStyle;
+            ctx.strokeRect(7 * PARAMS.BLOCKWIDTH + 2, 2.5 * PARAMS.BLOCKWIDTH - 2, 0.5 * PARAMS.BLOCKWIDTH + 2, 0.5 * PARAMS.BLOCKWIDTH + 2);
+            ctx.fillText("R", 7 * PARAMS.BLOCKWIDTH + 4, 3 * PARAMS.BLOCKWIDTH);
+
+            ctx.strokeStyle = this.game.A ? "White" : "Grey";
+            ctx.fillStyle = ctx.strokeStyle;
+            ctx.beginPath();
+            ctx.arc(8.25 * PARAMS.BLOCKWIDTH + 2, 2.75 * PARAMS.BLOCKWIDTH, 0.25 * PARAMS.BLOCKWIDTH + 4, 0, 2 * Math.PI);
+            ctx.stroke();
+            ctx.fillText("A", 8 * PARAMS.BLOCKWIDTH + 4, 3 * PARAMS.BLOCKWIDTH);
+            ctx.strokeStyle = this.game.B ? "White" : "Grey";
+            ctx.fillStyle = ctx.strokeStyle;
+           ctx.beginPath();
+            ctx.arc(9 * PARAMS.BLOCKWIDTH + 2, 2.75 * PARAMS.BLOCKWIDTH, 0.25 * PARAMS.BLOCKWIDTH + 4, 0, 2 * Math.PI);
+            ctx.stroke();
+            ctx.fillText("B", 8.75 * PARAMS.BLOCKWIDTH + 4, 3 * PARAMS.BLOCKWIDTH);
+
+            ctx.strokeStyle = "White";
         }
     };
 };
