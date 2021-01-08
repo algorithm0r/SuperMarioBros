@@ -53,9 +53,11 @@ class GameEngine {
                     that.down = true;
                     break;
                 case "KeyZ":
+                case "Comma":
                     that.B = true;
                     break;
                 case "KeyX":
+                case "Period":
                     that.A = true;
                     break;
             }
@@ -80,9 +82,11 @@ class GameEngine {
                     that.down = false;
                     break;
                 case "KeyZ":
+                case "Comma":
                     that.B = false;
                     break;
                 case "KeyX":
+                case "Period":
                     that.A = false;
                     break;
             }
@@ -99,6 +103,7 @@ class GameEngine {
         for (var i = 0; i < this.entities.length; i++) {
             this.entities[i].draw(this.ctx);
         }
+        this.camera.draw(this.ctx);
     };
 
     update() {
@@ -111,6 +116,7 @@ class GameEngine {
                 entity.update();
             }
         }
+        this.camera.update();
 
         for (var i = this.entities.length - 1; i >= 0; --i) {
             if (this.entities[i].removeFromWorld) {

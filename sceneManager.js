@@ -20,7 +20,7 @@ class SceneManager {
     };
 
     clearEntities() {
-        this.game.entities = [this];
+        this.game.entities = [];
     };
 
     loadLevelOne() {
@@ -300,7 +300,7 @@ class SceneManager {
         let midpoint = PARAMS.CANVAS_WIDTH/2 - PARAMS.BLOCKWIDTH / 2;
 
         if (this.x < this.mario.x - midpoint) this.x = this.mario.x - midpoint;
-
+    
         if (this.mario.dead && this.mario.y > PARAMS.BLOCKWIDTH * 16) {
             this.clearEntities();
             this.loadLevelOne();
@@ -353,12 +353,13 @@ class SceneManager {
             ctx.fillText("A", 8 * PARAMS.BLOCKWIDTH + 4, 3 * PARAMS.BLOCKWIDTH);
             ctx.strokeStyle = this.game.B ? "White" : "Grey";
             ctx.fillStyle = ctx.strokeStyle;
-           ctx.beginPath();
+            ctx.beginPath();
             ctx.arc(9 * PARAMS.BLOCKWIDTH + 2, 2.75 * PARAMS.BLOCKWIDTH, 0.25 * PARAMS.BLOCKWIDTH + 4, 0, 2 * Math.PI);
             ctx.stroke();
             ctx.fillText("B", 8.75 * PARAMS.BLOCKWIDTH + 4, 3 * PARAMS.BLOCKWIDTH);
 
             ctx.strokeStyle = "White";
+            ctx.fillStyle = ctx.strokeStyle;
         }
     };
 };

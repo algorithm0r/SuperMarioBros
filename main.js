@@ -21,7 +21,7 @@ ASSET_MANAGER.downloadAll(function () {
 
 	gameEngine.init(ctx);
 
-	gameEngine.addEntity(new SceneManager(gameEngine));
+	new SceneManager(gameEngine);
 
 	gameEngine.start();
 });
