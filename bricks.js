@@ -12,6 +12,11 @@ class Ground {
     update() {
     };
 
+    drawMinimap(ctx, mmX, mmY) {
+        ctx.fillStyle = "Brown";
+        ctx.fillRect(mmX + this.x / PARAMS.BITWIDTH, mmY + this.y / PARAMS.BITWIDTH, this.w / PARAMS.BITWIDTH, PARAMS.SCALE * 2);
+    };
+
     draw(ctx) {
         let brickCount = this.w / PARAMS.BLOCKWIDTH;
         for (var i = 0; i < brickCount; i++) {
@@ -87,6 +92,11 @@ class Brick { // type 0 = invis, 1 = brick, 2 = question, 3 = block
 
     };
 
+    drawMinimap(ctx, mmX, mmY) {
+        ctx.fillStyle = this.type === 2 ? "Gold" : "Brown";
+        if (this.type) ctx.fillRect(mmX + this.x / PARAMS.BITWIDTH, mmY + this.y / PARAMS.BITWIDTH, PARAMS.SCALE, PARAMS.SCALE);
+    };
+
     draw(ctx) {
         if (this.type) {
             this.animation[this.type].drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x, this.y, PARAMS.SCALE);
@@ -113,6 +123,11 @@ class Block {
     update() {
     };
 
+    drawMinimap(ctx, mmX, mmY) {
+        ctx.fillStyle = "Brown";
+        ctx.fillRect(mmX + this.x / PARAMS.BITWIDTH, mmY + this.y / PARAMS.BITWIDTH, this.w / PARAMS.BITWIDTH, PARAMS.SCALE);
+    };
+
     draw(ctx) {
         let brickCount = this.w / PARAMS.BLOCKWIDTH;
         for (var i = 0; i < brickCount; i++) {
@@ -134,6 +149,11 @@ class Tube {
     
     update() {
 
+    };
+
+    drawMinimap(ctx, mmX, mmY) {
+        ctx.fillStyle = "Green";
+        ctx.fillRect(mmX + this.x / PARAMS.BITWIDTH, mmY + this.y / PARAMS.BITWIDTH, PARAMS.SCALE * 2, PARAMS.SCALE * (this.size + 1));
     };
 
     draw(ctx) {

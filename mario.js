@@ -336,6 +336,11 @@ class Mario {
         }
     };
 
+    drawMinimap(ctx, mmX, mmY) {
+        ctx.fillStyle = "Red";
+        ctx.fillRect(mmX + this.x / PARAMS.BITWIDTH, mmY + this.y / PARAMS.BITWIDTH, PARAMS.SCALE, PARAMS.SCALE * Math.min(this.size + 1, 2));
+    }
+
     draw(ctx) {
         if (this.dead) {
             this.deadAnim.drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x, this.y, PARAMS.SCALE);

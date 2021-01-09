@@ -9,6 +9,8 @@ class SceneManager {
 
         this.coinAnimation = new Animator(ASSET_MANAGER.getAsset("./sprites/coins.png"), 0, 160, 8, 8, 4, 0.2, 0, false, true);
 
+        this.minimap = new Minimap(this.game, 1.5 * PARAMS.BLOCKWIDTH, 3.5 * PARAMS.BLOCKWIDTH, 224 * PARAMS.SCALE);
+
         this.loadLevelOne();
     };
 
@@ -326,6 +328,7 @@ class SceneManager {
             ctx.fillText(xV, 1.5 * PARAMS.BLOCKWIDTH, 2.5 * PARAMS.BLOCKWIDTH);
             ctx.fillText(yV, 1.5 * PARAMS.BLOCKWIDTH, 3 * PARAMS.BLOCKWIDTH);
 
+            ctx.translate(0, -10); // hack to move elements up by 10 pixels instead of adding -10 to all y coordinates below
             ctx.strokeStyle = "White";
             ctx.lineWidth = 2;
             ctx.strokeStyle = this.game.left ? "White" : "Grey";
@@ -358,8 +361,29 @@ class SceneManager {
             ctx.stroke();
             ctx.fillText("B", 8.75 * PARAMS.BLOCKWIDTH + 4, 3 * PARAMS.BLOCKWIDTH);
 
+            ctx.translate(0, 10);
             ctx.strokeStyle = "White";
             ctx.fillStyle = ctx.strokeStyle;
+
+            this.minimap.draw(ctx);
+        }
+    };
+};
+
+class Minimap {
+    constructor(game, x, y, w) {
+        Object.assign(this, { game, x, y, w });
+    };
+
+    update() {
+
+    };
+
+    draw(ctx) {
+        ctx.strokeStyle = "Black";
+        ctx.strokeRect(this.x, this.y, this.w, PARAMS.BLOCKWIDTH);
+        for (var i = 0; i < this.game.entities.length; i++) {
+            this.game.entities[i].drawMinimap(ctx, this.x, this.y);
         }
     };
 };

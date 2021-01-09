@@ -9,6 +9,9 @@ class BigHill {
 
     };
 
+    drawMinimap(ctx, mmX, mmY) {
+    }
+
     draw(ctx) {
         ctx.drawImage(this.spritesheet, 86, 0, 80, 40, this.x - this.game.camera.x, this.y, PARAMS.BLOCKWIDTH * 5, PARAMS.BLOCKWIDTH * 2.5);
     };
@@ -25,6 +28,9 @@ class Hill {
 
     };
 
+    drawMinimap(ctx, mmX, mmY) {
+    }
+
     draw(ctx) {
         ctx.drawImage(this.spritesheet, 169, 20, 48, 20, this.x - this.game.camera.x, this.y, PARAMS.BLOCKWIDTH * 3, PARAMS.BLOCKWIDTH * 1.25);
     };
@@ -40,6 +46,9 @@ class Bush {
     update() {
 
     };
+
+    drawMinimap(ctx, mmX, mmY) {
+    }
 
     draw(ctx) {
         ctx.drawImage(this.spritesheet, 288, 24, 8, 24, this.x - this.game.camera.x, this.y, PARAMS.BLOCKWIDTH * 0.5, PARAMS.BLOCKWIDTH * 1.5);
@@ -61,6 +70,9 @@ class Cloud {
     update() {
 
     };
+
+    drawMinimap(ctx, mmX, mmY) {
+    }
 
     draw(ctx) {
         ctx.drawImage(this.spritesheet, 211, 69, 8, 24, this.x - this.game.camera.x, this.y, PARAMS.BLOCKWIDTH * 0.5, PARAMS.BLOCKWIDTH * 1.5);

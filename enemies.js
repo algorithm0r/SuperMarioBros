@@ -50,6 +50,11 @@ class Goomba {
        }
      };
 
+    drawMinimap(ctx, mmX, mmY) {
+        ctx.fillStyle = "Tan";
+        ctx.fillRect(mmX + this.x / PARAMS.BITWIDTH, mmY + this.y / PARAMS.BITWIDTH, PARAMS.SCALE, PARAMS.SCALE);
+    };
+
     draw(ctx) {
         if (this.dead) {
             if (this.flickerFlag) {
@@ -123,6 +128,11 @@ class Koopa {
                 };
             });
         }
+    };
+
+    drawMinimap(ctx, mmX, mmY) {
+        ctx.fillStyle = "LightGreen";
+        ctx.fillRect(mmX + this.x / PARAMS.BITWIDTH, mmY + this.y / PARAMS.BITWIDTH, PARAMS.SCALE, PARAMS.SCALE * 1.5);
     };
 
     draw(ctx) {

@@ -21,7 +21,10 @@ class CoinPop {
         }
     };
 
-    draw(ctx) {
+    drawMinimap(ctx, mmX, mmY) {
+    }
+
+   draw(ctx) {
         this.animation.drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x, this.y, PARAMS.SCALE);
     };
 };
@@ -43,7 +46,10 @@ class Score {
         this.y += this.game.clockTick * this.velocity * PARAMS.SCALE;
     };
 
-    draw(ctx) {
+    drawMinimap(ctx, mmX, mmY) {
+    }
+
+   draw(ctx) {
         ctx.font = PARAMS.BLOCKWIDTH / 4 + 'px "Press Start 2P"';
         ctx.fillStyle = "White";
         ctx.fillText(this.score, this.x + (this.score < 1000 ? PARAMS.BLOCKWIDTH / 8 : 0) - this.game.camera.x, this.y);
@@ -102,7 +108,10 @@ class Mushroom {
         }
     };
 
-    draw(ctx) {
+    drawMinimap(ctx, mmX, mmY) {
+    }
+
+   draw(ctx) {
         if (this.type === 'Growth') {
             ctx.drawImage(this.spritesheet, 184, 34, 16, 16, this.x - this.game.camera.x, this.y, PARAMS.BLOCKWIDTH, PARAMS.BLOCKWIDTH);
         } else {
