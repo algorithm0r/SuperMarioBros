@@ -327,7 +327,7 @@ class Mario {
                 else if (Math.abs(this.velocity.x) >= MIN_WALK) this.state = 1;
                 else this.state = 0;
             } else {
-                console.log(this.state);
+
             }
 
             // update direction

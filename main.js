@@ -1,4 +1,3 @@
-var gameEngine = new GameEngine();
 
 var ASSET_MANAGER = new AssetManager();
 
@@ -12,6 +11,8 @@ ASSET_MANAGER.queueDownload("./sprites/items.png");
 ASSET_MANAGER.queueDownload("./sprites/coins.png");
 
 ASSET_MANAGER.downloadAll(function () {
+	var gameEngine = new GameEngine();
+
 	PARAMS.BLOCKWIDTH = PARAMS.BITWIDTH * PARAMS.SCALE;
 
 	var canvas = document.getElementById('gameWorld');

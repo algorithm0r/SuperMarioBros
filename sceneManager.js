@@ -291,8 +291,8 @@ class SceneManager {
         goomba = new Goomba(this.game, 128.5 * PARAMS.BLOCKWIDTH, 13 * PARAMS.BLOCKWIDTH);
         this.game.addEntity(goomba);
 
-        this.mario = new Mario(gameEngine, 2.5 * PARAMS.BLOCKWIDTH, 0 * PARAMS.BLOCKWIDTH);
-        gameEngine.addEntity(this.mario);
+        this.mario = new Mario(this.game, 2.5 * PARAMS.BLOCKWIDTH, 0 * PARAMS.BLOCKWIDTH);
+        this.game.addEntity(this.mario);
 
     };
 
