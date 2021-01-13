@@ -12,7 +12,8 @@ class Goomba {
     };
 
     updateBB() {
-            this.BB = new BoundingBox(this.x, this.y, PARAMS.BLOCKWIDTH, PARAMS.BLOCKWIDTH);
+        this.lastBB = this.BB;
+        this.BB = new BoundingBox(this.x, this.y, PARAMS.BLOCKWIDTH, PARAMS.BLOCKWIDTH);
     };
 
     update() {
@@ -35,10 +36,10 @@ class Goomba {
             var that = this;
             this.game.entities.forEach(function (entity) {
                 if (entity.BB && that.BB.collide(entity.BB)) {
-                    if (entity instanceof Mario) {
+                    if (entity instanceof Mario || entity instanceof Mushroom) {
 
                     } else if ((entity instanceof Ground || entity instanceof Brick || entity instanceof Block || entity instanceof Tube)
-                        && (that.BB.bottom - that.velocity.y * that.game.clockTick * PARAMS.SCALE) <= entity.BB.top) {
+                        && that.lastBB.bottom <= entity.BB.top) {
                         that.y = entity.BB.top - PARAMS.BLOCKWIDTH;
                         that.velocity.y = 0;
                         that.updateBB();

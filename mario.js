@@ -106,6 +106,7 @@ class Mario {
     };
 
     updateBB() {
+        this.lastBB = this.BB;
         if (this.size === 0 || this.size === 3) {
             this.BB = new BoundingBox(this.x, this.y, PARAMS.BLOCKWIDTH, PARAMS.BLOCKWIDTH);
         }
@@ -259,51 +260,50 @@ class Mario {
                 if (entity.BB && that.BB.collide(entity.BB)) {
                     if (that.velocity.y > 0) { // falling
                         if ((entity instanceof Ground || entity instanceof Brick || entity instanceof Block || entity instanceof Tube) // landing
-                            && (that.BB.bottom - that.velocity.y * TICK * PARAMS.SCALE) <= entity.BB.top) {
-                            if (that.size === 0 || that.size === 3) {
+                            && (that.lastBB.bottom) <= entity.BB.top) { // was above last tick
+                            if (that.size === 0 || that.size === 3) { // small
                                 that.y = entity.BB.top - PARAMS.BLOCKWIDTH;
-                                that.velocity.y === 0;
-                            } else {
+                            } else { // big
                                 that.y = entity.BB.top - 2 * PARAMS.BLOCKWIDTH;
-                                that.velocity.y === 0;
                             }
-                            if(that.state === 4) that.state = 0;
+                            that.velocity.y === 0;
+
+                            if(that.state === 4) that.state = 0; // set state to idle
                             that.updateBB();
                         }
                         if ((entity instanceof Goomba || entity instanceof Koopa) // squish Goomba
-                            && (that.BB.bottom - that.velocity.y * TICK * PARAMS.SCALE) <= entity.BB.top
-                            && !entity.dead) {
+                            && (that.lastBB.bottom) <= entity.BB.top // was above last tick
+                            && !entity.dead) { // can't squish an already squished Goomba
                             entity.dead = true;
                             that.velocity.y = -240; // bounce
                         }
                     }
                     if (that.velocity.y < 0) { // jumping
                         if ((entity instanceof Brick) // hit ceiling
-                            && (that.BB.top - that.velocity.y * TICK * PARAMS.SCALE) >= entity.BB.bottom
-                            && that.BB.collide(entity.leftBB) && that.BB.collide(entity.rightBB)) {
+                            && (that.lastBB.top) >= entity.BB.bottom // was below last tick
+                            && that.BB.collide(entity.leftBB) && that.BB.collide(entity.rightBB)) { // collide with the center point of the brick
                             entity.bounce = true;
                             that.velocity.y = 0;
                         }
                     }
-                    if (entity instanceof Brick && entity.type && that.BB.collide(entity.topBB) && that.BB.collide(entity.bottomBB)) { // hit the side of a brick or box
-                        if (that.BB.collide(entity.leftBB) && that.velocity.x > 0) { // facing right
+                    if (entity instanceof Brick && entity.type // hit a visible brick
+                        && that.BB.collide(entity.topBB) && that.BB.collide(entity.bottomBB)) { // hit the side
+                        if (that.BB.collide(entity.leftBB)) {
                             that.x = entity.BB.left - PARAMS.BLOCKWIDTH;
-                        } else if (that.BB.collide(entity.rightBB) && that.velocity.x < 0) {
+                            if (that.velocity.x > 0) that.velocity.x = 0;
+                        } else if (that.BB.collide(entity.rightBB)) {
                             that.x = entity.BB.right;
+                            if (that.velocity.x < 0) that.velocity.x = 0;
                         }
-                        that.velocity.x = 0;
                         that.updateBB();
                     }
                     if ((entity instanceof Tube || entity instanceof Block || entity instanceof Ground) && that.BB.bottom > entity.BB.top) {
                         if (that.BB.collide(entity.leftBB)) {
                             that.x = entity.BB.left - PARAMS.BLOCKWIDTH;
+                            if (that.velocity.x > 0) that.velocity.x = 0;
                         } else {
                             that.x = entity.BB.right;
-                        }
-                        if (!that.game.right && !that.game.left) {
-                            that.velocity.x = 0;
-                        } else {
-                            that.velocity.x = Math.pow(-1, that.facing) * MIN_WALK;
+                            if (that.velocity.x < 0) that.velocity.x = 0;
                         }
                         that.updateBB();
                     }
