@@ -94,8 +94,8 @@ class Mario {
         // duck animation
         // facing right
         this.animations[5][0][0] = new Animator(this.spritesheet, 209, 0, 16, 16, 1, 0.33, 14, false, true);
-        this.animations[5][1][0] = new Animator(this.spritesheet, 389, 48, 16, 32, 1, 0.33, 14, false, true);
-        this.animations[5][2][0] = new Animator(this.spritesheet, 389, 118, 16, 32, 1, 0.33, 14, false, true);
+        this.animations[5][1][0] = new Animator(this.spritesheet, 389, 47, 16, 32, 1, 0.33, 14, false, true);
+        this.animations[5][2][0] = new Animator(this.spritesheet, 389, 117, 16, 32, 1, 0.33, 14, false, true);
 
         // facing left
         this.animations[5][0][1] = new Animator(this.spritesheet, 180, 0, 16, 16, 1, 0.33, 14, false, true);
@@ -155,7 +155,7 @@ class Mario {
 
             // update velocity
 
-            if (this.state < 4) { // not jumping
+            if (this.state !== 4) { // not jumping
                 // ground physics
                 if (Math.abs(this.velocity.x) < MIN_WALK) {  // slower than a walk // starting, stopping or turning around
                     this.velocity.x = 0;
@@ -259,7 +259,7 @@ class Mario {
             this.game.entities.forEach(function (entity) {
                 if (entity.BB && that.BB.collide(entity.BB)) {
                     if (that.velocity.y > 0) { // falling
-                        if ((entity instanceof Ground || entity instanceof Brick || entity instanceof Block || entity instanceof Tube) // landing
+                        if ((entity instanceof Ground || entity instanceof Brick || entity instanceof Block || entity instanceof Tube || entity instanceof SideTube) // landing
                             && (that.lastBB.bottom) <= entity.BB.top) { // was above last tick
                             if (that.size === 0 || that.size === 3) { // small
                                 that.y = entity.BB.top - PARAMS.BLOCKWIDTH;
@@ -270,6 +270,10 @@ class Mario {
 
                             if(that.state === 4) that.state = 0; // set state to idle
                             that.updateBB();
+
+                            if (entity instanceof Tube && entity.destination && that.game.down) {
+                                that.game.camera.loadBonusLevelOne();
+                            }
                         }
                         if ((entity instanceof Goomba || entity instanceof Koopa) // squish Goomba
                             && (that.lastBB.bottom) <= entity.BB.top // was above last tick
@@ -297,10 +301,12 @@ class Mario {
                         }
                         that.updateBB();
                     }
-                    if ((entity instanceof Tube || entity instanceof Block || entity instanceof Ground) && that.BB.bottom > entity.BB.top) {
+                    if ((entity instanceof Tube || entity instanceof SideTube || entity instanceof Block || entity instanceof Ground) && that.BB.bottom > entity.BB.top) {
                         if (that.BB.collide(entity.leftBB)) {
                             that.x = entity.BB.left - PARAMS.BLOCKWIDTH;
                             if (that.velocity.x > 0) that.velocity.x = 0;
+                            if (entity instanceof SideTube && that.game.right)
+                                that.game.camera.loadLevelOne(162.5 * PARAMS.BLOCKWIDTH, 11 * PARAMS.BLOCKWIDTH) 
                         } else {
                             that.x = entity.BB.right;
                             if (that.velocity.x < 0) that.velocity.x = 0;
@@ -317,13 +323,18 @@ class Mario {
                             that.game.camera.lives++;
                         }
                     }
+                    if (entity instanceof Coin) {
+                        entity.removeFromWorld = true;
+                        that.game.camera.addCoin();
+                    }
                 }
             });
 
 
             // update state
-            if (this.state < 3) {
-                if (Math.abs(this.velocity.x) > MAX_WALK) this.state = 2;
+            if (this.state !== 4) {
+                if (this.game.down) this.state = 5;
+                else if (Math.abs(this.velocity.x) > MAX_WALK) this.state = 2;
                 else if (Math.abs(this.velocity.x) >= MIN_WALK) this.state = 1;
                 else this.state = 0;
             } else {

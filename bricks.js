@@ -173,3 +173,33 @@ class Tube {
         }
     };
 };
+
+class SideTube {
+    constructor(game, x, y, size, destination) {
+        Object.assign(this, { game, x, y, size, destination });
+
+        this.spritesheet = ASSET_MANAGER.getAsset("./sprites/tiles.png");
+
+        this.BB = new BoundingBox(this.x + PARAMS.BLOCKWIDTH / 8, this.y, PARAMS.BLOCKWIDTH * 2, PARAMS.BLOCKWIDTH * 2);
+        this.leftBB = new BoundingBox(this.x, this.y, PARAMS.BLOCKWIDTH, PARAMS.BLOCKWIDTH * 2);
+        this.rightBB = new BoundingBox(this.x + PARAMS.BLOCKWIDTH, this.y, PARAMS.BLOCKWIDTH, PARAMS.BLOCKWIDTH * 2);
+    };
+
+    update() {
+
+    };
+
+    drawMinimap(ctx, mmX, mmY) {
+        ctx.fillStyle = "Green";
+        ctx.fillRect(mmX + this.x / PARAMS.BITWIDTH, mmY + this.y / PARAMS.BITWIDTH, PARAMS.SCALE * 2, PARAMS.SCALE * 2);
+    };
+
+    draw(ctx) {
+        ctx.drawImage(this.spritesheet, 84, 417, 40, 32, this.x - this.game.camera.x, this.y, 2.5 * PARAMS.BLOCKWIDTH, 2 * PARAMS.BLOCKWIDTH);
+     
+        if (PARAMS.DEBUG) {
+            ctx.strokeStyle = 'Red';
+            ctx.strokeRect(this.BB.x - this.game.camera.x, this.BB.y, this.BB.width, this.BB.height);
+        }
+    };
+};

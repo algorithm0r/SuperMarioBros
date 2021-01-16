@@ -11,7 +11,9 @@ class SceneManager {
 
         this.minimap = new Minimap(this.game, 1.5 * PARAMS.BLOCKWIDTH, 3.5 * PARAMS.BLOCKWIDTH, 224 * PARAMS.SCALE);
 
-        this.loadLevelOne();
+        this.mario = new Mario(this.game, 2.5 * PARAMS.BLOCKWIDTH, 0 * PARAMS.BLOCKWIDTH);
+
+        this.loadLevelOne(2.5 * PARAMS.BLOCKWIDTH, 0 * PARAMS.BLOCKWIDTH);
     };
 
     addCoin() {
@@ -20,12 +22,9 @@ class SceneManager {
             this.lives++;
         }
     };
-
-    clearEntities() {
+    
+    loadLevelOne(x,y) {
         this.game.entities = [];
-    };
-
-    loadLevelOne() {
         this.x = 0;
 
         let background = new BigHill(this.game, 0, 11.5 * PARAMS.BLOCKWIDTH);
@@ -175,7 +174,7 @@ class SceneManager {
         this.game.addEntity(tube);
         tube = new Tube(this.game, 46 * PARAMS.BLOCKWIDTH, 10 * PARAMS.BLOCKWIDTH, 3);
         this.game.addEntity(tube);
-        tube = new Tube(this.game, 57 * PARAMS.BLOCKWIDTH, 10 * PARAMS.BLOCKWIDTH, 3);
+        tube = new Tube(this.game, 57 * PARAMS.BLOCKWIDTH, 10 * PARAMS.BLOCKWIDTH, 3, true);
         this.game.addEntity(tube);
         tube = new Tube(this.game, 162 * PARAMS.BLOCKWIDTH, 12 * PARAMS.BLOCKWIDTH, 1);
         this.game.addEntity(tube);
@@ -291,9 +290,157 @@ class SceneManager {
         goomba = new Goomba(this.game, 128.5 * PARAMS.BLOCKWIDTH, 13 * PARAMS.BLOCKWIDTH);
         this.game.addEntity(goomba);
 
-        this.mario = new Mario(this.game, 2.5 * PARAMS.BLOCKWIDTH, 0 * PARAMS.BLOCKWIDTH);
+        this.mario.x = x;
+        this.mario.y = this.mario.size ? y - PARAMS.BLOCKWIDTH : y;
         this.game.addEntity(this.mario);
+    };
 
+    loadBonusLevelOne() {
+        this.game.entities = [];
+        this.x = 0;
+
+        let ground = new Ground(this.game, 0, 14 * PARAMS.BLOCKWIDTH, 17 * PARAMS.BLOCKWIDTH);
+        this.game.addEntity(ground);
+
+        let box = new Brick(this.game, 0 * PARAMS.BLOCKWIDTH, 0 * PARAMS.BLOCKWIDTH, 1, "None");
+        this.game.addEntity(box);
+        box = new Brick(this.game, 0 * PARAMS.BLOCKWIDTH, 1 * PARAMS.BLOCKWIDTH, 1, "None");
+        this.game.addEntity(box);
+        box = new Brick(this.game, 0 * PARAMS.BLOCKWIDTH, 2 * PARAMS.BLOCKWIDTH, 1, "None");
+        this.game.addEntity(box);
+        box = new Brick(this.game, 0 * PARAMS.BLOCKWIDTH, 3 * PARAMS.BLOCKWIDTH, 1, "None");
+        this.game.addEntity(box);
+        box = new Brick(this.game, 0 * PARAMS.BLOCKWIDTH, 4 * PARAMS.BLOCKWIDTH, 1, "None");
+        this.game.addEntity(box);
+        box = new Brick(this.game, 0 * PARAMS.BLOCKWIDTH, 5 * PARAMS.BLOCKWIDTH, 1, "None");
+        this.game.addEntity(box);
+        box = new Brick(this.game, 0 * PARAMS.BLOCKWIDTH, 6 * PARAMS.BLOCKWIDTH, 1, "None");
+        this.game.addEntity(box);
+        box = new Brick(this.game, 0 * PARAMS.BLOCKWIDTH, 7 * PARAMS.BLOCKWIDTH, 1, "None");
+        this.game.addEntity(box);
+        box = new Brick(this.game, 0 * PARAMS.BLOCKWIDTH, 8 * PARAMS.BLOCKWIDTH, 1, "None");
+        this.game.addEntity(box);
+        box = new Brick(this.game, 0 * PARAMS.BLOCKWIDTH, 9 * PARAMS.BLOCKWIDTH, 1, "None");
+        this.game.addEntity(box);
+        box = new Brick(this.game, 0 * PARAMS.BLOCKWIDTH, 10 * PARAMS.BLOCKWIDTH, 1, "None");
+        this.game.addEntity(box);
+        box = new Brick(this.game, 0 * PARAMS.BLOCKWIDTH, 11 * PARAMS.BLOCKWIDTH, 1, "None");
+        this.game.addEntity(box);
+        box = new Brick(this.game, 0 * PARAMS.BLOCKWIDTH, 12 * PARAMS.BLOCKWIDTH, 1, "None");
+        this.game.addEntity(box);
+        box = new Brick(this.game, 0 * PARAMS.BLOCKWIDTH, 13 * PARAMS.BLOCKWIDTH, 1, "None");
+        this.game.addEntity(box);
+
+        box = new Brick(this.game, 4 * PARAMS.BLOCKWIDTH, 0 * PARAMS.BLOCKWIDTH, 1, "None");
+        this.game.addEntity(box);
+        box = new Brick(this.game, 5 * PARAMS.BLOCKWIDTH, 0 * PARAMS.BLOCKWIDTH, 1, "None");
+        this.game.addEntity(box);
+        box = new Brick(this.game, 6 * PARAMS.BLOCKWIDTH, 0 * PARAMS.BLOCKWIDTH, 1, "None");
+        this.game.addEntity(box);
+        box = new Brick(this.game, 7 * PARAMS.BLOCKWIDTH, 0 * PARAMS.BLOCKWIDTH, 1, "None");
+        this.game.addEntity(box);
+        box = new Brick(this.game, 8 * PARAMS.BLOCKWIDTH, 0 * PARAMS.BLOCKWIDTH, 1, "None");
+        this.game.addEntity(box);
+        box = new Brick(this.game, 9 * PARAMS.BLOCKWIDTH, 0 * PARAMS.BLOCKWIDTH, 1, "None");
+        this.game.addEntity(box);
+        box = new Brick(this.game, 10 * PARAMS.BLOCKWIDTH, 0 * PARAMS.BLOCKWIDTH, 1, "None");
+        this.game.addEntity(box);
+
+        box = new Brick(this.game, 4 * PARAMS.BLOCKWIDTH, 11 * PARAMS.BLOCKWIDTH, 1, "None");
+        this.game.addEntity(box);
+        box = new Brick(this.game, 5 * PARAMS.BLOCKWIDTH, 11* PARAMS.BLOCKWIDTH, 1, "None");
+        this.game.addEntity(box);
+        box = new Brick(this.game, 6 * PARAMS.BLOCKWIDTH, 11 * PARAMS.BLOCKWIDTH, 1, "None");
+        this.game.addEntity(box);
+        box = new Brick(this.game, 7 * PARAMS.BLOCKWIDTH, 11* PARAMS.BLOCKWIDTH, 1, "None");
+        this.game.addEntity(box);
+        box = new Brick(this.game, 8 * PARAMS.BLOCKWIDTH, 11* PARAMS.BLOCKWIDTH, 1, "None");
+        this.game.addEntity(box);
+        box = new Brick(this.game, 9 * PARAMS.BLOCKWIDTH, 11* PARAMS.BLOCKWIDTH, 1, "None");
+        this.game.addEntity(box);
+        box = new Brick(this.game, 10 * PARAMS.BLOCKWIDTH, 11 * PARAMS.BLOCKWIDTH, 1, "None");
+        this.game.addEntity(box);
+
+        box = new Brick(this.game, 4 * PARAMS.BLOCKWIDTH, 12 * PARAMS.BLOCKWIDTH, 1, "None");
+        this.game.addEntity(box);
+        box = new Brick(this.game, 5 * PARAMS.BLOCKWIDTH, 12 * PARAMS.BLOCKWIDTH, 1, "None");
+        this.game.addEntity(box);
+        box = new Brick(this.game, 6 * PARAMS.BLOCKWIDTH, 12 * PARAMS.BLOCKWIDTH, 1, "None");
+        this.game.addEntity(box);
+        box = new Brick(this.game, 7 * PARAMS.BLOCKWIDTH, 12 * PARAMS.BLOCKWIDTH, 1, "None");
+        this.game.addEntity(box);
+        box = new Brick(this.game, 8 * PARAMS.BLOCKWIDTH, 12 * PARAMS.BLOCKWIDTH, 1, "None");
+        this.game.addEntity(box);
+        box = new Brick(this.game, 9 * PARAMS.BLOCKWIDTH, 12 * PARAMS.BLOCKWIDTH, 1, "None");
+        this.game.addEntity(box);
+        box = new Brick(this.game, 10 * PARAMS.BLOCKWIDTH, 12 * PARAMS.BLOCKWIDTH, 1, "None");
+        this.game.addEntity(box);
+
+        box = new Brick(this.game, 4 * PARAMS.BLOCKWIDTH, 13 * PARAMS.BLOCKWIDTH, 1, "None");
+        this.game.addEntity(box);
+        box = new Brick(this.game, 5 * PARAMS.BLOCKWIDTH, 13 * PARAMS.BLOCKWIDTH, 1, "None");
+        this.game.addEntity(box);
+        box = new Brick(this.game, 6 * PARAMS.BLOCKWIDTH, 13 * PARAMS.BLOCKWIDTH, 1, "None");
+        this.game.addEntity(box);
+        box = new Brick(this.game, 7 * PARAMS.BLOCKWIDTH, 13 * PARAMS.BLOCKWIDTH, 1, "None");
+        this.game.addEntity(box);
+        box = new Brick(this.game, 8 * PARAMS.BLOCKWIDTH, 13 * PARAMS.BLOCKWIDTH, 1, "None");
+        this.game.addEntity(box);
+        box = new Brick(this.game, 9 * PARAMS.BLOCKWIDTH, 13 * PARAMS.BLOCKWIDTH, 1, "None");
+        this.game.addEntity(box);
+        box = new Brick(this.game, 10 * PARAMS.BLOCKWIDTH, 13 * PARAMS.BLOCKWIDTH, 1, "None");
+        this.game.addEntity(box);
+
+        let coin = new Coin(this.game, 4 * PARAMS.BLOCKWIDTH, 10 * PARAMS.BLOCKWIDTH);
+        this.game.addEntity(coin);
+        coin = new Coin(this.game, 5 * PARAMS.BLOCKWIDTH, 10 * PARAMS.BLOCKWIDTH);
+        this.game.addEntity(coin);
+        coin = new Coin(this.game, 6 * PARAMS.BLOCKWIDTH, 10 * PARAMS.BLOCKWIDTH);
+        this.game.addEntity(coin);
+        coin = new Coin(this.game, 7 * PARAMS.BLOCKWIDTH, 10 * PARAMS.BLOCKWIDTH);
+        this.game.addEntity(coin);
+        coin = new Coin(this.game, 8 * PARAMS.BLOCKWIDTH, 10 * PARAMS.BLOCKWIDTH);
+        this.game.addEntity(coin);
+        coin = new Coin(this.game, 9 * PARAMS.BLOCKWIDTH, 10 * PARAMS.BLOCKWIDTH);
+        this.game.addEntity(coin);
+        coin = new Coin(this.game, 10 * PARAMS.BLOCKWIDTH, 10 * PARAMS.BLOCKWIDTH);
+        this.game.addEntity(coin);
+
+        coin = new Coin(this.game, 4 * PARAMS.BLOCKWIDTH, 9 * PARAMS.BLOCKWIDTH);
+        this.game.addEntity(coin);
+        coin = new Coin(this.game, 5 * PARAMS.BLOCKWIDTH, 9 * PARAMS.BLOCKWIDTH);
+        this.game.addEntity(coin);
+        coin = new Coin(this.game, 6 * PARAMS.BLOCKWIDTH, 9 * PARAMS.BLOCKWIDTH);
+        this.game.addEntity(coin);
+        coin = new Coin(this.game, 7 * PARAMS.BLOCKWIDTH, 9 * PARAMS.BLOCKWIDTH);
+        this.game.addEntity(coin);
+        coin = new Coin(this.game, 8 * PARAMS.BLOCKWIDTH, 9 * PARAMS.BLOCKWIDTH);
+        this.game.addEntity(coin);
+        coin = new Coin(this.game, 9 * PARAMS.BLOCKWIDTH, 9 * PARAMS.BLOCKWIDTH);
+        this.game.addEntity(coin);
+        coin = new Coin(this.game, 10 * PARAMS.BLOCKWIDTH, 9 * PARAMS.BLOCKWIDTH);
+        this.game.addEntity(coin);
+
+        coin = new Coin(this.game, 5 * PARAMS.BLOCKWIDTH, 8 * PARAMS.BLOCKWIDTH);
+        this.game.addEntity(coin);
+        coin = new Coin(this.game, 6 * PARAMS.BLOCKWIDTH, 8 * PARAMS.BLOCKWIDTH);
+        this.game.addEntity(coin);
+        coin = new Coin(this.game, 7 * PARAMS.BLOCKWIDTH, 8 * PARAMS.BLOCKWIDTH);
+        this.game.addEntity(coin);
+        coin = new Coin(this.game, 8 * PARAMS.BLOCKWIDTH, 8 * PARAMS.BLOCKWIDTH);
+        this.game.addEntity(coin);
+        coin = new Coin(this.game, 9 * PARAMS.BLOCKWIDTH, 8 * PARAMS.BLOCKWIDTH);
+        this.game.addEntity(coin);
+
+        let tube = new Tube(this.game, 15 * PARAMS.BLOCKWIDTH, -1 * PARAMS.BLOCKWIDTH, 14);
+        this.game.addEntity(tube);
+        tube = new SideTube(this.game, 13 * PARAMS.BLOCKWIDTH, 12 * PARAMS.BLOCKWIDTH);
+        this.game.addEntity(tube);
+
+        this.mario.x = 2.5 * PARAMS.BLOCKWIDTH;
+        this.mario.y = 0 * PARAMS.BLOCKWIDTH;
+        this.mario.state = 4; // falling
+        this.game.addEntity(this.mario);
     };
 
     update() {
@@ -304,8 +451,8 @@ class SceneManager {
         if (this.x < this.mario.x - midpoint) this.x = this.mario.x - midpoint;
     
         if (this.mario.dead && this.mario.y > PARAMS.BLOCKWIDTH * 16) {
-            this.clearEntities();
-            this.loadLevelOne();
+            this.mario.dead = false;
+            this.loadLevelOne(2.5 * PARAMS.BLOCKWIDTH, 0 * PARAMS.BLOCKWIDTH);
         };
     };
 

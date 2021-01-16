@@ -1,3 +1,25 @@
+class Coin {
+    constructor(game, x, y) {
+        Object.assign(this, { game, x, y });
+
+        this.BB = new BoundingBox(this.x, this.y, PARAMS.BLOCKWIDTH, PARAMS.BLOCKWIDTH);
+
+        this.animation = new Animator(ASSET_MANAGER.getAsset("./sprites/coins.png"), 0, 97, 16, 16, 4, 0.1, 0, false, true);
+    };
+
+    update() {
+       
+    };
+
+    drawMinimap(ctx, mmX, mmY) {
+
+    }
+
+    draw(ctx) {
+        this.animation.drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x, this.y, PARAMS.SCALE);
+    };
+};
+
 class CoinPop {
     constructor(game, x, y) {
         Object.assign(this, { game, x, y });
