@@ -325,6 +325,7 @@ class Mario {
                     }
                     if (entity instanceof Coin) {
                         entity.removeFromWorld = true;
+                        that.game.camera.score += 200;
                         that.game.camera.addCoin();
                     }
                 }
