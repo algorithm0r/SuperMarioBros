@@ -272,7 +272,7 @@ class Mario {
                             that.updateBB();
 
                             if (entity instanceof Tube && entity.destination && that.game.down) {
-                                that.game.camera.loadBonusLevelOne();
+                                that.game.camera.loadLevel(bonusLevelOne, 2.5 * PARAMS.BLOCKWIDTH, 0 * PARAMS.BLOCKWIDTH);
                             }
                         }
                         if ((entity instanceof Goomba || entity instanceof Koopa) // squish Goomba
@@ -306,7 +306,7 @@ class Mario {
                             that.x = entity.BB.left - PARAMS.BLOCKWIDTH;
                             if (that.velocity.x > 0) that.velocity.x = 0;
                             if (entity instanceof SideTube && that.game.right)
-                                that.game.camera.loadLevelOne(162.5 * PARAMS.BLOCKWIDTH, 11 * PARAMS.BLOCKWIDTH) 
+                                that.game.camera.loadLevel(levelOne, 162.5 * PARAMS.BLOCKWIDTH, 11 * PARAMS.BLOCKWIDTH) 
                         } else {
                             that.x = entity.BB.right;
                             if (that.velocity.x < 0) that.velocity.x = 0;

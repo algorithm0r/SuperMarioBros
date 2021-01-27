@@ -21,7 +21,7 @@ ASSET_MANAGER.downloadAll(function () {
 	PARAMS.CANVAS_WIDTH = canvas.width;
 
 	gameEngine.init(ctx);
-
+		
 	new SceneManager(gameEngine);
 
 	gameEngine.start();
