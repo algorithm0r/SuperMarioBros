@@ -148,3 +148,83 @@ class Koopa {
         }
     };
 };
+
+class PirahnaPlant {
+    constructor(game, x, y) {
+        Object.assign(this, { game, x, y });
+        this.spritesheet = ASSET_MANAGER.getAsset("./sprites/enemies.png");
+        this.animations = new Animator(this.spritesheet, 390, 60, 15, 23, 2, 0.17, 15, false, true);
+        this.maxHeight = this.y - 64;
+        this.minHeight = this.y + 32;
+        this.marioClose = false;
+        this.emerging = true;
+        this.wait = 0;
+        this.paused = true;
+        this.dead = false;
+        this.deadCounter = 0;
+        this.updateBB();
+    };
+
+    updateBB() {
+        this.BB = new BoundingBox(this.x + 2 * PARAMS.SCALE, this.y + 12 * PARAMS.SCALE, 11 * PARAMS.SCALE, 6 * PARAMS.SCALE);
+    };
+
+    update() {
+        var that = this;
+        this.game.entities.forEach(function (entity) {
+            if (entity instanceof Mario) {
+                // If Mario's x position is within 65 he is too close, else false
+                that.marioClose = Math.abs(entity.x - that.x) <= 65 ? true : false;
+            };
+        });
+
+        if (this.dead) {
+            if (this.deadCounter === 0) this.game.addEntity(new Score(this.game, this.x, this.y, 100));
+            this.deadCounter += this.game.clockTick;
+            if (this.deadCounter > 0.5) this.removeFromWorld = true;  // flicker for half a second
+        }
+
+        if (this.paused && this.game.camera.x > this.x - PARAMS.CANVAS_WIDTH) {
+            this.paused = false;
+        }
+        
+        if (!this.paused && !this.dead) {
+            if (this.emerging) {
+                if (this.y != this.maxHeight) {
+                    this.y--;
+                } else if (this.wait < 90){
+                    this.wait++;
+                } else {
+                    this.emerging = false;
+                }
+            } else {
+                if (this.y != this.minHeight) {
+                    this.y++;
+                } else if (this.wait > 0) {
+                    this.wait--;
+                } else if (!this.marioClose) {
+                    this.emerging = true;
+                }
+            }
+
+            this.updateBB();
+        }
+    };
+
+    drawMinimap(ctx, mmX, mmY) {
+        ctx.fillStyle = "olive";
+        ctx.fillRect(mmX + this.x / PARAMS.BITWIDTH, mmY + this.y / PARAMS.BITWIDTH, PARAMS.SCALE, PARAMS.SCALE * 1.5);
+    };
+
+    draw(ctx) {
+        if (this.dead) {
+            
+        } else {
+            this.animations.drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x, this.y, PARAMS.SCALE);
+            if (PARAMS.DEBUG) {
+                ctx.strokeStyle = 'Red';
+                ctx.strokeRect(this.BB.x - this.game.camera.x, this.BB.y, this.BB.width, this.BB.height);
+            }
+        }
+    };
+};
