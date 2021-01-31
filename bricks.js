@@ -141,8 +141,14 @@ class Block {
 };
 
 class Tube {
-    constructor(game, x, y, size, destination) {
+    constructor(game, x, y, size, destination, enemyType) {
         Object.assign(this, { game, x, y, size, destination });
+        // Enemy Type Keeps track of which enemies spawn from this tube
+        if (enemyType) {
+            if (enemyType === "pirahna") {
+                this.game.addEntity(new PirahnaPlant(this.game, this.x, this.y, this));
+            }
+        }
 
         this.spritesheet = ASSET_MANAGER.getAsset("./sprites/tiles.png");
 

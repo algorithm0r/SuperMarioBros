@@ -66,7 +66,7 @@ class SceneManager {
             for (var i = 0; i < level.tubes.length; i++) {
                 let tube = level.tubes[i];
                 if (!tube.side) {
-                    this.game.addEntity(new Tube(this.game, tube.x * PARAMS.BLOCKWIDTH, tube.y * PARAMS.BLOCKWIDTH, tube.size, tube.destination));
+                    this.game.addEntity(new Tube(this.game, tube.x * PARAMS.BLOCKWIDTH, tube.y * PARAMS.BLOCKWIDTH, tube.size, tube.destination, tube.enemyType));
                 } else {
                     this.game.addEntity(new SideTube(this.game, tube.x * PARAMS.BLOCKWIDTH, tube.y * PARAMS.BLOCKWIDTH));
                 }

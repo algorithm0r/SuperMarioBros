@@ -150,31 +150,41 @@ class Koopa {
 };
 
 class PirahnaPlant {
-    constructor(game, x, y) {
-        Object.assign(this, { game, x, y });
+    constructor(game, x, y, tube) {
+        Object.assign(this, { game, x, y, tube });
+
+        // Positions the Pirahna Plant in the middle of the Tube is appears from
+        this.x += (tube.x / PARAMS.BLOCKWIDTH);
         this.spritesheet = ASSET_MANAGER.getAsset("./sprites/enemies.png");
-        this.animations = new Animator(this.spritesheet, 390, 60, 15, 23, 2, 0.17, 15, false, true);
+        this.animations = new Animator(this.spritesheet, 390, 60, 16, 24, 2, 0.17, 14, false, true);
         this.maxHeight = this.y - 64;
-        this.minHeight = this.y + 32;
+        this.minHeight = this.y + 24;
         this.marioClose = false;
         this.emerging = true;
-        this.wait = 0;
         this.paused = true;
         this.dead = false;
         this.deadCounter = 0;
+        this.wait = 0;
         this.updateBB();
     };
 
     updateBB() {
-        this.BB = new BoundingBox(this.x + 2 * PARAMS.SCALE, this.y + 12 * PARAMS.SCALE, 11 * PARAMS.SCALE, 6 * PARAMS.SCALE);
+        // The Pirahna Plant has a smaller Bounding Box than what is visually seen
+        // These constants define the area for that Bounding Box 
+        const xOffset = 2, yOffset = 12;
+        const widthOfBB = 11, heightOfBB = 6;
+
+        this.BB = new BoundingBox(this.x + xOffset * PARAMS.SCALE, this.y + yOffset * PARAMS.SCALE,
+                                  widthOfBB * PARAMS.SCALE, heightOfBB * PARAMS.SCALE);
+
     };
 
     update() {
         var that = this;
         this.game.entities.forEach(function (entity) {
             if (entity instanceof Mario) {
-                // If Mario's x position is within 65 he is too close, else false
-                that.marioClose = Math.abs(entity.x - that.x) <= 65 ? true : false;
+                // If Mario's x position is within 70 he is too close, else false
+                that.marioClose = Math.abs(entity.x - that.x) <= 70 ? true : false;
             };
         });
 
@@ -221,6 +231,8 @@ class PirahnaPlant {
             
         } else {
             this.animations.drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x, this.y, PARAMS.SCALE);
+            if (this.emerging) this.tube.draw(ctx);
+            
             if (PARAMS.DEBUG) {
                 ctx.strokeStyle = 'Red';
                 ctx.strokeRect(this.BB.x - this.game.camera.x, this.BB.y, this.BB.width, this.BB.height);

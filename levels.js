@@ -56,7 +56,7 @@ var levelOne = {
         { x: 128, y: 6, type: 2, prize: "Coin" },
         { x: 129, y: 6, type: 2, prize: "Coin" },
         { x: 169, y: 10, type: 2, prize: "Coin" }],
-    tubes: [{ x: 28, y: 12, size: 1, destination: false },
+    tubes: [{ x: 28, y: 12, size: 1, destination: false, enemyType: "pirahna" },
         { x: 38, y: 11, size: 2, destination: false },
         { x: 46, y: 10, size: 3, destination: false },
         { x: 57, y: 10, size: 3, destination: true },
@@ -101,7 +101,7 @@ var levelOne = {
         { x: 127, y: 13 },
         { x: 128.5, y: 13 }],
     koopas: [{ x: 106, y: 12.5, facing: 1}],
-    pirahnaplant : [{ x: 28, y: 12 }],
+    // pirahnaplant : [{ x: 28, y: 12 }],
 };
 
 var bonusLevelOne = {
