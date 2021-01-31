@@ -84,12 +84,6 @@ class SceneManager {
                 this.game.addEntity(new Koopa(this.game, koopa.x * PARAMS.BLOCKWIDTH, koopa.y * PARAMS.BLOCKWIDTH, koopa.facing));
             }
         }
-        if (level.pirahnaplant) {
-            for (var i=0; i<level.pirahnaplant.length; i++) {
-                let pirahnaplant = level.pirahnaplant[i];
-                this.game.addEntity(new PirahnaPlant(this.game, 23 + pirahnaplant.x  * PARAMS.BLOCKWIDTH, pirahnaplant.y * PARAMS.BLOCKWIDTH));
-            }
-        }
         if (level.coins) {
             for (var i = 0; i < level.coins.length; i++) {
                 let coin = level.coins[i];

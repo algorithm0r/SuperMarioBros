@@ -101,7 +101,6 @@ var levelOne = {
         { x: 127, y: 13 },
         { x: 128.5, y: 13 }],
     koopas: [{ x: 106, y: 12.5, facing: 1}],
-    // pirahnaplant : [{ x: 28, y: 12 }],
 };
 
 var bonusLevelOne = {
