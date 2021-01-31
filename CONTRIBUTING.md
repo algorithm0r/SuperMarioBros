@@ -34,7 +34,7 @@ Example: hungvu/contributing-guideline
 3. At **week 7**, you will make a pull request and your code will be reviewed by Hung Vu (@hunghvu), Benjamin (@BenjaminDeJager), and professor Chris (@algorithm0r).
 4. For the pull requests, please document what you changed, updated, what portion of an assigned task has been completed, not completed and any potential or discovered bugs which haven't been fixed.
 5. For the pull requests, please link you pull request with an assigned issue. For more information, please visit [this site](https://docs.github.com/en/github/managing-your-work-on-github/linking-a-pull-request-to-an-issue).
-6. For each pull request, please add a label **PR: NEED REVIEW** so the reviewer know it is a submission. The reviewer will then update labels with the followings.
+6. For each pull request, we will restrict **Assignees** to the code author(s). Please also add a label **PR: NEED REVIEW** so the reviewer know it is a submission. The reviewer will then update labels with the followings.
 
    - **PR: REVIEWED**: This pull request is reviewed, but the decision has not been made. This tag will always stay on the pull request.
    - The labels below are more like secondary one, which indicates the review progress.
