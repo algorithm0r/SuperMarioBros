@@ -9,7 +9,7 @@ ASSET_MANAGER.queueDownload("./sprites/ground.png");
 ASSET_MANAGER.queueDownload("./sprites/bricks.png");
 ASSET_MANAGER.queueDownload("./sprites/items.png");
 ASSET_MANAGER.queueDownload("./sprites/coins.png");
-
+//blurg
 ASSET_MANAGER.downloadAll(function () {
 	var gameEngine = new GameEngine();
 
@@ -21,7 +21,7 @@ ASSET_MANAGER.downloadAll(function () {
 	PARAMS.CANVAS_WIDTH = canvas.width;
 
 	gameEngine.init(ctx);
-		
+
 	new SceneManager(gameEngine);
 
 	gameEngine.start();
