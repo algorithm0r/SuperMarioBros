@@ -32,7 +32,7 @@ Example: hungvu/contributing-guideline
 1. You will not directly push the changes to a master branch. Master branch is protected.
 2. Your code will stay on your own branch. You might create an upstream branch. Each branch is only accessible by contributors of that one.
 3. At **week 7**, you will make a pull request and your code will be reviewed by Hung Vu (@hunghvu), Benjamin (@BenjaminDeJager), and professor Chris (@algorithm0r).
-4. For the pull requests, please document what you changed, updated and any potential or discovered bugs which haven't been fixed.
+4. For the pull requests, please document what you changed, updated, what portion of an assigned task has been completed, not completed and any potential or discovered bugs which haven't been fixed.
 5. For the pull requests, please link you pull request with an assigned issue. For more information, please visit [this site](https://docs.github.com/en/github/managing-your-work-on-github/linking-a-pull-request-to-an-issue).
 6. For each pull request, please add a label **PR: NEED REVIEW** so the reviewer know it is a submission. The reviewer will then update labels with the followings.
 
