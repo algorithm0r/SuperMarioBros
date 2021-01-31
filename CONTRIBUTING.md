@@ -26,6 +26,7 @@ Example: hungvu/contributing-guideline
 1. In **week 7**, you will make a pull request to submit your code.
 2. Tasks will be divided into issues and put into project board. A story board will clearly indicate the task for each person and/or group. It is located in **Projects** tab.
 3. All pull requests must pass an automated test run by Github action. As of now, it simply checks whether your code is compilable or not. There can be more tests added later on.
+4. Please use .gitignore to exclude your environment or config files.
 
 ## Submitting pull request
 
