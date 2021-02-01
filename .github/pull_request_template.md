@@ -1,6 +1,6 @@
-# Description
+# Pull Request Description
 
-Please fill in the form below. For the checkbox, use [x] to have a checkmark. For example:
+Please fill out the form below. For the checkbox, use [x] to have a checkmark. For example:
 
 - [x] With a checkmark.
 - [ ] Without a checkmark.
@@ -32,37 +32,38 @@ This should not affect the way whether your pull request is accepted or not. Thi
    - [ ] Yes
    - [ ] No
 
-## Related issues
+## Unimplented task(s)
+
+- *Only answer when you chose **Partially completed** in question 2, provide a brief summary of what you have not done in here.*
+
+## Related issue(s)
 
 - *Issue number goes here.*
+- *If you answer **Yes** to question 3, please provide a description about that in here.*
 
 ## Added
 
 - *Description goes here.*
 - *Description goes here.*
 
-## Changed
+## Changed and Enhanced
 
 - *Description goes here.*
 - *Description goes here.*
 
-## Enhanced and Fixed
+## Fixed
 
 - *Description goes here.*
 - *Description goes here.*
 
 ## Bugs
 
-1. Not-fixed bugs (only answer when you chose **Yes** in question 3):
+1. Not-fixed bugs (only answer when you chose **Yes** in question 4):
    - *Description goes here.*
    - *Description goes here.*
-2. Potention bugs (only answer when you chose **Yes** in question 4):
+2. Potention bugs (only answer when you chose **Yes** in question 5):
    - *Description goes here.*
    - *Description goes here.*
-
-## What have not been completed
-
-- *Only answer when you chose **Partially completed** in question 2, provide a brief summary of what you have not done in here.*
 
 ## Contributors and code author(s)
 
