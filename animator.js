@@ -6,7 +6,7 @@ class Animator {
         this.totalTime = this.frameCount * this.frameDuration;
 
     };
-//test
+
     drawFrame(tick, ctx, x, y, scale) {
         this.elapsedTime += tick;
 
