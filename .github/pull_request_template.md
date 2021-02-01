@@ -2,12 +2,12 @@
 
 Please fill in the form below. For the checkbox, use [x] to have a checkmark. For example:
 
-- [x] With a checkmark
-- [ ] Without a checkmark
+- [x] With a checkmark.
+- [ ] Without a checkmark.
 
 This should not affect the way whether your pull request is accepted or not. Think of it like a survey and documentation, so the reviewers and future developers can follow your PR easier.
 
-1. Have you included *.gitignore* file? Or manually remove config and environment files from this submission? The answer should be yes in this case.
+1. Have you included *.gitignore* file? Or manually remove config and environment files (E.g: *node_modules* folder, Eclipse IDE files) from this submission? The answer should be **Yes** in this case.
 
    - [ ] Yes
    - [ ] No
@@ -22,7 +22,7 @@ This should not affect the way whether your pull request is accepted or not. Thi
    - [ ] Yes
    - [ ] No
 
-4. Are you aware of any bug caused by your code that have not been fixed in your PR ?
+4. Are you aware of any bug caused by your code that have not been fixed in this PR?
 
    - [ ] Yes
    - [ ] No
@@ -34,26 +34,31 @@ This should not affect the way whether your pull request is accepted or not. Thi
 
 ## Related issues
 
-- *Issue number goes here*
+- *Issue number goes here.*
 
 ## Added
 
-- *Description goes here*
-- *Description goes here*
+- *Description goes here.*
+- *Description goes here.*
 
 ## Changed
 
-- *Description goes here*
-- *Description goes here*
+- *Description goes here.*
+- *Description goes here.*
+
+## Enhanced and Fixed
+
+- *Description goes here.*
+- *Description goes here.*
 
 ## Bugs
 
 1. Not-fixed bugs (only answer when you chose **Yes** in question 3):
-   - *Description goes here*
-   - *Description goes here*
+   - *Description goes here.*
+   - *Description goes here.*
 2. Potention bugs (only answer when you chose **Yes** in question 4):
-   - *Description goes here*
-   - *Description goes here*
+   - *Description goes here.*
+   - *Description goes here.*
 
 ## What have not been completed
 
@@ -61,4 +66,11 @@ This should not affect the way whether your pull request is accepted or not. Thi
 
 ## Contributors and code author(s)
 
-- *Indicate the name of participants in this PRs*
+- *Indicate the name of participants in this PRs.*
+
+## Final check
+
+Have you fully filled out this document, and add a label **PR: NEED REVIEW** to this pull request? Answer *Yes* (as it should be) means you are good to go! Thanks for the contribution.
+
+- [ ] Yes
+- [ ] No
