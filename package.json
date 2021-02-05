@@ -3,6 +3,9 @@
   "description": "A web based clone of the classic NES Super Mario Brothers.",
   "author": "Chris Marriott",
   "main": "index.js",
+  "scripts": {
+    "test": "mocha"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/algorithm0r/SuperMarioBros.git"
@@ -10,5 +13,8 @@
   "homepage": "https://github.com/algorithm0r/SuperMarioBros",
   "bugs": {
     "url": "https://github.com/algorithm0r/SuperMarioBros/issues"
+  },
+  "dependencies": {
+    "mocha": "^8.2.1"
   }
 }
