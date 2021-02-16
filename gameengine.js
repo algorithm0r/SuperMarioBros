@@ -34,6 +34,21 @@ class GameEngine {
     startInput() {
         var that = this;
 
+        var getXandY = function (e) {
+            var x = e.clientX - that.ctx.canvas.getBoundingClientRect().left;
+            var y = e.clientY - that.ctx.canvas.getBoundingClientRect().top;
+
+            return { x: x, y: y, radius: 0 };
+        }
+
+        this.ctx.canvas.addEventListener("mousemove", function (e) {
+            that.mouse = getXandY(e);
+        }, false);
+
+        this.ctx.canvas.addEventListener("click", function (e) {
+            that.click = getXandY(e);
+        }, false);
+
         this.ctx.canvas.addEventListener("keydown", function (e) {
             switch (e.code) {
                 case "ArrowLeft":
@@ -128,5 +143,7 @@ class GameEngine {
         this.clockTick = this.timer.tick();
         this.update();
         this.draw();
+
+        this.click = null;
     };
 };
