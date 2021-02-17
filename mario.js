@@ -118,6 +118,7 @@ class Mario {
     die() {
         this.velocity.y = -640;
         this.dead = true;
+        ASSET_MANAGER.pauseBackgroundMusic();
     };
 
     update() {
@@ -220,6 +221,12 @@ class Mario {
                             this.fallAcc = RUN_FALL;
                         }
                         this.state = 4;
+
+                        if (this.size === 0) {
+                            ASSET_MANAGER.playAsset("./audio/small-jump.mp3");
+                        } else {
+                            ASSET_MANAGER.playAsset("./audio/super-jump.mp3");
+                        }
                     }
                 } else {
                     // air physics
@@ -291,6 +298,7 @@ class Mario {
                             && !entity.dead) { // can't squish an already squished Goomba
                             entity.dead = true;
                             that.velocity.y = -240; // bounce
+                            ASSET_MANAGER.playAsset("./audio/stomp.mp3");
                         }
                     }
                     if (that.velocity.y < 0) { // jumping

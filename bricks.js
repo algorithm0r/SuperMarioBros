@@ -85,7 +85,13 @@ class Brick { // type 0 = invis, 1 = brick, 2 = question, 3 = block
                     this.game.addEntity(new Mushroom(this.game, this.x, this.BB.top, this, '1up'));
                     this.type = 3;
             }
-        
+            if (this.type === 1) {
+                if (this.game.mario.size === 0) {
+                    ASSET_MANAGER.playAsset("./audio/bump.wav");
+                } else {
+                    ASSET_MANAGER.playAsset("./audio/block.mp3");
+                }
+            }
         }
 
         if (this.y > this.BB.top) this.y = this.BB.top;
