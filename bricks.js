@@ -221,7 +221,11 @@ class FireBar {
         for (var i = 0; i < 6; i++) {
             var x = i * 25 * Math.sin(this.angle);
             var y = i * 25 * Math.cos(this.angle);
-            var fire = new Fire(this.game, this.x + x + 12, this.y + y + 12);
+            if(i <= 1) {
+                var fire = new Fire(this.game, this.x + x + 12, this.y + y + 12, true);
+            } else {
+                var fire = new Fire(this.game, this.x + x + 12, this.y + y + 12, false);
+            }
             this.fires.push(fire);
             this.game.addEntity(fire);
         }
@@ -249,16 +253,20 @@ class FireBar {
 }
 
 class Fire {
-    constructor(game, x, y) {
-        Object.assign(this, { game, x, y });
+    constructor(game, x, y, inner) {
+        Object.assign(this, { game, x, y, inner });
         this.angle = 0;
         this.spritesheetFire = ASSET_MANAGER.getAsset("./sprites/firebar_fire.png");
         this.animation = new Animator(this.spritesheetFire, 0, 0, 8, 8, 4, 0.1, 0, false, true);
-        this.BB = new BoundingBox(this.x + 6, this.y + 6, 12, 12);
+        if(!this.inner) {
+            this.BB = new BoundingBox(this.x, this.y, 24, 24);
+        }
     };
 
     update() {
-        this.BB = new BoundingBox(this.x + 6, this.y + 6, 12, 12);
+        if(!this.inner) {
+            this.BB = new BoundingBox(this.x, this.y, 24, 24);
+        }
     };
 
     drawMinimap(ctx, mmX, mmY) {
@@ -266,7 +274,7 @@ class Fire {
 
     draw(ctx) {
         this.animation.drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x , this.y, 3);
-        if (PARAMS.DEBUG) {
+        if (PARAMS.DEBUG && !this.inner) {
             ctx.strokeStyle = 'Red';
             ctx.strokeRect(this.BB.x - this.game.camera.x, this.BB.y, this.BB.width, this.BB.height);
         }
