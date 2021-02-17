@@ -328,6 +328,9 @@ class Mario {
                         that.game.camera.score += 200;
                         that.game.camera.addCoin();
                     }
+                    if (entity instanceof Fire) {
+                        that.die();
+                    }
                 }
             });
 

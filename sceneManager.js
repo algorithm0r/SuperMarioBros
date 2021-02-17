@@ -20,6 +20,9 @@ class SceneManager {
         this.game.entities = [];
         this.x = 0;
 
+        let firebar = new FireBar(this.game, 10* PARAMS.BLOCKWIDTH, 10* PARAMS.BLOCKWIDTH);
+        this.game.addEntity(firebar);
+        
         if (level.bighills) {
             for (var i = 0; i < level.bighills.length; i++) {
                 let hill = level.bighills[i];

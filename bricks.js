@@ -209,3 +209,66 @@ class SideTube {
         }
     };
 };
+
+class FireBar {
+    constructor(game, x, y) {
+        Object.assign(this, { game, x, y });
+        let brick = new Brick(this.game, this.x, this.y, 3, "None");
+        this.game.addEntity(brick);
+
+        this.angle = 0;
+        this.fires = [];
+        for (var i = 0; i < 6; i++) {
+            var x = i * 25 * Math.sin(this.angle);
+            var y = i * 25 * Math.cos(this.angle);
+            var fire = new Fire(this.game, this.x + x + 12, this.y + y + 12);
+            this.fires.push(fire);
+            this.game.addEntity(fire);
+        }
+    };
+
+    update() {
+        this.angle += this.game.clockTick;
+        if(this.angle >= 360){
+            this.angle = 0;
+        }
+        for (var i = 0; i < 6; i++) {
+            var x = i * 25 * Math.sin(this.angle);
+            var y = i * 25 * Math.cos(this.angle);
+            this.fires[i].x = this.x + x + 12;
+            this.fires[i].y = this.y + y + 12;
+        }
+    };
+
+    drawMinimap(ctx, mmX, mmY) {
+    };
+
+    draw(ctx) {
+        // blockd
+    };
+}
+
+class Fire {
+    constructor(game, x, y) {
+        Object.assign(this, { game, x, y });
+        this.angle = 0;
+        this.spritesheetFire = ASSET_MANAGER.getAsset("./sprites/firebar_fire.png");
+        this.animation = new Animator(this.spritesheetFire, 0, 0, 8, 8, 4, 0.1, 0, false, true);
+        this.BB = new BoundingBox(this.x + 6, this.y + 6, 12, 12);
+    };
+
+    update() {
+        this.BB = new BoundingBox(this.x + 6, this.y + 6, 12, 12);
+    };
+
+    drawMinimap(ctx, mmX, mmY) {
+    };
+
+    draw(ctx) {
+        this.animation.drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x , this.y, 3);
+        if (PARAMS.DEBUG) {
+            ctx.strokeStyle = 'Red';
+            ctx.strokeRect(this.BB.x - this.game.camera.x, this.BB.y, this.BB.width, this.BB.height);
+        }
+    };
+}
