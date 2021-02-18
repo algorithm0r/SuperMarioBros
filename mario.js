@@ -14,6 +14,10 @@ class Mario {
         this.state = 0; // 0 = idle, 1 = walking, 2 = running, 3 = skidding, 4 = jumping/falling, 5 = ducking
         this.dead = false;
 
+        // fire mario's state variables
+        this.canThrow = true;
+        this.throwFireballTimeElapsed = 0;
+        this.fireballsThrown = 0;
 
         this.velocity = { x: 0, y: 0 };
         this.fallAcc = 562.5;
@@ -146,6 +150,7 @@ class Mario {
 
         const MAX_FALL = 270;
 
+        this.fireballsThrown = 0;
 
         if (this.dead) {
             this.velocity.y += RUN_FALL * TICK;
@@ -323,14 +328,47 @@ class Mario {
                             that.game.camera.lives++;
                         }
                     }
+                    if (entity instanceof Flower && !entity.emerging) {
+                        entity.removeFromWorld = true;
+                        if (that.size == 1) {
+                            that.size = 2;
+                        } else if (that.size == 0) {
+                            that.size = 1;
+                        }
+                    }
                     if (entity instanceof Coin) {
                         entity.removeFromWorld = true;
                         that.game.camera.score += 200;
                         that.game.camera.addCoin();
                     }
                 }
+
+                // counting the number of fireballs currently in play
+                if (entity instanceof Fireball) {
+                    that.fireballsThrown++;
+                }
             });
 
+            // mario throws fireballs
+            if (this.size == 2) {
+                if (this.fireballsThrown >= 2) {
+                    this.canThrow = false;
+                }
+                if (this.game.B) {
+                    this.throwFireballTimeElapsed += TICK;
+                    if (this.canThrow) {
+                        if (this.facing == 0) {
+                            this.game.addEntity(new Fireball(this.game, this.x + 14 * PARAMS.SCALE, this.y + 12 * PARAMS.SCALE));
+                        } else {
+                            this.game.addEntity(new Fireball(this.game, this.x - 6 * PARAMS.SCALE, this.y + 12 * PARAMS.SCALE));
+                        }
+                        this.canThrow = false;
+                    }
+                } else if (!this.game.B && this.fireballsThrown < 2) {
+                    this.throwFireballTimeElapsed = 0;
+                    this.canThrow = true;
+                }
+            }
 
             // update state
             if (this.state !== 4) {
@@ -356,6 +394,12 @@ class Mario {
     draw(ctx) {
         if (this.dead) {
             this.deadAnim.drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x, this.y, PARAMS.SCALE);
+        } else if (this.size == 2 && this.game.B && this.throwFireballTimeElapsed < 0.1) { // throwing fireballs
+            if (this.facing == 0) {
+                ctx.drawImage(this.spritesheet, 287, 122, 16, 32, this.x - this.game.camera.x, this.y, PARAMS.BLOCKWIDTH, 2 * PARAMS.BLOCKWIDTH);
+            } else {
+                ctx.drawImage(this.spritesheet, 102, 122, 16, 32, this.x - this.game.camera.x, this.y, PARAMS.BLOCKWIDTH, 2 * PARAMS.BLOCKWIDTH);
+            }
         } else {
             this.animations[this.state][this.size][this.facing].drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x, this.y, PARAMS.SCALE);
         }
