@@ -154,7 +154,7 @@ class PirahnaPlant {
         Object.assign(this, { game, x, y, tube });
 
         // Positions the Pirahna Plant in the middle of the Tube is appears from
-        this.x += (tube.x / PARAMS.BLOCKWIDTH);
+        this.x += (PARAMS.BLOCKWIDTH / 2);
         this.spritesheet = ASSET_MANAGER.getAsset("./sprites/enemies.png");
         this.animations = new Animator(this.spritesheet, 390, 60, 16, 24, 2, 0.17, 14, false, true);
         this.maxHeight = this.y - 64;
@@ -183,7 +183,28 @@ class PirahnaPlant {
         this.game.entities.forEach(function (entity) {
             if (entity instanceof Mario) {
                 // If Mario's x position is within 70 pixels he is too close
-                that.marioClose = Math.abs(entity.x - that.x) <= 70 ? true : false;
+                let distance = Math.abs(entity.x - that.x)
+                that.marioClose =  distance <= 70 ? true : false;
+
+                // Determine who gets hit based on the state of mario
+                if (that.BB.collide(entity.BB)) {
+                    // If mario is small
+                    if (entity.size === 0) {
+                        // kill mario, reset level
+                        entity.die();
+                    // If mario has flower power, or is big
+                    } else if (entity.size < 3) {
+                        entity.size -= 1;
+                    
+                    // otherwise, mario has star man power
+                    } else {
+                        that.removeFromWorld = true;
+                        that.dead = true;
+                    }
+                }
+                
+                // add logic for getting hit by other entities such as koopa shells here
+
             };
         });
 
