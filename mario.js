@@ -328,7 +328,7 @@ class Mario {
                         that.game.camera.score += 200;
                         that.game.camera.addCoin();
                     }
-                    if (entity instanceof Fire) {
+                    if (entity instanceof FireBar_Fire) {
                         that.die();
                     }
                 }

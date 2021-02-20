@@ -20,7 +20,7 @@ class SceneManager {
         this.game.entities = [];
         this.x = 0;
 
-        let firebar = new FireBar(this.game, 10* PARAMS.BLOCKWIDTH, 10* PARAMS.BLOCKWIDTH);
+        let firebar = new FireBar(this.game, 10* PARAMS.BLOCKWIDTH, 10* PARAMS.BLOCKWIDTH, 6);
         this.game.addEntity(firebar);
         
         if (level.bighills) {
