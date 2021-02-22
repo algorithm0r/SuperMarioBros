@@ -302,8 +302,12 @@ class Mario {
                         if ((entity instanceof Brick) // hit ceiling
                             && (that.lastBB.top) >= entity.BB.bottom // was below last tick
                             && that.BB.collide(entity.leftBB) && that.BB.collide(entity.rightBB)) { // collide with the center point of the brick
-                            entity.bounce = true;
-                            that.velocity.y = 0;
+                                entity.bounce = true;
+                                that.velocity.y = 0;
+
+                                if(entity.type == 1 && that.size != 0 && that.size != 3){ // if it's a regular brick, and marrio is big
+                                    entity.explode();
+                                }
                         }
                     }
                     if (entity instanceof Brick && entity.type // hit a visible brick
