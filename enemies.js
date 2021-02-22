@@ -36,7 +36,7 @@ class Goomba {
             var that = this;
             this.game.entities.forEach(function (entity) {
                 if (entity.BB && that.BB.collide(entity.BB)) {
-                    if (entity instanceof Mario || entity instanceof Mushroom) {
+                    if (entity instanceof Mario || entity instanceof Mushroom || entity instanceof Flower) {
 
                     } else if ((entity instanceof Ground || entity instanceof Brick || entity instanceof Block || entity instanceof Tube)
                         && that.lastBB.bottom <= entity.BB.top) {
@@ -141,6 +141,97 @@ class Koopa {
             
         } else {
             this.animations[this.facing].drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x, this.y, PARAMS.SCALE)
+            if (PARAMS.DEBUG) {
+                ctx.strokeStyle = 'Red';
+                ctx.strokeRect(this.BB.x - this.game.camera.x, this.BB.y, this.BB.width, this.BB.height);
+            }
+        }
+    };
+};
+
+class PirahnaPlant {
+    constructor(game, x, y, tube) {
+        Object.assign(this, { game, x, y, tube });
+
+        // Positions the Pirahna Plant in the middle of the Tube is appears from
+        this.x += (tube.x / PARAMS.BLOCKWIDTH);
+        this.spritesheet = ASSET_MANAGER.getAsset("./sprites/enemies.png");
+        this.animations = new Animator(this.spritesheet, 390, 60, 16, 24, 2, 0.17, 14, false, true);
+        this.maxHeight = this.y - 64;
+        this.minHeight = this.y + 24;
+        this.marioClose = false;
+        this.emerging = true;
+        this.paused = true;
+        this.dead = false;
+        this.deadCounter = 0;
+        this.wait = 0;
+        this.updateBB();
+    };
+
+    updateBB() {
+        // The Pirahna Plant has a smaller Bounding Box than what is visually seen
+        // These constants define the area for that Bounding Box 
+        const xOffset = 2, yOffset = 12;
+        const widthOfBB = 11, heightOfBB = 6;
+
+        this.BB = new BoundingBox(this.x + xOffset * PARAMS.SCALE, this.y + yOffset * PARAMS.SCALE,
+                                  widthOfBB * PARAMS.SCALE, heightOfBB * PARAMS.SCALE);
+    };
+
+    update() {
+        var that = this;
+        this.game.entities.forEach(function (entity) {
+            if (entity instanceof Mario) {
+                // If Mario's x position is within 70 pixels he is too close
+                that.marioClose = Math.abs(entity.x - that.x) <= 70 ? true : false;
+            };
+        });
+
+        if (this.dead) {
+            if (this.deadCounter === 0) this.game.addEntity(new Score(this.game, this.x, this.y, 200));
+            this.deadCounter += this.game.clockTick;
+            if (this.deadCounter > 0.5) this.removeFromWorld = true;  // flicker for half a second
+        }
+
+        if (this.paused && this.game.camera.x > this.x - PARAMS.CANVAS_WIDTH) {
+            this.paused = false;
+        }
+        
+        if (!this.paused && !this.dead) {
+            if (this.emerging) {
+                if (this.y != this.maxHeight) {
+                    this.y--;
+                } else if (this.wait < 90){
+                    this.wait++;
+                } else {
+                    this.emerging = false;
+                }
+            } else {
+                if (this.y != this.minHeight) {
+                    this.y++;
+                } else if (this.wait > 0) {
+                    this.wait--;
+                } else if (!this.marioClose) {
+                    this.emerging = true;
+                }
+            }
+
+            this.updateBB();
+        }
+    };
+
+    drawMinimap(ctx, mmX, mmY) {
+        ctx.fillStyle = "olive";
+        ctx.fillRect(mmX + this.x / PARAMS.BITWIDTH, mmY + this.y / PARAMS.BITWIDTH, PARAMS.SCALE, PARAMS.SCALE * 1.5);
+    };
+
+    draw(ctx) {
+        if (this.dead) {
+            
+        } else {
+            this.animations.drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x, this.y, PARAMS.SCALE);
+            if (this.emerging) this.tube.draw(ctx);
+            
             if (PARAMS.DEBUG) {
                 ctx.strokeStyle = 'Red';
                 ctx.strokeRect(this.BB.x - this.game.camera.x, this.BB.y, this.BB.width, this.BB.height);

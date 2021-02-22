@@ -1,0 +1,8 @@
+# VS Code config
+jsconfig.json
+
+# VS config
+/.vs/
+
+
+node_modules
