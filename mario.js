@@ -275,6 +275,17 @@ class Mario {
                                 that.game.camera.loadLevel(bonusLevelOne, 2.5 * PARAMS.BLOCKWIDTH, 0 * PARAMS.BLOCKWIDTH);
                             }
                         }
+                        if (entity instanceof Lift && that.lastBB.bottom <= entity.BB.top + PARAMS.SCALE * 3) {
+                            if (that.size === 0 || that.size === 3) { // small
+                                that.y = entity.BB.top - PARAMS.BLOCKWIDTH;
+                            } else { // big
+                                that.y = entity.BB.top - 2 * PARAMS.BLOCKWIDTH;
+                            }
+                            that.velocity.y === 0;
+
+                            if(that.state === 4) that.state = 0; // set state to idle
+                            that.updateBB();
+                        }
                         if ((entity instanceof Goomba || entity instanceof Koopa) // squish Goomba
                             && (that.lastBB.bottom) <= entity.BB.top // was above last tick
                             && !entity.dead) { // can't squish an already squished Goomba
@@ -288,6 +299,15 @@ class Mario {
                             && that.BB.collide(entity.leftBB) && that.BB.collide(entity.rightBB)) { // collide with the center point of the brick
                             entity.bounce = true;
                             that.velocity.y = 0;
+                        }
+                        if (entity instanceof Lift && that.lastBB.bottom <= entity.BB.top + PARAMS.SCALE * 3) {
+                            if (that.size === 0 || that.size === 3) { // small
+                                that.y = entity.BB.top - PARAMS.BLOCKWIDTH;
+                            } else { // big
+                                that.y = entity.BB.top - 2 * PARAMS.BLOCKWIDTH;
+                            }
+                            that.velocity.y = 0;
+                            that.updateBB();
                         }
                     }
                     if (entity instanceof Brick && entity.type // hit a visible brick

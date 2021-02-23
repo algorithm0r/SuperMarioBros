@@ -203,3 +203,51 @@ class SideTube {
         }
     };
 };
+
+class Lift {
+    constructor(game, x, y, goingDown) {
+        Object.assign(this, {game, x, y, goingDown});
+
+        this.spritesheet = ASSET_MANAGER.getAsset("./sprites/items.png");
+
+        this.velocity = 3 * PARAMS.BLOCKWIDTH; // pixels per second
+        if (!goingDown) this.velocity = -this.velocity;
+
+        this.updateBB();
+    };
+
+    update() {
+        if (this.goingDown && this.y > 15 * PARAMS.BLOCKWIDTH) {
+            let newLift = new Lift(this.game, this.x, 0, this.goingDown);
+            this.game.addEntity(newLift);
+            this.removeFromWorld = true;
+        } else if (!this.goingDown && this.y < 0) {
+            let newLift = new Lift(this.game, this.x, 15 * PARAMS.BLOCKWIDTH, this.goingDown);
+            this.game.addEntity(newLift);
+            this.removeFromWorld = true;
+        } else {
+            this.y += this.velocity * this.game.clockTick;
+            this.updateBB();
+        }
+    }
+
+    drawMinimap(ctx, mmX, mmY) {
+        ctx.fillStyle = 'Orange';
+        ctx.fillRect(mmX + this.x / PARAMS.BITWIDTH, mmY + this.y / PARAMS.BITWIDTH, PARAMS.SCALE * 3, PARAMS.SCALE);
+    };
+
+    draw(ctx) {
+        ctx.drawImage(this.spritesheet, 63, 39, 48, 7, this.x - this.game.camera.x, this.y, PARAMS.BLOCKWIDTH * 3, PARAMS.BLOCKWIDTH * 0.4375);
+
+        if (PARAMS.DEBUG) {
+            ctx.strokeStyle = 'Red';
+            ctx.strokeRect(this.BB.x - this.game.camera.x, this.BB.y, this.BB.width, this.BB.height);
+        }
+    };
+
+    updateBB() {
+        this.BB = new BoundingBox(this.x, this.y, PARAMS.BLOCKWIDTH * 3, PARAMS.BLOCKWIDTH * 0.4375);
+        this.leftBB = new BoundingBox(this.x, this.y, PARAMS.BLOCKWIDTH, PARAMS.BLOCKWIDTH * 0.4375);
+        this.rightBB = new BoundingBox(this.x + PARAMS.BLOCKWIDTH * 2, this.y, PARAMS.BLOCKWIDTH, PARAMS.BLOCKWIDTH * 0.4375);
+    }
+}

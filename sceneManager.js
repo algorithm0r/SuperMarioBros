@@ -90,6 +90,12 @@ class SceneManager {
                 this.game.addEntity(new Coin(this.game, coin.x * PARAMS.BLOCKWIDTH, coin.y * PARAMS.BLOCKWIDTH));
             }
         }
+        if (level.lifts) {
+            for (var i = 0; i < level.lifts.length; i++) {
+                let lift = level.lifts[i];
+                this.game.addEntity(new Lift(this.game, lift.x * PARAMS.BLOCKWIDTH, lift.y * PARAMS.BLOCKWIDTH, lift.goingDown));
+            }
+        }
         this.mario.x = x;
         this.mario.y = y;
         this.game.addEntity(this.mario);
