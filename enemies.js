@@ -101,7 +101,8 @@ class Koopa {
         if (this.dead) {
             if (this.deadCounter === 0) this.game.addEntity(new Score(this.game, this.x, this.y, 100));
             this.deadCounter += this.game.clockTick;
-            if (this.deadCounter > 0.5) this.removeFromWorld = true;  // flicker for half a second
+            this.game.addEntity(new KoopaShell(this.game, this.x, this.y + 12));
+            this.removeFromWorld = true;
         }
         if (this.paused && this.game.camera.x > this.x - PARAMS.CANVAS_WIDTH) {
             this.paused = false;
@@ -141,6 +142,129 @@ class Koopa {
             
         } else {
             this.animations[this.facing].drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x, this.y, PARAMS.SCALE)
+            if (PARAMS.DEBUG) {
+                ctx.strokeStyle = 'Red';
+                ctx.strokeRect(this.BB.x - this.game.camera.x, this.BB.y, this.BB.width, this.BB.height);
+            }
+        }
+    };
+};
+
+class KoopaShell {
+    constructor(game, x, y, facing) {
+        Object.assign(this, { game, x, y, facing });
+        this.speed = PARAMS.BITWIDTH * 8;
+        this.velocity = { x: 0, y: 0 }; // pixels per second
+        this.spritesheet = ASSET_MANAGER.getAsset("./sprites/enemies.png");
+        this.animations = [];
+        // Just the shell
+        this.animations.push(new Animator(this.spritesheet, 360, 4, 16, 15, 1, 0.2, 14, false, true));
+        // Shell leg blinking
+        this.animations.push(new Animator(this.spritesheet, 330, 4, 16, 15, 2, 0.2, 14, false, true));
+        this.paused = true;
+        // Dead is used purely to detect if the player has stepped on the shell
+        this.dead = false;
+        this.deadCounter = 0;
+        // The amount of time the turtle has been not moving
+        this.timeStill = 0;
+        this.updateBB();
+    };
+
+    updateBB() {
+        this.BB = new BoundingBox(this.x, this.y, PARAMS.BLOCKWIDTH, (15/16) * PARAMS.BLOCKWIDTH);
+    };
+
+    update() {
+        const FALL_ACC = 1800;
+        if (this.paused && this.game.camera.x > this.x - PARAMS.CANVAS_WIDTH) {
+            this.paused = false;
+        }
+        let playerMidpoint;
+        if (!this.paused) {
+            this.velocity.y += FALL_ACC * this.game.clockTick;
+            this.x += this.game.clockTick * this.velocity.x * PARAMS.SCALE;
+            this.y += this.game.clockTick * this.velocity.y * PARAMS.SCALE;
+            this.updateBB();
+
+            var that = this;
+            this.game.entities.forEach(function (entity) {
+                // Always keep track of where mario is to determine which way to send the shell
+                if (entity instanceof Mario) {
+                    playerMidpoint = (entity.BB.x + entity.BB.right) / 2;
+                }
+                if (entity.BB && that.BB.collide(entity.BB)) {
+                    if (entity instanceof Mario) {
+                        // If the player walks into a still shell then send that shell flying
+                        if (that.velocity.x == 0 && !that.dead) {
+                            if (playerMidpoint > (that.BB.x + that.BB.right) / 2) {
+                                that.velocity.x = -that.speed;
+                                that.x = entity.BB.left - 1 - that.BB.width;
+                            } else {
+                                that.velocity.x = that.speed;
+                                that.x = entity.BB.right + 1;
+                            }
+                        }
+                    } else if ((entity instanceof Ground || entity instanceof Brick || entity instanceof Block || entity instanceof Tube)
+                        && (that.BB.bottom - that.velocity.y * that.game.clockTick * PARAMS.SCALE) <= entity.BB.top) {
+                        that.y = entity.BB.top - that.BB.height;
+                        that.velocity.y = 0;
+                        that.updateBB();
+                    } else if (entity !== that) {
+                        that.x -= that.game.clockTick * that.velocity.x * PARAMS.SCALE;
+                        // If we've run into a wall then let's not linger
+                        that.velocity.x = -that.velocity.x;
+                        that.facing = (that.facing + 1) % 2;
+                    }
+                };
+            });
+        }
+
+        // If we've been stomped on
+        if (this.dead) {
+            // And we are still
+            if (this.velocity.x == 0) {
+                // Get sent flying
+                if (playerMidpoint > this.BB.x + this.BB.width / 2) {
+                    this.velocity.x = -this.speed;
+                } else {
+                    this.velocity.x = this.speed;
+                }
+            } else {
+                // Stop moving
+                this.velocity.x = 0;
+            }
+            // Reset the dead variable
+            this.dead = false;
+        }
+
+        // Keep track of how long we have been immobile
+        if (this.velocity.x == 0) {
+            this.timeStill += this.game.clockTick;
+        } else {
+            this.timeStill = 0;
+        }
+
+        // Come out of our shell if we've been immobile for long enough
+        if (this.timeStill > 4) {
+            this.game.addEntity(new Koopa(this.game, this.x, this.y - PARAMS.SCALE * 8,  1));
+            this.removeFromWorld = true;
+        }
+    };
+
+    drawMinimap(ctx, mmX, mmY) {
+        ctx.fillStyle = "LightGreen";
+        ctx.fillRect(mmX + this.x / PARAMS.BITWIDTH, mmY + this.y / PARAMS.BITWIDTH, PARAMS.SCALE, PARAMS.SCALE);
+    };
+
+    draw(ctx) {
+        if (this.dead) {
+            
+        } else {
+            if (this.timeStill > 2) {
+                this.animations[1].drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x, this.y, PARAMS.SCALE);
+            } else {
+                this.animations[0].drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x, this.y, PARAMS.SCALE);
+            }
             if (PARAMS.DEBUG) {
                 ctx.strokeStyle = 'Red';
                 ctx.strokeRect(this.BB.x - this.game.camera.x, this.BB.y, this.BB.width, this.BB.height);
