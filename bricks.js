@@ -237,7 +237,7 @@ class Lift {
     };
 
     draw(ctx) {
-        ctx.drawImage(this.spritesheet, 63, 39, 48, 7, this.x - this.game.camera.x, this.y, PARAMS.BLOCKWIDTH * 3, PARAMS.BLOCKWIDTH * 0.4375);
+        ctx.drawImage(this.spritesheet, 63, 38, 48, 8, this.x - this.game.camera.x, this.y, PARAMS.BLOCKWIDTH * 3, PARAMS.BLOCKWIDTH * 0.5);
 
         if (PARAMS.DEBUG) {
             ctx.strokeStyle = 'Red';
@@ -246,8 +246,8 @@ class Lift {
     };
 
     updateBB() {
-        this.BB = new BoundingBox(this.x, this.y, PARAMS.BLOCKWIDTH * 3, PARAMS.BLOCKWIDTH * 0.4375);
-        this.leftBB = new BoundingBox(this.x, this.y, PARAMS.BLOCKWIDTH, PARAMS.BLOCKWIDTH * 0.4375);
-        this.rightBB = new BoundingBox(this.x + PARAMS.BLOCKWIDTH * 2, this.y, PARAMS.BLOCKWIDTH, PARAMS.BLOCKWIDTH * 0.4375);
+        this.BB = new BoundingBox(this.x, this.y, PARAMS.BLOCKWIDTH * 3, PARAMS.BLOCKWIDTH * 0.5);
+        this.leftBB = new BoundingBox(this.x, this.y, PARAMS.BLOCKWIDTH, PARAMS.BLOCKWIDTH * 0.5);
+        this.rightBB = new BoundingBox(this.x + PARAMS.BLOCKWIDTH * 2, this.y, PARAMS.BLOCKWIDTH, PARAMS.BLOCKWIDTH * 0.5);
     }
 }
