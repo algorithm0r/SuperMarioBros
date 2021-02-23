@@ -33,6 +33,9 @@ class SceneManager {
         this.clearEntities();
         this.x = 0;
 
+        let firebar = new FireBar(this.game, 10* PARAMS.BLOCKWIDTH, 10* PARAMS.BLOCKWIDTH, 6);
+        this.game.addEntity(firebar);
+        
         if (transition) {
             this.game.addEntity(new TransitionScreen(this.game, level, x, y, title));
         } else {

@@ -9,6 +9,7 @@ ASSET_MANAGER.queueDownload("./sprites/ground.png");
 ASSET_MANAGER.queueDownload("./sprites/bricks.png");
 ASSET_MANAGER.queueDownload("./sprites/items.png");
 ASSET_MANAGER.queueDownload("./sprites/coins.png");
+ASSET_MANAGER.queueDownload("./sprites/firebar_fire.png");
 ASSET_MANAGER.queueDownload("./sprites/title.png");
 
 ASSET_MANAGER.downloadAll(function () {
