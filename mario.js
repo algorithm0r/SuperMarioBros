@@ -122,6 +122,7 @@ class Mario {
     die() {
         this.velocity.y = -640;
         this.dead = true;
+        ASSET_MANAGER.pauseBackgroundMusic();
     };
 
     update() {
@@ -225,6 +226,12 @@ class Mario {
                             this.fallAcc = RUN_FALL;
                         }
                         this.state = 4;
+
+                        if (this.size === 0) {
+                            ASSET_MANAGER.playAsset("./audio/small-jump.mp3");
+                        } else {
+                            ASSET_MANAGER.playAsset("./audio/super-jump.mp3");
+                        }
                     }
                 } else {
                     // air physics
@@ -291,19 +298,24 @@ class Mario {
                                 that.game.camera.loadLevel(bonusLevelOne, 2.5 * PARAMS.BLOCKWIDTH, 0 * PARAMS.BLOCKWIDTH, false, false);
                             }
                         }
-                        if ((entity instanceof Goomba || entity instanceof Koopa) // squish Goomba
+                        if ((entity instanceof Goomba || entity instanceof Koopa || entity instanceof KoopaShell) // squish Goomba
                             && (that.lastBB.bottom) <= entity.BB.top // was above last tick
                             && !entity.dead) { // can't squish an already squished Goomba
                             entity.dead = true;
                             that.velocity.y = -240; // bounce
+                            ASSET_MANAGER.playAsset("./audio/stomp.mp3");
                         }
                     }
                     if (that.velocity.y < 0) { // jumping
                         if ((entity instanceof Brick) // hit ceiling
                             && (that.lastBB.top) >= entity.BB.bottom // was below last tick
                             && that.BB.collide(entity.leftBB) && that.BB.collide(entity.rightBB)) { // collide with the center point of the brick
-                            entity.bounce = true;
-                            that.velocity.y = 0;
+                                entity.bounce = true;
+                                that.velocity.y = 0;
+
+                                if(entity.type == 1 && that.size != 0 && that.size != 3){ // if it's a regular brick, and marrio is big
+                                    entity.explode();
+                                }
                         }
                     }
                     if (entity instanceof Brick && entity.type // hit a visible brick
@@ -351,6 +363,9 @@ class Mario {
                         entity.removeFromWorld = true;
                         that.game.camera.score += 200;
                         that.game.camera.addCoin();
+                    }
+                    if (entity instanceof FireBar_Fire) {
+                        that.die();
                     }
                 }
 

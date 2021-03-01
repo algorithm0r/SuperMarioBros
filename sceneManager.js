@@ -33,6 +33,9 @@ class SceneManager {
         this.clearEntities();
         this.x = 0;
 
+        let firebar = new FireBar(this.game, 10* PARAMS.BLOCKWIDTH, 10* PARAMS.BLOCKWIDTH, 6);
+        this.game.addEntity(firebar);
+        
         if (transition) {
             this.game.addEntity(new TransitionScreen(this.game, level, x, y, title));
         } else {
@@ -111,6 +114,11 @@ class SceneManager {
             this.mario.removeFromWorld = false;
             this.mario.velocity = { x: 0, y: 0 };
 
+            if (level.music && !this.title) {
+                ASSET_MANAGER.pauseBackgroundMusic();
+                ASSET_MANAGER.playAsset(level.music);
+            }
+
             var that = this;
             var mario = false;
             this.game.entities.forEach(function(entity) {
@@ -119,9 +127,19 @@ class SceneManager {
             if(!mario) this.game.addEntity(this.mario);
         }
     };
-    
+
+    updateAudio() {
+        var mute = document.getElementById("mute").checked;
+        var volume = document.getElementById("volume").value;
+
+        ASSET_MANAGER.muteAudio(mute);
+        ASSET_MANAGER.adjustVolume(volume);
+    };
+
     update() {
         PARAMS.DEBUG = document.getElementById("debug").checked;
+
+        this.updateAudio();
 
         if (this.title && this.game.click) {
             if (this.game.click && this.game.click.y > 9 * PARAMS.BLOCKWIDTH && this.game.click.y < 9.5 * PARAMS.BLOCKWIDTH) {
