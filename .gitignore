@@ -3,3 +3,6 @@ jsconfig.json
 
 # VS config
 /.vs/
+
+
+node_modules

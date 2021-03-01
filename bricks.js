@@ -83,6 +83,9 @@ class Brick { // type 0 = invis, 1 = brick, 2 = question, 3 = block
                     playSound("./sound/sfx/coin.wav");
                     break;
                 case 'Growth':
+                    if (this.game.mario.size === 1) {
+                        this.game.addEntity(new Flower(this.game, this.x, this.BB.top, this));
+                    }
                     if (this.game.mario.size === 0) {
                         this.game.addEntity(new Mushroom(this.game, this.x, this.BB.top, this, 'Growth'));
                     }
@@ -92,9 +95,16 @@ class Brick { // type 0 = invis, 1 = brick, 2 = question, 3 = block
                 case '1up':
                     this.game.addEntity(new Mushroom(this.game, this.x, this.BB.top, this, '1up'));
                     this.type = 3;
-                    playSound("./sound/sfx/powerup_appears.wav");
+                    break;
             }
-        
+            if (this.type === 1) {
+                if (this.game.mario.size === 0) {
+                    ASSET_MANAGER.playAsset("./audio/bump.wav");
+                } else {
+                    ASSET_MANAGER.playAsset("./audio/block.mp3");
+                }
+
+            }
         }
 
         if (this.y > this.BB.top) this.y = this.BB.top;
@@ -150,7 +160,7 @@ class Block {
 };
 
 class Tube {
-    constructor(game, x, y, size, destination) {
+    constructor(game, x, y, size, destination, enemyType) {
         Object.assign(this, { game, x, y, size, destination });
 
         this.spritesheet = ASSET_MANAGER.getAsset("./sprites/tiles.png");
@@ -158,6 +168,12 @@ class Tube {
         this.BB = new BoundingBox(this.x + PARAMS.BLOCKWIDTH / 8, this.y, PARAMS.BLOCKWIDTH * 2 - PARAMS.BLOCKWIDTH * 2 / 8, PARAMS.BLOCKWIDTH * (size + 1));
         this.leftBB = new BoundingBox(this.x, this.y, PARAMS.BLOCKWIDTH, PARAMS.BLOCKWIDTH * (size + 1));
         this.rightBB = new BoundingBox(this.x + PARAMS.BLOCKWIDTH, this.y, PARAMS.BLOCKWIDTH, PARAMS.BLOCKWIDTH * (size + 1));
+
+        if (enemyType) {
+            if (enemyType === "piranha") {
+                this.game.addEntity(new PirahnaPlant(this.game, this.x, this.y, this));
+            }
+        }
     };
     
     update() {
