@@ -76,6 +76,9 @@ class Brick { // type 0 = invis, 1 = brick, 2 = question, 3 = block
                     this.type = 3;
                     break;
                 case 'Growth':
+                    if (this.game.mario.size === 1) {
+                        this.game.addEntity(new Flower(this.game, this.x, this.BB.top, this));
+                    }
                     if (this.game.mario.size === 0) {
                         this.game.addEntity(new Mushroom(this.game, this.x, this.BB.top, this, 'Growth'));
                     }
@@ -84,8 +87,15 @@ class Brick { // type 0 = invis, 1 = brick, 2 = question, 3 = block
                 case '1up':
                     this.game.addEntity(new Mushroom(this.game, this.x, this.BB.top, this, '1up'));
                     this.type = 3;
+                    break;
             }
-        
+            if (this.type === 1) {
+                if (this.game.mario.size === 0) {
+                    ASSET_MANAGER.playAsset("./audio/bump.wav");
+                } else {
+                    ASSET_MANAGER.playAsset("./audio/block.mp3");
+                }
+            }
         }
 
         if (this.y > this.BB.top) this.y = this.BB.top;
@@ -111,6 +121,46 @@ class Brick { // type 0 = invis, 1 = brick, 2 = question, 3 = block
             ctx.strokeRect(this.bottomBB.x - this.game.camera.x, this.bottomBB.y, this.bottomBB.width, this.bottomBB.height);
         }
     };
+
+    explode(){
+        this.game.addEntity(new Shard(this.game, this.x, this.y, -150));
+        this.game.addEntity(new Shard(this.game, this.x, this.y  - PARAMS.BLOCKWIDTH * 1.5, -150));
+        this.game.addEntity(new Shard(this.game, this.x + PARAMS.BLOCKWIDTH, this.y - PARAMS.BLOCKWIDTH * 1.5, 150));
+        this.game.addEntity(new Shard(this.game, this.x + PARAMS.BLOCKWIDTH, this.y, 150));
+        this.removeFromWorld = true;
+    }
+};
+
+class Shard{
+    constructor(game, x, y, xVelocity, yVelocity = -100){
+        Object.assign(this, {game, x, y})
+
+        this.animation = new Animator(ASSET_MANAGER.getAsset("./sprites/bricks.png"), 16, 0, 8, 8, 1, 0.33, 0, false, true);
+        this.velocity = {x:xVelocity, y:yVelocity};
+        this.life = 90; //90 clock ticks -> 1.5 seconds at 60 fps
+
+    }
+
+    update(){
+        const FALL_ACC = 562.5;
+        this.life -= 1;
+        if(this.life <= 0){
+            this.removeFromWorld = true;
+        }
+        this.velocity.y += FALL_ACC * this.game.clockTick;
+        this.y += this.game.clockTick * this.velocity.y * PARAMS.SCALE;
+        this.x += this.game.clockTick * this.velocity.x;
+    }
+
+    draw(ctx) {
+        this.animation.drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x, this.y, PARAMS.SCALE);
+    };
+
+    drawMinimap(ctx, mmX, mmY) {
+        ctx.fillStyle = "Brown";
+        ctx.fillRect(mmX + this.x / PARAMS.BITWIDTH, mmY + this.y / PARAMS.BITWIDTH, this.w / PARAMS.BITWIDTH, PARAMS.SCALE);
+    };
+
 };
 
 class Block {
@@ -141,7 +191,7 @@ class Block {
 };
 
 class Tube {
-    constructor(game, x, y, size, destination) {
+    constructor(game, x, y, size, destination, enemyType) {
         Object.assign(this, { game, x, y, size, destination });
 
         this.spritesheet = ASSET_MANAGER.getAsset("./sprites/tiles.png");
@@ -149,6 +199,12 @@ class Tube {
         this.BB = new BoundingBox(this.x + PARAMS.BLOCKWIDTH / 8, this.y, PARAMS.BLOCKWIDTH * 2 - PARAMS.BLOCKWIDTH * 2 / 8, PARAMS.BLOCKWIDTH * (size + 1));
         this.leftBB = new BoundingBox(this.x, this.y, PARAMS.BLOCKWIDTH, PARAMS.BLOCKWIDTH * (size + 1));
         this.rightBB = new BoundingBox(this.x + PARAMS.BLOCKWIDTH, this.y, PARAMS.BLOCKWIDTH, PARAMS.BLOCKWIDTH * (size + 1));
+
+        if (enemyType) {
+            if (enemyType === "piranha") {
+                this.game.addEntity(new PirahnaPlant(this.game, this.x, this.y, this));
+            }
+        }
     };
     
     update() {

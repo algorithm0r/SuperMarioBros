@@ -1,4 +1,6 @@
 var levelOne = {
+    music: "./music/overworld.mp3",
+    label: "1-1",
     ground: [{ x: 0, y: 14, size: 69 }, { x: 71, y: 14, size: 15 }, { x: 89, y: 14, size: 63 }, { x: 154, y: 14, size: 69 }],
     bighills: [{ x: 0, y: 11.5 }, { x: 48, y: 11.5 }, { x: 95, y: 11.5 }, { x: 143, y: 11.5 }],
     hills: [{ x: 16, y: 12.75 }, { x: 64, y: 12.75 }, { x: 111, y: 12.75 }, { x: 159, y: 12.75 }],
@@ -104,6 +106,8 @@ var levelOne = {
 };
 
 var bonusLevelOne = {
+    music: "./music/underworld.mp3",
+    label: "1-1",
     bricks: [{ x: 0, y: 0, type: 1, prize: "None" },
     { x: 0, y: 1, type: 1, prize: "None" },
     { x: 0, y: 2, type: 1, prize: "None" },
