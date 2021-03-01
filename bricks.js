@@ -1,5 +1,5 @@
 class Ground {
-    constructor(game, x, y, w) {
+    constructor(game, x, y, w, underground) {
         Object.assign(this, { game, x, y, w });
 
         this.spritesheet = ASSET_MANAGER.getAsset("./sprites/bricks.png");
@@ -34,8 +34,8 @@ class Ground {
 };
 
 class Brick { // type 0 = invis, 1 = brick, 2 = question, 3 = block
-    constructor(game, x, y, type, prize) {
-        Object.assign(this, { game, x, y, prize, type });
+    constructor(game, x, y, type, prize, underground) {
+        Object.assign(this, { game, x, y, prize, type, underground });
 
         this.bounce = false;
 
