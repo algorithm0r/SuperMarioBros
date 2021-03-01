@@ -549,64 +549,6 @@ class HammerBro
     };
 }
 
-
-class FireBar {
-    constructor(game, x, y, numOfFires) {
-        Object.assign(this, { game, x, y , numOfFires});
-        let brick = new Brick(this.game, this.x, this.y, 3, "None");
-        this.game.addEntity(brick);
-
-        this.angle = 0;
-        this.fires = [];
-        for (var i = 0; i < this.numOfFires; i++) {
-            var x = i * 25 * Math.sin(this.angle);
-            var y = i * 25 * Math.cos(this.angle);
-            if(i <= 1) {
-                var fire = new FireBar_Fire(this.game, this.x + x + 12, this.y + y + 12, true);
-            } else {
-                var fire = new FireBar_Fire(this.game, this.x + x + 12, this.y + y + 12, false);
-            }
-            this.fires.push(fire);
-            this.game.addEntity(fire);
-        }
-    };
-
-    update() {
-        this.angle += this.game.clockTick;
-        if(this.angle >= 360){
-            this.angle = 0;
-        }
-        console.log(this.numOfFires);
-        for (var i = 0; i < this.numOfFires; i++) {
-            var x = i * 25 * Math.sin(this.angle);
-            var y = i * 25 * Math.cos(this.angle);
-            this.fires[i].x = this.x + x + 12;
-            this.fires[i].y = this.y + y + 12;
-
-        }
-    };
-
-    drawMinimap(ctx, mmX, mmY) {
-        ctx.fillStyle = "LightGreen";
-        ctx.fillRect(mmX + this.x / PARAMS.BITWIDTH, mmY + this.y / PARAMS.BITWIDTH, PARAMS.SCALE, PARAMS.SCALE * 1.5);
-    };
-
-    draw(ctx) {
-        if (this.dead) {
-            
-        } else {
-            this.animations[this.facing].drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x, this.y, PARAMS.SCALE)
-            if(this.throwing > 0)
-            {
-                //ctx.drawImage(this.spritesheet,239,89,16,17,this.x,this.y,16*3,17*3);
-            }
-            if (PARAMS.DEBUG) {
-                ctx.strokeStyle = 'Red';
-                ctx.strokeRect(this.BB.x - this.game.camera.x, this.BB.y, this.BB.width, this.BB.height);
-            }
-        }
-    };
-}
 //the hammer thrown by the hammer brother 
 class Hammer
 {
@@ -764,7 +706,49 @@ class Hammer
     };
 
 }
+class FireBar {
+    constructor(game, x, y, numOfFires) {
+        Object.assign(this, { game, x, y , numOfFires});
+        let brick = new Brick(this.game, this.x, this.y, 3, "None");
+        this.game.addEntity(brick);
 
+        this.angle = 0;
+        this.fires = [];
+        for (var i = 0; i < this.numOfFires; i++) {
+            var x = i * 25 * Math.sin(this.angle);
+            var y = i * 25 * Math.cos(this.angle);
+            if(i <= 1) {
+                var fire = new FireBar_Fire(this.game, this.x + x + 12, this.y + y + 12, true);
+            } else {
+                var fire = new FireBar_Fire(this.game, this.x + x + 12, this.y + y + 12, false);
+            }
+            this.fires.push(fire);
+            this.game.addEntity(fire);
+        }
+    };
+
+    update() {
+        this.angle += this.game.clockTick;
+        if(this.angle >= 360){
+            this.angle = 0;
+        }
+        console.log(this.numOfFires);
+        for (var i = 0; i < this.numOfFires; i++) {
+            var x = i * 25 * Math.sin(this.angle);
+            var y = i * 25 * Math.cos(this.angle);
+            this.fires[i].x = this.x + x + 12;
+            this.fires[i].y = this.y + y + 12;
+
+        }
+    };
+
+    drawMinimap(ctx, mmX, mmY) {
+    };
+
+    draw(ctx) {
+        // blockd
+    };
+}
 class FireBar_Fire {
     constructor(game, x, y, inner) {
         Object.assign(this, { game, x, y, inner });
