@@ -19,6 +19,8 @@ class SceneManager {
         this.mario = new Mario(this.game, 2.5 * PARAMS.BLOCKWIDTH, 0 * PARAMS.BLOCKWIDTH);
 
         this.loadLevel(levelOne, 2.5 * PARAMS.BLOCKWIDTH, 13 * PARAMS.BLOCKWIDTH, false, true);
+
+
     };
 
     clearEntities() {
@@ -32,6 +34,7 @@ class SceneManager {
         this.level = level;
         this.clearEntities();
         this.x = 0;
+        this.underground = level.underground;
 
         let firebar = new FireBar(this.game, 10* PARAMS.BLOCKWIDTH, 10* PARAMS.BLOCKWIDTH, 6);
         this.game.addEntity(firebar);
@@ -66,19 +69,19 @@ class SceneManager {
             if (level.ground) {
                 for (var i = 0; i < level.ground.length; i++) {
                     let ground = level.ground[i];
-                    this.game.addEntity(new Ground(this.game, ground.x * PARAMS.BLOCKWIDTH, ground.y * PARAMS.BLOCKWIDTH, ground.size * PARAMS.BLOCKWIDTH));
+                    this.game.addEntity(new Ground(this.game, ground.x * PARAMS.BLOCKWIDTH, ground.y * PARAMS.BLOCKWIDTH, ground.size * PARAMS.BLOCKWIDTH, level.underground));
                 }
             }
             if (level.bricks) {
                 for (var i = 0; i < level.bricks.length; i++) {
                     let brick = level.bricks[i];
-                    this.game.addEntity(new Brick(this.game, brick.x * PARAMS.BLOCKWIDTH, brick.y * PARAMS.BLOCKWIDTH, brick.type, brick.prize));
+                    this.game.addEntity(new Brick(this.game, brick.x * PARAMS.BLOCKWIDTH, brick.y * PARAMS.BLOCKWIDTH, brick.type, brick.prize, level.underground));
                 }
             }
             if (level.blocks) {
                 for (var i = 0; i < level.blocks.length; i++) {
                     let block = level.blocks[i];
-                    this.game.addEntity(new Block(this.game, block.x * PARAMS.BLOCKWIDTH, block.y * PARAMS.BLOCKWIDTH, block.size * PARAMS.BLOCKWIDTH));
+                    this.game.addEntity(new Block(this.game, block.x * PARAMS.BLOCKWIDTH, block.y * PARAMS.BLOCKWIDTH, block.size * PARAMS.BLOCKWIDTH, level.underground));
                 }
             }
             if (level.tubes) {
@@ -171,6 +174,13 @@ class SceneManager {
         let midpoint = PARAMS.CANVAS_WIDTH/2 - PARAMS.BLOCKWIDTH / 2;
 
         if (this.x < this.mario.x - midpoint) this.x = this.mario.x - midpoint;
+
+        var canvas = document.getElementById("gameWorld");
+        if (this.underground) {
+            canvas.style.backgroundColor = "black";
+        } else {
+            canvas.style.backgroundColor = "#049cd8";
+        }
     };
 
     addCoin() {
