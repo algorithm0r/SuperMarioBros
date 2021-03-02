@@ -20,6 +20,11 @@ class SceneManager {
 
         this.loadLevel(levelOne, 2.5 * PARAMS.BLOCKWIDTH, 13 * PARAMS.BLOCKWIDTH, false, true);
 
+        // NOTE: PLEASE USE THE FOLLOWING LINE TO TEST.
+        // this.loadLevel(levelTwo, 2.5 * PARAMS.BLOCKWIDTH, 13 * PARAMS.BLOCKWIDTH, false, true);
+
+        
+
 
     };
 
@@ -175,6 +180,7 @@ class SceneManager {
 
         if (this.x < this.mario.x - midpoint) this.x = this.mario.x - midpoint;
 
+        // NOTE: THIS FOLLOWING CODE HAS A BUG WHERE CANVAS COLOR WON'T CHANGE BACK TO BLUE.
         var canvas = document.getElementById("gameWorld");
         if (this.underground) {
             canvas.style.backgroundColor = "black";

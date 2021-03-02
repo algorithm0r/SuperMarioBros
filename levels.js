@@ -176,3 +176,14 @@ var bonusLevelOne = {
     ground: [{ x: 0, y: 14, size: 34 }]
 
 };
+
+// NOTE: THIS IS JUST A CODE SNIPPET.
+/* 
+    var levelTwo = {
+    underground: true, // NOTE: PLEASE ADD THIS BOOLEAN PROPERTY WHEN TESTING LEVEL 1-2
+    ground: [{ x: 0, y: 13, size: 80 }, { x:83, y: 13, size: 37}, {x: 122, y: 13, size: 2}, 
+        {x: 126, y: 13, size: 12}, {x: 145, y: 13, size: 7}, {x: 159, y: 13, size: 32}],
+    bricks: [],
+    blocks: [{ x: 17, y: 12, size: 1 },
+        ....
+ */
