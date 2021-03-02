@@ -35,7 +35,7 @@ class Ground {
 
 class Brick { // type 0 = invis, 1 = brick, 2 = question, 3 = block
     constructor(game, x, y, type, prize, underground) {
-        Object.assign(this, { game, x, y, prize, type, underground });
+        Object.assign(this, { game, x, y, prize, type });
 
         this.bounce = false;
 
