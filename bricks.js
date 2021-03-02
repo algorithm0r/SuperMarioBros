@@ -4,7 +4,7 @@ class Ground {
 
         this.spritesheet = ASSET_MANAGER.getAsset("./sprites/bricks.png");
 
-        if (underground) this.spritesheet = ASSET_MANAGER.getAsset("./sprites/SuperMarioBros/sprites/underground_stuff.png");
+        if (underground) this.spritesheet = ASSET_MANAGER.getAsset("./sprites/underground_stuff.png");
 
 
         this.BB = new BoundingBox(this.x, this.y, this.w, PARAMS.BLOCKWIDTH * 2);
@@ -45,7 +45,7 @@ class Brick { // type 0 = invis, 1 = brick, 2 = question, 3 = block
 
         this.animation = [];
 
-        if (underground) this.spritesheet = ASSET_MANAGER.getAsset("./sprites/SuperMarioBros/sprites/underground_stuff.png");
+        if (underground) this.spritesheet = ASSET_MANAGER.getAsset("./sprites/underground_stuff.png");
 
         this.animation.push(null);
         this.animation.push(new Animator(ASSET_MANAGER.getAsset("./sprites/bricks.png"), 16, 0, 16, 16, 1, 0.33, 0, false, true));
