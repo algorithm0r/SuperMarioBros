@@ -213,6 +213,7 @@ var levelTwo = {
         { x: 178, y: 10, size: 2, destination: false },
         { x: 182, y: 10, size: 2, destination: false },
         { x: 186, y: 10, size: 2, destination: false }],
+    lifts: [{ x: 140, y: 7, goingDown: true }, {x: 155, y: 9, goingDown: false }]
 };
 
 var bonusLevelTwo = {
