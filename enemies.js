@@ -385,6 +385,327 @@ class PirahnaPlant {
     };
 };
 
+//the hammer brother enemy
+class HammerBro
+{
+    constructor(game,x,y,facing)
+    {
+        Object.assign(this, { game, x, y, facing });
+        this.velocity = { x: Math.pow(-1, this.facing)*PARAMS.BITWIDTH, y: 0 }; // pixels per second
+        this.spritesheet = ASSET_MANAGER.getAsset("./sprites/enemies.png");
+        this.animations = [];
+        this.animations.push(new Animator(this.spritesheet, 179, 89, 16, 25, 2, 0.1, 14, false, true));
+        this.animations.push(new Animator(this.spritesheet, 119, 89, 16, 24, 2, 0.1, 14, false, true));
+        this.paused = true;
+        this.dead = false;
+        this.deadCounter = 0;
+        //this.updateBB();
+        this.swap = 60;
+        this.jump = 240;
+        this.jumpType = 1;
+        this.passThrough = 0;
+        this.throw = 30;
+        this.throws = 0;
+        this.interval = 0;
+        this.throwing = 0;
+        this.beserk = 3600;
+        this.paused = true;
+        this.BB = new BoundingBox(this.x, this.y, PARAMS.BLOCKWIDTH, (1 + 7/16) * PARAMS.BLOCKWIDTH);
+    }
+    updateBB() {
+        this.BB = new BoundingBox(this.x, this.y, PARAMS.BLOCKWIDTH, (1 + 7/16) * PARAMS.BLOCKWIDTH);
+    };
+
+    update() {
+        if (this.paused && this.game.camera.x > this.x - PARAMS.CANVAS_WIDTH) 
+        {
+            this.paused = false;
+        }
+        //changes his direction
+        if(this.game.camera.mario.x < this.x)
+        {
+            this.facing = 1;
+        }
+        else
+        {
+            this.facing = 0;
+        }
+        const FALL_ACC = 1800;
+        //adds in his secret mechanic where after 1 minute he chaces mario
+        if(this.beserk > 0)
+        {
+            if(this.swap == 0)
+            {
+                this.velocity.x = - this.velocity.x;
+                this.swap = 60;
+            }
+        }
+        else
+        {
+            this.velocity.x = (Math.pow(-1, this.facing)*PARAMS.BITWIDTH) * 2;
+        }
+        //logic for his jump
+        if(this.jump == 0)
+            {
+                //small jump
+                if(this.jumpType == 1)
+                {
+                    this.velocity.y = -180 * PARAMS.SCALE;
+                    this.jumpType = - this.jumpType;
+                    this.passThrough = 20;
+                }
+                //big jump
+                else if(this.jumpType == -1)
+                {
+                    this.velocity.y = -105 * PARAMS.SCALE;
+                    this.jumpType = - this.jumpType;
+                    this.passThrough = 25;
+                }
+                //jump cooldown
+                this.jump = 240;
+            }
+            //throw logic, throws between 1 and 4 hammers
+            if(this.throw <=0 && this.throws == 0)
+            {
+                this.throws = Math.floor(Math.random() * Math.floor(4)) + 1;
+                this.interval = 0;
+                
+            }
+            if(this.throws > 0)
+            {
+                if(this.interval == 0)
+                {
+                    this.game.addEntity(new Hammer(this.game,this.x,this.y,this));
+                    this.interval = 50;
+                    this.throws--;
+                    this.throwing = 20;
+                }
+                //after he throws all hammers a 2 second cooldown is started
+                if(this.throws == 0)
+                {
+                    this.throw = 120;
+                }
+            }
+        if (this.dead) {
+            if (this.deadCounter === 0) this.game.addEntity(new Score(this.game, this.x, this.y, 100));
+            this.deadCounter += this.game.clockTick;
+            if (this.deadCounter > 0.5) this.removeFromWorld = true;  // flicker for half a second
+        }
+
+        if (!this.paused && !this.dead) {
+            this.velocity.y += FALL_ACC * this.game.clockTick;
+            this.x += this.game.clockTick * this.velocity.x * PARAMS.SCALE;
+            this.y += this.game.clockTick * this.velocity.y * PARAMS.SCALE;
+            this.updateBB();
+
+            var that = this;
+            this.game.entities.forEach(function (entity) {
+                if (entity.BB && that.BB.collide(entity.BB)) {
+                    if (entity instanceof Mario) {
+
+                    } else if (( entity instanceof Brick || entity instanceof Block )
+                        && ((that.BB.bottom - that.velocity.y * that.game.clockTick * PARAMS.SCALE) <= entity.BB.top) && that.passThrough <= 0) {
+                        that.y = entity.BB.top - PARAMS.BLOCKWIDTH * (1 + 7 / 16);
+                        that.velocity.y = 0;
+                        that.updateBB();
+                    } 
+                    else if ((entity instanceof Ground  || entity instanceof Tube)
+                    && ((that.BB.bottom - that.velocity.y * that.game.clockTick * PARAMS.SCALE) <= entity.BB.top)) {
+                    that.y = entity.BB.top - PARAMS.BLOCKWIDTH * (1 + 7 / 16);
+                    that.velocity.y = 0;
+                    that.updateBB();
+                } 
+                };
+            });
+            this.swap--;
+            this.jump--;
+            this.passThrough--;
+            this.throw--;
+            this.interval--;
+            this.throwing --;
+            this.beserk--;
+         }
+    };
+
+    drawMinimap(ctx, mmX, mmY) {
+        ctx.fillStyle = "LightGreen";
+        ctx.fillRect(mmX + this.x / PARAMS.BITWIDTH, mmY + this.y / PARAMS.BITWIDTH, PARAMS.SCALE, PARAMS.SCALE * 1.5);
+    };
+
+    draw(ctx) {
+        if (this.dead) {
+
+        } else {
+            this.animations[this.facing].drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x, this.y, PARAMS.SCALE)
+            if(this.throwing > 0)
+            {
+                //ctx.drawImage(this.spritesheet,239,89,16,17,this.x,this.y,16*3,17*3);
+            }
+            if (PARAMS.DEBUG) {
+                ctx.strokeStyle = 'Red';
+                ctx.strokeRect(this.BB.x - this.game.camera.x, this.BB.y, this.BB.width, this.BB.height);
+            }
+        }
+    };
+}
+
+//the hammer thrown by the hammer brother 
+class Hammer
+{
+    constructor(game,x,y,parent)
+    {
+        Object.assign(this, { game, x, y, parent });
+        this.velocity = { x:0, y: 0 }; // pixels per second
+        this.spritesheet = ASSET_MANAGER.getAsset("./sprites/enemies.png");
+        this.lifeTime = 150;
+        this.state = 0;
+        this.delay = 5;
+        this.thrown = false;
+        this.throwDelay = 20;
+        this.facing = this.parent.facing;
+        //faces the same direction as parent untill thrown
+        if(this.facing == 1)
+        {
+            this.x = this.parent.x + 20;
+            this.y = this.parent.y - 25;
+        }
+        else
+        {
+            this.x = this.parent.x;
+            this.y = this.parent.y - 20;
+        }
+        this.BB = new BoundingBox(this.x, this.y, PARAMS.BLOCKWIDTH/3, PARAMS.BLOCKWIDTH/3);
+    }
+    //needs to be finished to properly follow the head of the hammer
+    updateBB() {
+        this.BB = new BoundingBox(this.x, this.y, PARAMS.BLOCKWIDTH/3, PARAMS.BLOCKWIDTH/3);
+    };
+    update()
+    {
+        const FALL_ACC = 10;
+        //when not thrown follows the parent position and direction
+        if(!this.thrown)
+        {
+            if(this.facing == 1)
+            {
+                this.x = this.parent.x + 20;
+                this.y = this.parent.y - 25;
+            }
+            else
+            {
+                this.x = this.parent.x;
+                this.y = this.parent.y - 20;
+            }
+            this.facing = this.parent.facing;
+            if(this.throwDelay == 0)
+            {
+                this.thrown = true;
+                if(this.facing == 1)
+                {
+                    this.velocity.x = -3;
+                    this.velocity.y = -6;
+                }
+                else
+                {
+                    this.velocity.x = 3;
+                    this.velocity.y = -6;
+                }
+            }
+            //is removed if held when the parent is killed
+            if(this.parent.dead)
+            {
+                this.removeFromWorld = true;
+            }
+            this.throwDelay--;
+        }
+        if(this.thrown)
+        {
+            if(this.delay == 0)
+            {
+                this.state++
+                if(this.state == 4)
+                {
+                    this.state = 0;
+                }
+                this.delay = 5;
+            }
+            this.velocity.y += FALL_ACC * this.game.clockTick;
+            this.delay--;
+        }
+        this.x += this.velocity.x;
+        this.y += this.velocity.y;
+        this.updateBB();
+        this.lifeTime--;
+        //dissapearsd after a set time
+        if(this.lifeTime == 0)
+        {
+            this.removeFromWorld = true;
+        }
+    }
+    draw(ctx)
+    {
+            if(this.facing == 1)
+            {
+                if(this.state == 0)
+                {
+                    ctx.drawImage(this.spritesheet,263,99,9,17,this.x- this.game.camera.x,this.y,9*3,17*3);
+                }
+                if(this.state == 1)
+                {
+                    ctx.drawImage(this.spritesheet,278,107,17,9,this.x- this.game.camera.x,this.y,17*3,9*3);
+                }
+                if(this.state == 2)
+                {
+                    ctx.drawImage(this.spritesheet,283,86,9,17,this.x- this.game.camera.x,this.y,9*3,17*3);
+                }
+                if(this.state == 3)
+                {
+                    ctx.drawImage(this.spritesheet,263,86,17,9,this.x- this.game.camera.x,this.y,17*3,9*3);
+                }
+            }
+            else
+            {
+                if(this.state == 0)
+                {
+                    ctx.save();
+                    ctx.scale(-1,1);
+                    ctx.drawImage(this.spritesheet,263,99,9,17,-this.x-9*3 + this.game.camera.x,this.y,9*3,17*3);
+                    ctx.restore();
+                }
+                if(this.state == 1)
+                {
+                    ctx.save();
+                    ctx.scale(-1,1);
+                    ctx.drawImage(this.spritesheet,278,107,17,9,-this.x-17*3 + this.game.camera.x,this.y,17*3,9*3);
+                    ctx.restore();
+                }
+                if(this.state == 2)
+                {
+                    ctx.save();
+                    ctx.scale(-1,1);
+                    ctx.drawImage(this.spritesheet,283,86,9,17,-this.x-9*3 + this.game.camera.x,this.y,9*3,17*3);
+                    ctx.restore();
+                }
+                if(this.state == 3)
+                {
+                    ctx.save();
+                    ctx.scale(-1,1);
+                    ctx.drawImage(this.spritesheet,263,86,17,9,-this.x-17*3 + this.game.camera.x,this.y,17*3,9*3);
+                    ctx.restore();
+                }
+            }
+            if (PARAMS.DEBUG) {
+                ctx.strokeStyle = 'Red';
+                ctx.strokeRect(this.BB.x - this.game.camera.x, this.BB.y, this.BB.width, this.BB.height);
+            }
+    }
+    drawMinimap(ctx, mmX, mmY) {
+        ctx.fillStyle = "Red";
+        ctx.fillRect(mmX + this.x / PARAMS.BITWIDTH, mmY + this.y / PARAMS.BITWIDTH, PARAMS.SCALE, PARAMS.SCALE * 1.5);
+
+    };
+
+}
 class FireBar {
     constructor(game, x, y, numOfFires) {
         Object.assign(this, { game, x, y , numOfFires});
@@ -417,6 +738,7 @@ class FireBar {
             var y = i * 25 * Math.cos(this.angle);
             this.fires[i].x = this.x + x + 12;
             this.fires[i].y = this.y + y + 12;
+
         }
     };
 
@@ -427,7 +749,6 @@ class FireBar {
         // blockd
     };
 }
-
 class FireBar_Fire {
     constructor(game, x, y, inner) {
         Object.assign(this, { game, x, y, inner });
@@ -456,5 +777,6 @@ class FireBar_Fire {
             ctx.strokeStyle = 'Red';
             ctx.strokeRect(this.BB.x - this.game.camera.x, this.BB.y, this.BB.width, this.BB.height);
         }
+
     };
 }

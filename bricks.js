@@ -131,6 +131,46 @@ class Brick { // type 0 = invis, 1 = brick, 2 = question, 3 = block
             ctx.strokeRect(this.bottomBB.x - this.game.camera.x, this.bottomBB.y, this.bottomBB.width, this.bottomBB.height);
         }
     };
+
+    explode(){
+        this.game.addEntity(new Shard(this.game, this.x, this.y, -150));
+        this.game.addEntity(new Shard(this.game, this.x, this.y  - PARAMS.BLOCKWIDTH * 1.5, -150));
+        this.game.addEntity(new Shard(this.game, this.x + PARAMS.BLOCKWIDTH, this.y - PARAMS.BLOCKWIDTH * 1.5, 150));
+        this.game.addEntity(new Shard(this.game, this.x + PARAMS.BLOCKWIDTH, this.y, 150));
+        this.removeFromWorld = true;
+    }
+};
+
+class Shard{
+    constructor(game, x, y, xVelocity, yVelocity = -100){
+        Object.assign(this, {game, x, y})
+
+        this.animation = new Animator(ASSET_MANAGER.getAsset("./sprites/bricks.png"), 16, 0, 8, 8, 1, 0.33, 0, false, true);
+        this.velocity = {x:xVelocity, y:yVelocity};
+        this.life = 90; //90 clock ticks -> 1.5 seconds at 60 fps
+
+    }
+
+    update(){
+        const FALL_ACC = 562.5;
+        this.life -= 1;
+        if(this.life <= 0){
+            this.removeFromWorld = true;
+        }
+        this.velocity.y += FALL_ACC * this.game.clockTick;
+        this.y += this.game.clockTick * this.velocity.y * PARAMS.SCALE;
+        this.x += this.game.clockTick * this.velocity.x;
+    }
+
+    draw(ctx) {
+        this.animation.drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x, this.y, PARAMS.SCALE);
+    };
+
+    drawMinimap(ctx, mmX, mmY) {
+        ctx.fillStyle = "Brown";
+        ctx.fillRect(mmX + this.x / PARAMS.BITWIDTH, mmY + this.y / PARAMS.BITWIDTH, this.w / PARAMS.BITWIDTH, PARAMS.SCALE);
+    };
+
 };
 
 class Block {
@@ -230,3 +270,51 @@ class SideTube {
         }
     };
 };
+
+class Lift {
+    constructor(game, x, y, goingDown) {
+        Object.assign(this, {game, x, y, goingDown});
+
+        this.spritesheet = ASSET_MANAGER.getAsset("./sprites/items.png");
+
+        this.velocity = 3 * PARAMS.BLOCKWIDTH; // pixels per second
+        if (!goingDown) this.velocity = -this.velocity;
+
+        this.updateBB();
+    };
+
+    update() {
+        if (this.goingDown && this.y > 15 * PARAMS.BLOCKWIDTH) {
+            let newLift = new Lift(this.game, this.x, 0, this.goingDown);
+            this.game.addEntity(newLift);
+            this.removeFromWorld = true;
+        } else if (!this.goingDown && this.y < 0) {
+            let newLift = new Lift(this.game, this.x, 15 * PARAMS.BLOCKWIDTH, this.goingDown);
+            this.game.addEntity(newLift);
+            this.removeFromWorld = true;
+        } else {
+            this.y += this.velocity * this.game.clockTick;
+            this.updateBB();
+        }
+    }
+
+    drawMinimap(ctx, mmX, mmY) {
+        ctx.fillStyle = 'Orange';
+        ctx.fillRect(mmX + this.x / PARAMS.BITWIDTH, mmY + this.y / PARAMS.BITWIDTH, PARAMS.SCALE * 3, PARAMS.SCALE);
+    };
+
+    draw(ctx) {
+        ctx.drawImage(this.spritesheet, 63, 38, 48, 8, this.x - this.game.camera.x, this.y, PARAMS.BLOCKWIDTH * 3, PARAMS.BLOCKWIDTH * 0.5);
+
+        if (PARAMS.DEBUG) {
+            ctx.strokeStyle = 'Red';
+            ctx.strokeRect(this.BB.x - this.game.camera.x, this.BB.y, this.BB.width, this.BB.height);
+        }
+    };
+
+    updateBB() {
+        this.BB = new BoundingBox(this.x, this.y, PARAMS.BLOCKWIDTH * 3, PARAMS.BLOCKWIDTH * 0.5);
+        this.leftBB = new BoundingBox(this.x, this.y, PARAMS.BLOCKWIDTH, PARAMS.BLOCKWIDTH * 0.5);
+        this.rightBB = new BoundingBox(this.x + PARAMS.BLOCKWIDTH * 2, this.y, PARAMS.BLOCKWIDTH, PARAMS.BLOCKWIDTH * 0.5);
+    }
+}
