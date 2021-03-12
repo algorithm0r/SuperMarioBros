@@ -1,8 +1,11 @@
 class Ground {
-    constructor(game, x, y, w) {
+    constructor(game, x, y, w, underground) {
         Object.assign(this, { game, x, y, w });
 
         this.spritesheet = ASSET_MANAGER.getAsset("./sprites/bricks.png");
+
+        if (underground) this.spritesheet = ASSET_MANAGER.getAsset("./sprites/underground_stuff.png");
+
 
         this.BB = new BoundingBox(this.x, this.y, this.w, PARAMS.BLOCKWIDTH * 2);
         this.leftBB = new BoundingBox(this.x, this.y, PARAMS.BLOCKWIDTH, PARAMS.BLOCKWIDTH * 2)
@@ -31,7 +34,7 @@ class Ground {
 };
 
 class Brick { // type 0 = invis, 1 = brick, 2 = question, 3 = block
-    constructor(game, x, y, type, prize) {
+    constructor(game, x, y, type, prize, underground) {
         Object.assign(this, { game, x, y, prize, type });
 
         this.bounce = false;
@@ -42,10 +45,13 @@ class Brick { // type 0 = invis, 1 = brick, 2 = question, 3 = block
 
         this.animation = [];
 
+        this.spritesheet = ASSET_MANAGER.getAsset("./sprites/bricks.png");
+        if (underground) this.spritesheet = ASSET_MANAGER.getAsset("./sprites/underground_stuff.png");
+
         this.animation.push(null);
-        this.animation.push(new Animator(ASSET_MANAGER.getAsset("./sprites/bricks.png"), 16, 0, 16, 16, 1, 0.33, 0, false, true));
+        this.animation.push(new Animator(this.spritesheet, 16, 0, 16, 16, 1, 0.33, 0, false, true));
         this.animation.push(new Animator(ASSET_MANAGER.getAsset("./sprites/coins.png"), 0, 80, 16, 16, 4, 1/8, 0, false, true));
-        this.animation.push(new Animator(ASSET_MANAGER.getAsset("./sprites/bricks.png"), 48, 0, 16, 16, 1, 1, 0, false, true));
+        this.animation.push(new Animator(this.spritesheet, 48, 0, 16, 16, 1, 1, 0, false, true));
 
         this.BB = new BoundingBox(this.x + PARAMS.BLOCKWIDTH / 8, this.y, PARAMS.BLOCKWIDTH * 3 / 4, PARAMS.BLOCKWIDTH);
         this.leftBB = new BoundingBox(this.x, this.y, PARAMS.BLOCKWIDTH / 2, PARAMS.BLOCKWIDTH);
@@ -69,11 +75,13 @@ class Brick { // type 0 = invis, 1 = brick, 2 = question, 3 = block
                     if (this.startTime === 0) this.startTime = Date.now();
                     if (Date.now() - this.startTime < 3000) { 
                         this.game.addEntity(new CoinPop(this.game, this.x, this.BB.top - PARAMS.BLOCKWIDTH));
+                        //playSound("./sound/sfx/coin.wav");
                         break;
                     }
                 case 'Coin':
                     this.game.addEntity(new CoinPop(this.game, this.x, this.BB.top - PARAMS.BLOCKWIDTH));
                     this.type = 3;
+                    //playSound("./sound/sfx/coin.wav");
                     break;
                 case 'Growth':
                     if (this.game.mario.size === 1) {
@@ -83,6 +91,7 @@ class Brick { // type 0 = invis, 1 = brick, 2 = question, 3 = block
                         this.game.addEntity(new Mushroom(this.game, this.x, this.BB.top, this, 'Growth'));
                     }
                     this.type = 3;
+                    //playSound("./sound/sfx/powerup_appears.wav");
                     break;
                 case '1up':
                     this.game.addEntity(new Mushroom(this.game, this.x, this.BB.top, this, '1up'));
@@ -95,6 +104,7 @@ class Brick { // type 0 = invis, 1 = brick, 2 = question, 3 = block
                 } else {
                     ASSET_MANAGER.playAsset("./audio/block.mp3");
                 }
+
             }
         }
 
@@ -164,11 +174,12 @@ class Shard{
 };
 
 class Block {
-    constructor(game, x, y, w) {
+    constructor(game, x, y, w, underground) {
         Object.assign(this, { game, x, y, w });
 
         this.spritesheet = ASSET_MANAGER.getAsset("./sprites/bricks.png");
-
+        if (underground) this.spritesheet = ASSET_MANAGER.getAsset("./sprites/underground_stuff.png");
+        
         this.BB = new BoundingBox(this.x, this.y, this.w, PARAMS.BLOCKWIDTH);
         this.leftBB = new BoundingBox(this.x, this.y, this.w / 2, PARAMS.BLOCKWIDTH);
         this.rightBB = new BoundingBox(this.x + this.w / 2, this.y, this.w / 2, PARAMS.BLOCKWIDTH);
