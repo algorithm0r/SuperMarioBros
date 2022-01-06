@@ -22,10 +22,6 @@ class SceneManager {
 
         // NOTE: PLEASE USE THE FOLLOWING LINE TO TEST.
         // this.loadLevel(levelTwo, 2.5 * PARAMS.BLOCKWIDTH, 13 * PARAMS.BLOCKWIDTH, false, true);
-
-        
-
-
     };
 
     clearEntities() {
@@ -40,9 +36,6 @@ class SceneManager {
         this.clearEntities();
         this.x = 0;
         this.underground = level.underground;
-
-        let firebar = new FireBar(this.game, 10* PARAMS.BLOCKWIDTH, 10* PARAMS.BLOCKWIDTH, 6);
-        this.game.addEntity(firebar);
         
         if (transition) {
             this.game.addEntity(new TransitionScreen(this.game, level, x, y, title));
@@ -143,7 +136,7 @@ class SceneManager {
         }
         this.mario.x = x;
         this.mario.y = y;
-        this.game.addEntity(this.mario);
+        //this.game.addEntity(this.mario);
 
     };
 
