@@ -270,7 +270,7 @@ class SceneManager {
         this.updateAudio();
         PARAMS.DEBUG = document.getElementById("debug").checked;
 
-        if (this.title && !this.credits && (this.game.click || this.game.A)) {
+        if (this.title && !this.credits && (this.game.click || this.game.A) && (this.menuButtonTimer > this.menuButtonCooldown)) {
             if (this.menuSelect.mario || (this.game.click && this.game.click.y > 9 * PARAMS.BLOCKWIDTH && this.game.click.y < 9.5 * PARAMS.BLOCKWIDTH)) {
                 this.title = false;
                 this.mario = new Mario(this.game, 2.5 * PARAMS.BLOCKWIDTH, 0 * PARAMS.BLOCKWIDTH);
@@ -282,19 +282,15 @@ class SceneManager {
                 this.loadLevel(levelOne, 2.5 * PARAMS.BLOCKWIDTH, 0 * PARAMS.BLOCKWIDTH, true);
             }
             if (this.menuSelect.credits || (this.game.click && this.game.click.y > 11 * PARAMS.BLOCKWIDTH && this.game.click.y < 11.5 * PARAMS.BLOCKWIDTH)) {
-                if (this.menuButtonTimer > this.menuButtonCooldown) {
                     this.credits = true;
                     this.menuButtonTimer = 0;
-                }
+                    this.menuSelect.credits = false;     
             }
-        } else if (this.title && this.credits && (this.game.click || this.game.A || this.game.B)) {
+        } else if (this.title && this.credits && (this.game.click || this.game.A || this.game.B) && (this.menuButtonTimer > this.menuButtonCooldown)) {
             if (this.game.A || this.game.B || (this.game.click && this.game.click.y > 13.25 * PARAMS.BLOCKWIDTH && this.game.click.y < 13.75 * PARAMS.BLOCKWIDTH)) {
-                if (this.menuButtonTimer > this.menuButtonCooldown) {
                     this.credits = false;
                     this.menuButtonTimer = 0;
-                    this.menuSelect.mario = true;
-                    
-                }
+                    this.menuSelect.mario = true;         
             }
         }
 
