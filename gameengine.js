@@ -13,6 +13,7 @@ class GameEngine {
         this.down = false;
         this.A = false;
         this.B = false;
+        this.gamepad = null;
     };
 
     init(ctx) { // called after page has loaded
@@ -32,6 +33,7 @@ class GameEngine {
     };
 
     startInput() {
+        this.keyboardActive = false;
         var that = this;
 
         var getXandY = function (e) {
@@ -49,7 +51,13 @@ class GameEngine {
             that.click = getXandY(e);
         }, false);
 
+        this.ctx.canvas.addEventListener("wheel", function (e) {
+            e.preventDefault(); // Prevent Scrolling
+            that.wheel = e.deltaY;
+        }, false);
+
         this.ctx.canvas.addEventListener("keydown", function (e) {
+            that.keyboardActive = true;
             switch (e.code) {
                 case "ArrowLeft":
                 case "KeyA":
@@ -79,6 +87,7 @@ class GameEngine {
         }, false);
 
         this.ctx.canvas.addEventListener("keyup", function (e) {
+            that.keyboardActive = false;
             switch (e.code) {
                 case "ArrowLeft":
                 case "KeyA":
@@ -120,9 +129,24 @@ class GameEngine {
         this.camera.draw(this.ctx);
     };
 
+    gamepadUpdate() {
+        this.gamepad = navigator.getGamepads()[0];
+        let gamepad = this.gamepad;
+        if (gamepad != null && !this.keyboardActive) {
+            this.A = gamepad.buttons[0].pressed;
+            this.B = gamepad.buttons[1].pressed;
+            this.left = gamepad.buttons[14].pressed || gamepad.axes[0] < -0.3;
+            this.right = gamepad.buttons[15].pressed || gamepad.axes[0] > 0.3;
+            this.up = gamepad.buttons[12].pressed || gamepad.axes[1] < -0.3;
+            this.down = gamepad.buttons[13].pressed || gamepad.axes[1] > 0.3;
+        }
+    }
+
     update() {
         var entitiesCount = this.entities.length;
-
+        
+        this.gamepadUpdate();
+        
         for (var i = 0; i < entitiesCount; i++) {
             var entity = this.entities[i];
 
@@ -130,13 +154,15 @@ class GameEngine {
                 entity.update();
             }
         }
-        this.camera.update();
 
+        this.camera.update();
+        
         for (var i = this.entities.length - 1; i >= 0; --i) {
             if (this.entities[i].removeFromWorld) {
                 this.entities.splice(i, 1);
             }
         }
+        this.wheel = 0;
     };
 
     loop() {
