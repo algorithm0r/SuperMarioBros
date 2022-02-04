@@ -458,3 +458,37 @@ function loadLevel2Bricks(e) {
 }
 
 loadLevel2Bricks(levelTwo.bricks);
+
+var credits = {
+    text: [
+    "      2022 Students",
+    "• KV",
+    "   Merge requests", 
+    "• Raz",
+    "   Gamepad Support",
+    "   Credits",
+    " ",
+    "      2021 Students",
+    "• Seoungdeok Jeon",
+    "   Fire Bar",
+    "• Albert Lin",
+    "   Fire Mario",
+    "• Darryl James",
+    "   Piranha Plant",
+    "• Victor Chau",
+    "   Level 1-2",
+    "• Daniel Machen",
+    "   Koopa Shell",
+    "• James Wedum",
+    "   Brick Breaking",
+    "• Colin Chan/Khue Nguyen",
+    "   Palette Switching",
+    "• Timmy Roma",
+    "   Hammer Bros",
+    "• Kyle Oslin",
+    "   Moving Platforms",
+    " ",
+    "• v1.0 - Chris Marriott",
+    "• OG Engine - Seth Ladd"
+    ]
+}
