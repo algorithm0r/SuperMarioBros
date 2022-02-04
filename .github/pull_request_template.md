@@ -1,77 +1,52 @@
-# Pull Request Description
+# Pull Request Description Here
 
-Please fill out the form below. For the checkbox, use [x] to have a checkmark. For example:
+This is for documentation and readability purposes so that reviewers and future developers can follow your PR easier.
+    
+Feel free to delete this and any prompts you didn't need to fill out for the pull request (makes the document less cluttered)
+    
+Also Emoji Pull Requests will net imaginary and worthless brownie points 🚀
 
-- [x] With a checkmark.
-- [ ] Without a checkmark.
+**Related GitHub Issue Number/Thread:** <Number/Link Here if Any> (Delete this line if not needed)
 
-This should not affect the way whether your pull request is accepted or not. Think of it like a survey and documentation, so the reviewers and future developers can follow your PR easier.
+## Features
 
-1. Have you included *.gitignore* file? Or manually remove config and environment files (E.g: *node_modules* folder, Eclipse IDE files) from this submission? The answer should be **Yes** in this case.
+> Did you fully complete the assigned features?
 
-   - [ ] Yes
-   - [ ] No
+- [x] Fully completed
+- [ ] Partially completed
 
-2. Did you fully complete the assigned task(s)?
+> What features did you Complete?
 
-   - [ ] Fully completed
-   - [ ] Partially completed
+> What features were you supposed to complete but didn't? (If any)
 
-3. Did you introduce a new non-required feature in this PR? This feature is not an assigned task, but it is the one that you feel will make the game better. For example, reproduce a bug used by speed runner in an original version.
+> What features did you complete beyond your assigned features? (If any)
 
-   - [ ] Yes
-   - [ ] No
+> How did you go about implementing your features?
 
-4. Are you aware of any bug caused by your code that have not been fixed in this PR?
-
-   - [ ] Yes
-   - [ ] No
-
-5. Are you aware of any **potential bug**? You don't have to fix this, it is just a way to document. You may not face the bug during the development process, but theoretically it can happens in edge cases. For example, memory leak or a player falls out of map.
-
-   - [ ] Yes
-   - [ ] No
-
-## Unimplented task(s)
-
-- *Only answer when you chose **Partially completed** in question 2, provide a brief summary of what you have not done in here.*
-
-## Related issue(s)
-
-- *Issue number goes here.*
-- *If you answer **Yes** to question 3, please provide a description about that in here.*
-
-## Added
-
-- *Description goes here.*
-- *Description goes here.*
-
-## Changed and Enhanced
-
-- *Description goes here.*
-- *Description goes here.*
-
-## Fixed
-
-- *Description goes here.*
-- *Description goes here.*
+_Feel free to not fill this out if you don't think the feature is complex enough. This part is just really helpful for the maintainers to have when analyzing the code._
 
 ## Bugs
 
-1. Not-fixed bugs (only answer when you chose **Yes** in question 4):
-   - *Description goes here.*
-   - *Description goes here.*
-2. Potention bugs (only answer when you chose **Yes** in question 5):
-   - *Description goes here.*
-   - *Description goes here.*
+> Did you introduce any bugs or potential ones?
 
-## Contributors and code author(s)
+- [ ] Yes
+- [x] No
+    
+> If so, what bugs did you introduce or what do you think might be a cause for bugs?
 
-- *Indicate the name of participants in this PRs.*
+If possible please put file and line numbers to aid in the debugging process.
+
+> Did you fix any bugs outside of what you introduced?
+
+Please give line numbers to aid in the checking process.
+
+## Contributors to the Feature
+
+- *Indicate the name of participants in this PR*
 
 ## Final check
 
-Have you fully filled out this document, and add a label **PR: NEED REVIEW** to this pull request? Answer *Yes* (as it should be) means you are good to go! Thanks for the contribution.
+Have you filled out this document and gave the pull request a descriptive name (Up on top of this document and the GitHub PR title)? Answer *Yes* and that means you are good to go! Thank you for your contribution.
 
 - [ ] Yes
 - [ ] No
