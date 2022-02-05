@@ -15,6 +15,7 @@ ASSET_MANAGER.queueDownload("./sprites/title.png");
 ASSET_MANAGER.queueDownload("./sprites/underground_stuff.png");
 ASSET_MANAGER.queueDownload("./sprites/title_mushroom.png");
 ASSET_MANAGER.queueDownload("./sprites/mouse_wheel.png");
+ASSET_MANAGER.queueDownload("./sprites/castle_big.png");
 
 // music
 ASSET_MANAGER.queueDownload("./music/overworld.mp3");

@@ -15,6 +15,7 @@ var levelOne = {
         { x: 114.5, y: 3, size: 1 }, { x: 122.5, y: 4, size: 3 }, { x: 131.5, y: 3, size: 2 },
         { x: 151.5, y: 4, size: 1 }, { x: 162.5, y: 3, size: 1 }, { x: 170.5, y: 4, size: 3 },
         { x: 179.5, y: 3, size: 2 }],
+    bigcastles: [{ x: 199, y: 3, size: 1 }],
     bricks: [{ x: 20, y: 10, type: 1, prize: "None" },
         { x: 22, y: 10, type: 1, prize: "None" },
         { x: 24, y: 10, type: 1, prize: "None" },

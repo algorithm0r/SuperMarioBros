@@ -83,3 +83,22 @@ class Cloud {
         ctx.drawImage(this.spritesheet, 235, 69, 8, 24, this.x - this.game.camera.x + PARAMS.BLOCKWIDTH * (i + 0.5), this.y, PARAMS.BLOCKWIDTH * 0.5, PARAMS.BLOCKWIDTH * 1.5);
     };
 };
+
+class BigCastle { 
+    constructor(game, x, y) {
+        Object.assign(this, { game, x, y });
+
+        this.spritesheet = ASSET_MANAGER.getAsset("./sprites/castle_big.png");
+    };
+
+    update() {
+
+    };
+
+    drawMinimap(ctx, mmX, mmY) {
+    }
+
+    draw(ctx) {
+        ctx.drawImage(this.spritesheet, 0, 0, 145, 175, this.x - this.game.camera.x, this.y, PARAMS.BLOCKWIDTH * 9, PARAMS.BLOCKWIDTH * 11);
+    };
+};

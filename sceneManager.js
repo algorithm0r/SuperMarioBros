@@ -75,6 +75,12 @@ class SceneManager {
                     this.game.addEntity(new Cloud(this.game, cloud.x * PARAMS.BLOCKWIDTH, cloud.y * PARAMS.BLOCKWIDTH, cloud.size));
                 }
             }
+            if (level.bigcastles) {
+                for (var i = 0; i < level.bigcastles.length; i++) {
+                    let castle = level.bigcastles[i];
+                    this.game.addEntity(new BigCastle(this.game, castle.x * PARAMS.BLOCKWIDTH, castle.y * PARAMS.BLOCKWIDTH, castle.size));
+                }
+            }
             if (level.ground) {
                 for (var i = 0; i < level.ground.length; i++) {
                     let ground = level.ground[i];
