@@ -93,6 +93,12 @@ class SceneManager {
                     this.game.addEntity(new Brick(this.game, brick.x * PARAMS.BLOCKWIDTH, brick.y * PARAMS.BLOCKWIDTH, brick.type, brick.prize, level.underground));
                 }
             }
+            if (level.flags) {
+                for (var i = 0; i < level.flags.length; i++) {
+                    let flag = level.flags[i];
+                    this.game.addEntity(new Flag(this.game, flag.x * PARAMS.BLOCKWIDTH, flag.y * PARAMS.BLOCKWIDTH, flag.size * PARAMS.BLOCKWIDTH));
+                }
+            }
             if (level.blocks) {
                 for (var i = 0; i < level.blocks.length; i++) {
                     let block = level.blocks[i];
