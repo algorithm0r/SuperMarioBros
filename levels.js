@@ -67,6 +67,7 @@ var levelOne = {
         { x: 162, y: 12, size: 1, destination: false },
         { x: 176, y: 12, size: 1, destination: false }],
     flags: [{ x: 195.3, y: 3.55, size: 1 }],
+    // flags: [{ x: 15, y: 3.55, size: 1 }],
     blocks: [{ x: 133, y: 13, size: 4 },
         { x: 134, y: 12, size: 3 },
         { x: 135, y: 11, size: 2 },

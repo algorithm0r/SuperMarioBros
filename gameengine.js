@@ -13,6 +13,7 @@ class GameEngine {
         this.down = false;
         this.A = false;
         this.B = false;
+
         this.gamepad = null;
     };
 
@@ -42,21 +43,18 @@ class GameEngine {
 
             return { x: x, y: y, radius: 0 };
         }
-
-        this.ctx.canvas.addEventListener("mousemove", function (e) {
+        function mouseListener (e) {
             that.mouse = getXandY(e);
-        }, false);
-
-        this.ctx.canvas.addEventListener("click", function (e) {
+        }
+        function mouseClickListener (e) {
             that.click = getXandY(e);
-        }, false);
-
-        this.ctx.canvas.addEventListener("wheel", function (e) {
+            if (PARAMS.DEBUG) console.log(that.click);
+        }
+        function wheelListener (e) {
             e.preventDefault(); // Prevent Scrolling
             that.wheel = e.deltaY;
-        }, false);
-
-        this.ctx.canvas.addEventListener("keydown", function (e) {
+        }
+        function keydownListener (e) {
             that.keyboardActive = true;
             switch (e.code) {
                 case "ArrowLeft":
@@ -84,9 +82,8 @@ class GameEngine {
                     that.A = true;
                     break;
             }
-        }, false);
-
-        this.ctx.canvas.addEventListener("keyup", function (e) {
+        }
+        function keyUpListener (e) {
             that.keyboardActive = false;
             switch (e.code) {
                 case "ArrowLeft":
@@ -114,8 +111,40 @@ class GameEngine {
                     that.A = false;
                     break;
             }
-        }, false);
+        }
+
+        that.mousemove = mouseListener;
+        that.leftclick = mouseClickListener;
+        that.wheelscroll = wheelListener;
+        that.keydown = keydownListener;
+        that.keyup = keyUpListener;
+
+        this.ctx.canvas.addEventListener("mousemove", that.mousemove, false);
+
+        this.ctx.canvas.addEventListener("click", that.leftclick, false);
+
+        this.ctx.canvas.addEventListener("wheel", that.wheelscroll, false);
+
+        this.ctx.canvas.addEventListener("keydown", that.keydown, false);
+
+        this.ctx.canvas.addEventListener("keyup", that.keyup, false);
     };
+
+    disableInput() {
+        var that = this;
+        that.ctx.canvas.removeEventListener("mousemove", that.mousemove);
+        that.ctx.canvas.removeEventListener("click", that.leftclick);
+        that.ctx.canvas.removeEventListener("wheel", that.wheelscroll);
+        that.ctx.canvas.removeEventListener("keyup", that.keyup);
+        that.ctx.canvas.removeEventListener("keydown", that.keydown);
+
+        that.left = false;
+        that.right = false;
+        that.up = false;
+        that.down = false;
+        that.A = false;
+        that.B = false;
+    }
 
     addEntity(entity) {
         this.entities.push(entity);

@@ -326,10 +326,10 @@ class Flag {
         this.flagX = x - 36;
         this.flagY = y + 27;
         this.updateBB();
+        this.win = false;
     }
     
     update() {
-
     }
 
     drawMinimap(ctx, mmX, mmY) {
@@ -337,8 +337,26 @@ class Flag {
     };
 
     draw(ctx) {
+        let TICK = this.game.clockTick;
+        
+        // draw the pole
         ctx.drawImage(this.spritesheet, 20, 0, 8, 152, this.x - this.game.camera.x, this.y, PARAMS.BLOCKWIDTH / 2, PARAMS.BLOCKWIDTH * 9.5);
+        
+        if (this.win) {
+            let FLAG_SPEED_SCALE = 6;
+            let BLOCK_TOP = 13 * PARAMS.BLOCKWIDTH;
+            if (this.flagY === this.y + 27) this.game.addEntity(new Score(this.game, this.x, this.y, 100));
+            // top of the block = 13 * blockwidth - blockwidth
+            if (this.flagY < (BLOCK_TOP - PARAMS.BLOCKWIDTH)) {
+                this.flagY += PARAMS.BLOCKWIDTH * TICK * FLAG_SPEED_SCALE;
+                this.game.disableInput();
+            }
+        }
+        
+        // draw the triangle flag part
         ctx.drawImage(this.spritesheet, 2, 1, 16, 16, this.flagX - this.game.camera.x, this.flagY, PARAMS.BLOCKWIDTH, PARAMS.BLOCKWIDTH);
+        
+        
         if (PARAMS.DEBUG) {
             ctx.strokeStyle = 'Red';
             ctx.strokeRect(this.BB.x - this.game.camera.x, this.BB.y, this.BB.width, this.BB.height);
