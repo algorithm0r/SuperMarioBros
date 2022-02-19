@@ -1,5 +1,6 @@
 var levelOne = {
     music: "./music/overworld.mp3",
+    hurry_music: "./music/overworld-hurry.mp3",
     label: "1-1",
     underground: false,
     ground: [{ x: 0, y: 14, size: 69 }, { x: 71, y: 14, size: 15 }, { x: 89, y: 14, size: 63 }, { x: 154, y: 14, size: 69 }],
@@ -112,6 +113,7 @@ var levelOne = {
 
 var bonusLevelOne = {
     music: "./music/underworld.mp3",
+    hurry_music: "./music/underworld-hurry.mp3",
     label: "1-1",
     underground: false,
     bricks: [{ x: 0, y: 0, type: 1, prize: "None" },
@@ -183,7 +185,9 @@ var bonusLevelOne = {
 
     var levelTwo = {
     underground: true, // NOTE: PLEASE ADD THIS BOOLEAN PROPERTY WHEN TESTING LEVEL 1-2
-
+    music: "./music/underworld.mp3",
+    // hurry_music: "./music/underworld-hurry.mp3",
+    label: "1-2",
     ground: [{ x: 0, y: 13, size: 80 }, { x:83, y: 13, size: 37}, {x: 122, y: 13, size: 2},
         {x: 126, y: 13, size: 12}, {x: 145, y: 13, size: 7}, {x: 159, y: 13, size: 32}],
     bricks: [],
@@ -225,6 +229,7 @@ var bonusLevelOne = {
 };
 
 var bonusLevelTwo = {
+    label: "1-2",
     ground: [{ x: 0, y: 11, size: 17 }],
     coins: [{ x: 4, y: 6 }, { x: 5, y: 6 }, { x: 6, y: 6 }, { x: 7, y: 6 }, { x: 8, y: 6 }, { x: 9, y: 6 }, { x: 10, y: 6 }, { x: 11, y: 6 },
         { x: 3, y: 10 }, { x: 4, y: 10 }, { x: 5, y: 10 }, { x: 6, y: 10 }, { x: 7, y: 10 }, { x: 8, y: 10 }, { x: 9, y: 10 }, { x: 10, y: 10 }, { x: 11, y: 10 }],

@@ -345,11 +345,11 @@ class Flag {
         if (this.win) {
             let FLAG_SPEED_SCALE = 6;
             let BLOCK_TOP = 13 * PARAMS.BLOCKWIDTH;
-            if (this.flagY === this.y + 27) this.game.addEntity(new Score(this.game, this.x, this.y, 100));
             // top of the block = 13 * blockwidth - blockwidth
             if (this.flagY < (BLOCK_TOP - PARAMS.BLOCKWIDTH)) {
                 this.flagY += PARAMS.BLOCKWIDTH * TICK * FLAG_SPEED_SCALE;
                 this.game.disableInput();
+                this.game.camera.paused = true;
             }
         }
         
