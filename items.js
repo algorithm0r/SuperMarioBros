@@ -250,7 +250,7 @@ class Fireball {
                 } else if (entity instanceof Tube || entity instanceof SideTube || entity instanceof Block || 
                     (entity instanceof Brick && (that.BB.collide(entity.leftBB) || that.BB.collide(entity.rightBB)))) {
                     that.explode = true;
-                } else if ((entity instanceof Goomba || entity instanceof Koopa || entity instanceof PirahnaPlant) && !entity.dead) {
+                } else if ((entity instanceof Goomba || entity instanceof Koopa || entity instanceof PirahnaPlant || entity instanceof KoopaParatroopaGreen || entity instanceof KoopaParatroopaRed) && !entity.dead) {
                     entity.dead = true;
                     that.explode = true;
 

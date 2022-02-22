@@ -308,7 +308,7 @@ class Mario {
                             if(that.state === 4) that.state = 0; // set state to idle
                             that.updateBB();
                         }
-                        if ((entity instanceof Goomba || entity instanceof Koopa || entity instanceof KoopaShell) // squish Goomba
+                        if ((entity instanceof Goomba || entity instanceof Koopa || entity instanceof KoopaParatroopaGreen || entity instanceof KoopaParatroopaRed || entity instanceof KoopaShell) // squish Goomba
                             && (that.lastBB.bottom) <= entity.BB.top // was above last tick
                             && !entity.dead) { // can't squish an already squished Goomba
                             entity.dead = true;

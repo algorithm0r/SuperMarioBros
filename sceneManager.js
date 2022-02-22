@@ -109,6 +109,18 @@ class SceneManager {
                     this.game.addEntity(new Goomba(this.game, goomba.x * PARAMS.BLOCKWIDTH, goomba.y * PARAMS.BLOCKWIDTH));
                 }
             }
+            if (level.koopaParatroopaGreen) {
+                for (var i = 0; i < level.koopaParatroopaGreen.length; i++) {
+                    let koopaParatroopaGreen = level.koopaParatroopaGreen[i];
+                    this.game.addEntity(new KoopaParatroopaGreen(this.game, koopaParatroopaGreen.x * PARAMS.BLOCKWIDTH, koopaParatroopaGreen.y * PARAMS.BLOCKWIDTH, koopaParatroopaGreen.facing));
+                }
+            }
+            if (level.koopaParatroopaRed) {
+                for (var i = 0; i < level.koopaParatroopaRed.length; i++) {
+                    let koopaParatroopaRed = level.koopaParatroopaRed[i];
+                    this.game.addEntity(new KoopaParatroopaRed(this.game, koopaParatroopaRed.x * PARAMS.BLOCKWIDTH, koopaParatroopaRed.y * PARAMS.BLOCKWIDTH, koopaParatroopaRed.facing));
+                }
+            }
             if (level.koopas) {
                 for (var i = 0; i < level.koopas.length; i++) {
                     let koopa = level.koopas[i];
