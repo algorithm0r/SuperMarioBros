@@ -36,8 +36,15 @@ class Goomba {
             var that = this;
             this.game.entities.forEach(function (entity) {
                 if (entity.BB && that.BB.collide(entity.BB)) {
-                    if (entity instanceof Mario || entity instanceof Mushroom || entity instanceof Flower) {
-
+                    if (entity instanceof Mario) {
+                        // if (entity.size == 0) {
+                        //     entity.die();
+                        // }
+                        if (entity.size > 0 && entity.size <= 3) { //Mario takes a hit when not invincible
+                            entity.size -= 1;
+                        }
+                    } else if (entity instanceof Mushroom || entity instanceof Flower) { 
+                    
                     } else if ((entity instanceof Ground || entity instanceof Brick || entity instanceof Block || entity instanceof Tube)
                         && that.lastBB.bottom <= entity.BB.top) {
                         that.y = entity.BB.top - PARAMS.BLOCKWIDTH;
