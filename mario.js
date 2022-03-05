@@ -390,9 +390,9 @@ class Mario {
                 }
 
                 // counting the number of fireballs currently in play
-                // if (entity instanceof Fireball) {
-                //     that.fireballsThrown++;
-                // }
+                if (entity instanceof Fireball) {
+                    that.fireballsThrown++;
+                }
             });
 
             // mario throws fireballs
