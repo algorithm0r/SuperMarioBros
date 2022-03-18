@@ -75,6 +75,12 @@ class SceneManager {
                     this.game.addEntity(new Cloud(this.game, cloud.x * PARAMS.BLOCKWIDTH, cloud.y * PARAMS.BLOCKWIDTH, cloud.size));
                 }
             }
+            if (level.bigcastles) {
+                for (var i = 0; i < level.bigcastles.length; i++) {
+                    let castle = level.bigcastles[i];
+                    this.game.addEntity(new BigCastle(this.game, castle.x * PARAMS.BLOCKWIDTH, castle.y * PARAMS.BLOCKWIDTH, castle.size));
+                }
+            }
             if (level.ground) {
                 for (var i = 0; i < level.ground.length; i++) {
                     let ground = level.ground[i];
@@ -85,6 +91,12 @@ class SceneManager {
                 for (var i = 0; i < level.bricks.length; i++) {
                     let brick = level.bricks[i];
                     this.game.addEntity(new Brick(this.game, brick.x * PARAMS.BLOCKWIDTH, brick.y * PARAMS.BLOCKWIDTH, brick.type, brick.prize, level.underground));
+                }
+            }
+            if (level.flags) {
+                for (var i = 0; i < level.flags.length; i++) {
+                    let flag = level.flags[i];
+                    this.game.addEntity(new Flag(this.game, flag.x * PARAMS.BLOCKWIDTH, flag.y * PARAMS.BLOCKWIDTH, flag.size * PARAMS.BLOCKWIDTH));
                 }
             }
             if (level.blocks) {
@@ -137,6 +149,9 @@ class SceneManager {
                 if(that.mario === entity) mario = true;
             });
             if(!mario) this.game.addEntity(this.mario);
+
+            this.time = 400;
+            this.game.camera.paused = false;
         }
 
         if (level.lifts) {
@@ -162,6 +177,22 @@ class SceneManager {
 
     update() {
         this.menuButtonTimer += this.game.clockTick;
+        if (this.time === 99) {
+            ASSET_MANAGER.pauseBackgroundMusic();
+            ASSET_MANAGER.playAsset(this.level.hurry_music);
+        }
+        if (!this.title && !this.transition && !this.paused) {
+            if (this.timer === undefined) {
+                this.timer = 0;
+            } else {
+                this.timer += this.game.clockTick;
+            }
+
+            if (this.timer > 0.4) {
+                this.time -= 1;
+                this.timer = undefined;
+            }
+        }
 
         // Gamepad/keyboard title/credits menu select
         if (this.credits && (this.game.A || this.game.B)) {
@@ -339,7 +370,7 @@ class SceneManager {
         ctx.fillText("WORLD", 9 * PARAMS.BLOCKWIDTH, 1 * PARAMS.BLOCKWIDTH);
         ctx.fillText(this.level.label, 9.5 * PARAMS.BLOCKWIDTH, 1.5 * PARAMS.BLOCKWIDTH);
         ctx.fillText("TIME", 12.5 * PARAMS.BLOCKWIDTH, 1 * PARAMS.BLOCKWIDTH);
-        ctx.fillText("400", 13 * PARAMS.BLOCKWIDTH, 1.5 * PARAMS.BLOCKWIDTH);
+        ctx.fillText(this.time, 13 * PARAMS.BLOCKWIDTH, 1.5 * PARAMS.BLOCKWIDTH);
 
         if (this.title && !this.credits) { // Title Screen
             var width = 176;

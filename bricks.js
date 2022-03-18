@@ -318,3 +318,54 @@ class Lift {
         this.rightBB = new BoundingBox(this.x + PARAMS.BLOCKWIDTH * 2, this.y, PARAMS.BLOCKWIDTH, PARAMS.BLOCKWIDTH * 0.5);
     }
 }
+
+class Flag {
+    constructor(game, x, y) {
+        Object.assign(this, { game, x, y });
+        this.spritesheet = ASSET_MANAGER.getAsset("./sprites/flag.png");
+        this.flagX = x - 36;
+        this.flagY = y + 27;
+        this.updateBB();
+        this.win = false;
+    }
+    
+    update() {
+    }
+
+    drawMinimap(ctx, mmX, mmY) {
+       // TODO: add in minimap functionality
+    };
+
+    draw(ctx) {
+        let TICK = this.game.clockTick;
+        
+        // draw the pole
+        ctx.drawImage(this.spritesheet, 20, 0, 8, 152, this.x - this.game.camera.x, this.y, PARAMS.BLOCKWIDTH / 2, PARAMS.BLOCKWIDTH * 9.5);
+        
+        if (this.win) {
+            let FLAG_SPEED_SCALE = 6;
+            let BLOCK_TOP = 13 * PARAMS.BLOCKWIDTH;
+            // top of the block = 13 * blockwidth - blockwidth
+            if (this.flagY < (BLOCK_TOP - PARAMS.BLOCKWIDTH)) {
+                this.flagY += PARAMS.BLOCKWIDTH * TICK * FLAG_SPEED_SCALE;
+                this.game.disableInput();
+                this.game.camera.paused = true;
+            }
+        }
+        
+        // draw the triangle flag part
+        ctx.drawImage(this.spritesheet, 2, 1, 16, 16, this.flagX - this.game.camera.x, this.flagY, PARAMS.BLOCKWIDTH, PARAMS.BLOCKWIDTH);
+        
+        
+        if (PARAMS.DEBUG) {
+            ctx.strokeStyle = 'Red';
+            ctx.strokeRect(this.BB.x - this.game.camera.x, this.BB.y, this.BB.width, this.BB.height);
+        }
+    };
+
+    updateBB() {
+        this.BB = new BoundingBox(this.x + 9, this.y, PARAMS.BLOCKWIDTH / 7, PARAMS.BLOCKWIDTH * 9.5);
+        // this.leftBB = new BoundingBox(this.x, this.y, PARAMS.BLOCKWIDTH, PARAMS.BLOCKWIDTH * 0.5);
+        // this.rightBB = new BoundingBox(this.x + PARAMS.BLOCKWIDTH * 2, this.y, PARAMS.BLOCKWIDTH, PARAMS.BLOCKWIDTH * 0.5);
+    }
+}

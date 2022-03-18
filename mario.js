@@ -11,7 +11,7 @@ class Mario {
         // mario's state variables
         this.size = 0; // 0 = little, 1 = big, 2 = super, 3 = little invincible, 4 = big invincible, 5 = super invincible
         this.facing = 0; // 0 = right, 1 = left
-        this.state = 0; // 0 = idle, 1 = walking, 2 = running, 3 = skidding, 4 = jumping/falling, 5 = ducking
+        this.state = 0; // 0 = idle, 1 = walking, 2 = running, 3 = skidding, 4 = jumping/falling, 5 = ducking, 6 = pulling flag
         this.dead = false;
 
         // fire mario's state variables
@@ -30,7 +30,7 @@ class Mario {
     };
 
     loadAnimations() {
-        for (var i = 0; i < 6; i++) { // six states
+        for (var i = 0; i < 7; i++) { // six states
             this.animations.push([]);
             for (var j = 0; j < 3; j++) { // three sizes (star-power not implemented yet)
                 this.animations[i].push([]);
@@ -106,6 +106,17 @@ class Mario {
         this.animations[5][1][1] = new Animator(this.spritesheet, 0, 48, 16, 32, 1, 0.33, 14, false, true);
         this.animations[5][2][1] = new Animator(this.spritesheet, 0, 118, 16, 32, 1, 0.33, 14, false, true);
 
+        // pulling animation
+        // facing right
+        this.animations[6][0][0] = new Animator(this.spritesheet, 329, 29, 16, 16, 2, 0.12, 14, false, true);
+        this.animations[6][1][0] = new Animator(this.spritesheet, 361, 87, 15, 32, 2, 0.12, 14, false, true);
+        this.animations[6][2][0] = new Animator(this.spritesheet, 361, 157, 15, 32, 2, 0.12, 14, false, true);
+
+        // facing left
+        this.animations[6][0][1] = new Animator(this.spritesheet, 29, 29, 16, 16, 2, 0.12, 14, false, true);
+        this.animations[6][1][1] = new Animator(this.spritesheet, 0, 87, 15, 32, 2, 0.12, 14, false, true);
+        this.animations[6][2][1] = new Animator(this.spritesheet, 0, 157, 15, 32, 2, 0.12, 14, false, true);
+
         this.deadAnim = new Animator(this.spritesheet, 0, 16, 16, 16, 1, 0.33, 0, false, true);
     };
 
@@ -164,11 +175,102 @@ class Mario {
                     this.game.camera.gameOver = true;
                 else this.game.camera.loadLevel(levelOne, 2.5 * PARAMS.BLOCKWIDTH, 0 * PARAMS.BLOCKWIDTH, true, false);
             }
+            
+        } else if (this.state === 6) {
+            let BLOCK_TOP = 13 * PARAMS.BLOCKWIDTH;
+            let MARIO_SLIDE_SPEED = 12;
+            let FLAG_WIDTH = PARAMS.BLOCKWIDTH / 7;
+            let MARIO_FLIP_DELAY = 1.75;
+            let MARIO_JUMP_DELAY = 0.5;
+            let BASE_FLAG_HEIGHT = BLOCK_TOP - PARAMS.BLOCKWIDTH;
+            /*
+            Flag touch scoring from: https://mario.fandom.com/wiki/Goal_Pole
+            NOTE: We're using bitwidth estimates, this is not accurate
+
+            0-17 pixels high: 100 extra points --- 1 BLOCKWIDTH up from floor + blockwidth
+            18-57 pixels high: 400 extra points --- 2-3 BLOCKWIDTH ^^
+            58-81 pixels high: 800 extra points  -- 3-4 BLOCKWIDTH ^^
+            82-127 pixels high: 2000 extra points -- 4-5 BLOCKWIDTH ^^
+            128-153 pixels high: 4000 extra points -- above
+            */
+            let scoreAdd = 0;
+
+            if (this.size === 0) {
+                if (this.y < (BLOCK_TOP - PARAMS.BLOCKWIDTH)) {
+                    this.y += PARAMS.BLOCKWIDTH * TICK * MARIO_SLIDE_SPEED;
+                } else {
+                    if (!this.scored) {
+                        
+                        if (this.flagTouchedY > BASE_FLAG_HEIGHT - PARAMS.BLOCKWIDTH) {
+                            scoreAdd = 100;
+                        } else if (this.flagTouchedY > BASE_FLAG_HEIGHT - 3 * PARAMS.BLOCKWIDTH) {
+                            scoreAdd = 400;
+                        } else if (this.flagTouchedY > BASE_FLAG_HEIGHT - 5 * PARAMS.BLOCKWIDTH) {
+                            scoreAdd = 800;
+                        } else {
+                            scoreAdd = 2000;
+                        }
+                        this.game.addEntity(new Score(this.game, this.x, this.y, scoreAdd));
+                        this.scored = true;
+                    }
+                    this.doneSliding = true;
+                }
+            } else {
+                if (this.y < (BLOCK_TOP - 2 * PARAMS.BLOCKWIDTH)) {
+                    this.y += PARAMS.BLOCKWIDTH * TICK * MARIO_SLIDE_SPEED;
+                } else {
+                    if (!this.scored) {
+                        // this.game.addEntity(new Score(this.game, this.x, this.y, 100));
+                        if (this.flagTouchedY > BASE_FLAG_HEIGHT - PARAMS.BLOCKWIDTH) {
+                            scoreAdd = 100;
+                        } else if (this.flagTouchedY > BASE_FLAG_HEIGHT - 3 * PARAMS.BLOCKWIDTH) {
+                            scoreAdd = 400;
+                        } else if (this.flagTouchedY > BASE_FLAG_HEIGHT - 5 * PARAMS.BLOCKWIDTH) {
+                            scoreAdd = 800;
+                        } else {
+                            scoreAdd = 2000;
+                        }
+                        this.game.addEntity(new Score(this.game, this.x, this.y, scoreAdd));
+                        this.scored = true;
+                    }
+                    this.doneSliding = true;
+                }
+            } 
+            if (this.doneSliding) {
+                if (!this.flipped) {
+                    if (this.timer === undefined) {
+                        this.timer = 0;
+                        
+                    } else {
+                        this.timer += TICK;
+                    }
+                    if (this.timer && this.timer > MARIO_FLIP_DELAY) {
+                        this.facing = 1;
+                        this.x += FLAG_WIDTH + PARAMS.BLOCKWIDTH;
+                        this.flipped = true;
+                        this.timer = undefined;
+                    }
+                } else {
+                    if (this.timer === undefined) {
+                        this.timer = 0;
+                        
+                    } else {
+                        this.timer += TICK;
+                    }
+                    if (this.timer && this.timer > MARIO_JUMP_DELAY) {
+                        this.state = 4;
+                        this.velocity.x = 240; // need to figure out how to make him jump more
+                        this.velocity.y = -50;
+                        this.facing = 1;
+                    }
+                    
+                }
+            }
+            
+            
         } else {
-
-
-            // update velocity
-
+          // update velocity
+            
             if (!this.game.camera.title) {
                 if (this.state !== 4) { // not jumping
                     // ground physics
@@ -230,6 +332,48 @@ class Mario {
                             ASSET_MANAGER.playAsset("./audio/small-jump.mp3");
                         } else {
                             ASSET_MANAGER.playAsset("./audio/super-jump.mp3");
+                        }
+                    }
+
+                    if (this.win) {
+                        this.velocity.x = 50;
+                        
+                        // if (this.x === ??) delay for .5 secs, disappear
+                        // when he disappears, timer goes down, score increases
+                        // let TARGET_POS = 700 * PARAMS.BLOCKWIDTH;
+                        // console.log("current x " + this.x);
+                        // console.log("target x " + 9706);
+                        let DOOR_POSITION = 9645;
+
+                        if (this.x >= DOOR_POSITION) {
+                            this.disappear = true;
+                            this.velocity.x = 0;
+
+                            if (this.game.camera.time > 0) {
+                                if (this.timer === undefined) {
+                                    this.timer = 0;
+                                } else {
+                                    this.timer += this.game.clockTick;
+                                }
+                    
+                                if (this.timer > .02) {
+                                    this.game.camera.time -= 1;
+                                    this.game.camera.score += 50;
+                                    this.timer = undefined;
+                                }
+                                
+                            } else {
+                                this.doneScoring = true;
+                            }
+
+                            if (this.doneScoring) {
+                                this.win = false;
+                                this.game.camera.loadLevel(levelTwo, 2.5 * PARAMS.BLOCKWIDTH, 0 * PARAMS.BLOCKWIDTH, true, false);
+                                this.disappear = false;
+                                this.state = 0;
+                                this.game.startInput();
+                            }
+                            
                         }
                     }
                 } else {
@@ -386,6 +530,16 @@ class Mario {
                     if (entity instanceof FireBar_Fire) {
                         that.die();
                     }
+                    if (entity instanceof Flag) {
+                        that.x = entity.BB.left - PARAMS.BLOCKWIDTH;
+                        that.velocity.x = 0;
+                        entity.win = true;
+                        that.state = 6;
+                        that.win = true;
+                        if (!that.flagTouchedY) {
+                            that.flagTouchedY = that.y;
+                        }
+                    }
                 }
 
                 // counting the number of fireballs currently in play
@@ -416,7 +570,7 @@ class Mario {
             }
 
             // update state
-            if (this.state !== 4) {
+            if (this.state !== 4 && this.state !== 6) {
                 if (this.game.down) this.state = 5;
                 else if (Math.abs(this.velocity.x) > MAX_WALK) this.state = 2;
                 else if (Math.abs(this.velocity.x) >= MIN_WALK) this.state = 1;
@@ -425,9 +579,12 @@ class Mario {
 
             }
 
+            
+
             // update direction
             if (this.velocity.x < 0) this.facing = 1;
             if (this.velocity.x > 0) this.facing = 0;
+
         }
     };
 
@@ -445,6 +602,8 @@ class Mario {
             } else {
                 ctx.drawImage(this.spritesheet, 102, 122, 16, 32, this.x - this.game.camera.x, this.y, PARAMS.BLOCKWIDTH, 2 * PARAMS.BLOCKWIDTH);
             }
+        } else if (this.disappear) {
+            
         } else {
             this.animations[this.state][this.size][this.facing].drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x, this.y, PARAMS.SCALE);
         }

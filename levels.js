@@ -1,9 +1,10 @@
 var levelOne = {
     music: "./music/overworld.mp3",
+    hurry_music: "./music/overworld-hurry.mp3",
     label: "1-1",
     underground: false,
     ground: [{ x: 0, y: 14, size: 69 }, { x: 71, y: 14, size: 15 }, { x: 89, y: 14, size: 63 }, { x: 154, y: 14, size: 69 }],
-    bighills: [{ x: 0, y: 11.5 }, { x: 48, y: 11.5 }, { x: 95, y: 11.5 }, { x: 143, y: 11.5 }],
+    bighills: [{ x: 0, y: 11.5 }, { x: 48, y: 11.5 }, { x: 95, y: 11.5 }, { x: 143, y: 11.5 }, { x: 189, y: 11.5 }],
     hills: [{ x: 16, y: 12.75 }, { x: 64, y: 12.75 }, { x: 111, y: 12.75 }, { x: 159, y: 12.75 }],
     bushes: [{ x: 11.5, y: 13, size: 3 }, { x: 23.5, y: 13, size: 1 }, { x: 41.5, y: 13, size: 2 },
        { x: 59.5, y: 13, size: 3 }, { x: 71.5, y: 13, size: 1 }, { x: 89.5, y: 13, size: 2 },
@@ -14,7 +15,8 @@ var levelOne = {
         { x: 75.5, y: 4, size: 3 }, { x: 83.5, y: 3, size: 2 }, { x: 103.5, y: 4, size: 1 },
         { x: 114.5, y: 3, size: 1 }, { x: 122.5, y: 4, size: 3 }, { x: 131.5, y: 3, size: 2 },
         { x: 151.5, y: 4, size: 1 }, { x: 162.5, y: 3, size: 1 }, { x: 170.5, y: 4, size: 3 },
-        { x: 179.5, y: 3, size: 2 }],
+        { x: 179.5, y: 3, size: 2 }, { x: 197.5, y: 4, size: 1 }],
+    bigcastles: [{ x: 199, y: 3, size: 1 }],
     bricks: [{ x: 20, y: 10, type: 1, prize: "None" },
         { x: 22, y: 10, type: 1, prize: "None" },
         { x: 24, y: 10, type: 1, prize: "None" },
@@ -65,6 +67,8 @@ var levelOne = {
         { x: 57, y: 10, size: 3, destination: true },
         { x: 162, y: 12, size: 1, destination: false },
         { x: 176, y: 12, size: 1, destination: false }],
+    flags: [{ x: 195.3, y: 3.55, size: 1 }],
+    // flags: [{ x: 15, y: 3.55, size: 1 }],
     blocks: [{ x: 133, y: 13, size: 4 },
         { x: 134, y: 12, size: 3 },
         { x: 135, y: 11, size: 2 },
@@ -88,7 +92,8 @@ var levelOne = {
         { x: 182, y: 9, size: 5 },
         { x: 183, y: 8, size: 4 },
         { x: 184, y: 7, size: 3 },
-        { x: 185, y: 6, size: 2 }],
+        { x: 185, y: 6, size: 2 },
+        { x: 195, y: 13, size: 1 }],
     goombas: [{ x: 22, y:13 },
         { x: 40, y: 13 },
         { x: 51, y: 13 },
@@ -108,6 +113,7 @@ var levelOne = {
 
 var bonusLevelOne = {
     music: "./music/underworld.mp3",
+    hurry_music: "./music/underworld-hurry.mp3",
     label: "1-1",
     underground: false,
     bricks: [{ x: 0, y: 0, type: 1, prize: "None" },
@@ -179,7 +185,9 @@ var bonusLevelOne = {
 
     var levelTwo = {
     underground: true, // NOTE: PLEASE ADD THIS BOOLEAN PROPERTY WHEN TESTING LEVEL 1-2
-
+    music: "./music/underworld.mp3",
+    // hurry_music: "./music/underworld-hurry.mp3",
+    label: "1-2",
     ground: [{ x: 0, y: 13, size: 80 }, { x:83, y: 13, size: 37}, {x: 122, y: 13, size: 2},
         {x: 126, y: 13, size: 12}, {x: 145, y: 13, size: 7}, {x: 159, y: 13, size: 32}],
     bricks: [],
@@ -221,6 +229,7 @@ var bonusLevelOne = {
 };
 
 var bonusLevelTwo = {
+    label: "1-2",
     ground: [{ x: 0, y: 11, size: 17 }],
     coins: [{ x: 4, y: 6 }, { x: 5, y: 6 }, { x: 6, y: 6 }, { x: 7, y: 6 }, { x: 8, y: 6 }, { x: 9, y: 6 }, { x: 10, y: 6 }, { x: 11, y: 6 },
         { x: 3, y: 10 }, { x: 4, y: 10 }, { x: 5, y: 10 }, { x: 6, y: 10 }, { x: 7, y: 10 }, { x: 8, y: 10 }, { x: 9, y: 10 }, { x: 10, y: 10 }, { x: 11, y: 10 }],
