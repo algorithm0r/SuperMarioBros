@@ -137,8 +137,9 @@ class Mario {
     };
 
     update() {
+
         const TICK = this.game.clockTick;
-        
+
         // I used this page to approximate my constants
         // https://web.archive.org/web/20130807122227/http://i276.photobucket.com/albums/kk21/jdaster64/smb_playerphysics.png
         // I converted these values from hex and into units of pixels and seconds.
@@ -286,7 +287,7 @@ class Mario {
                     }
                     else if (Math.abs(this.velocity.x) >= MIN_WALK) {  // faster than a walk // accelerating or decelerating
                         if (this.facing === 0) {
-                            if ((this.game.right && !this.game.left)) {
+                            if (this.game.right && !this.game.left) {
                                 if (this.game.B) {
                                     this.velocity.x += ACC_RUN * TICK;
                                 } else this.velocity.x += ACC_WALK * TICK;
@@ -386,11 +387,11 @@ class Mario {
                     }
 
                     // horizontal physics
-                    if ((this.game.right && !this.game.left)) {
+                    if (this.game.right && !this.game.left) {
                         if (Math.abs(this.velocity.x) > MAX_WALK) {
                             this.velocity.x += ACC_RUN * TICK;
                         } else this.velocity.x += ACC_WALK * TICK;
-                    } else if ((this.game.left && !this.game.right)) {
+                    } else if (this.game.left && !this.game.right) {
                         if (Math.abs(this.velocity.x) > MAX_WALK) {
                             this.velocity.x -= ACC_RUN * TICK;
                         } else this.velocity.x -= ACC_WALK * TICK;
