@@ -113,7 +113,10 @@ var levelOne = {
         { x: 124.5, y: 13 },
         { x: 127, y: 13 },
         { x: 128.5, y: 13 }],
-    koopas: [{ x: 106, y: 12.5, facing: 1}]
+    koopas: [{ x: 106, y: 12.5, facing: 1}],
+    // Un-comment to test paratroopas
+    // koopaParatroopaGreen: [{x: 30, y: 12.5, facing: 1}],
+    // koopaParatroopaRed: [{x: 20, y: 12.5, facing: 1}]
 };
 
 var bonusLevelOne = {
