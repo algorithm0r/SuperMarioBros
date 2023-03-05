@@ -149,6 +149,7 @@ class SceneManager {
             this.mario.y = y;
             this.mario.removeFromWorld = false;
             this.mario.velocity = { x: 0, y: 0 };
+            this.mario.state = 4 // mario enters level in falling state;
 
             if (level.music && !this.title) {
                 ASSET_MANAGER.pauseBackgroundMusic();

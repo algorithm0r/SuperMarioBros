@@ -125,7 +125,10 @@ class Mario {
             this.BB = new BoundingBox(this.x, this.y, PARAMS.BLOCKWIDTH, PARAMS.BLOCKWIDTH);
         }
         else {
-            this.BB = new BoundingBox(this.x, this.y, PARAMS.BLOCKWIDTH, PARAMS.BLOCKWIDTH * 2);
+            if (this.game.down) // big mario is crouching
+                this.BB = new BoundingBox(this.x, this.y + PARAMS.BLOCKWIDTH, PARAMS.BLOCKWIDTH, PARAMS.BLOCKWIDTH);
+            else 
+                this.BB = new BoundingBox(this.x, this.y, PARAMS.BLOCKWIDTH, PARAMS.BLOCKWIDTH * 2);
         }
     };
 
@@ -281,20 +284,20 @@ class Mario {
                     if (Math.abs(this.velocity.x) < MIN_WALK) {  // slower than a walk // starting, stopping or turning around
                         this.velocity.x = 0;
                         this.state = 0;
-                        if (this.game.left) {
+                        if (this.game.left && !this.game.down) {
                             this.velocity.x -= MIN_WALK;
                         }
-                        if (this.game.right) {
+                        if (this.game.right && !this.game.down) {
                             this.velocity.x += MIN_WALK;
                         }
                     }
                     else if (Math.abs(this.velocity.x) >= MIN_WALK) {  // faster than a walk // accelerating or decelerating
                         if (this.facing === 0) {
-                            if (this.game.right && !this.game.left) {
+                            if (this.game.right && !this.game.left && !this.game.down) {
                                 if (this.game.B) {
                                     this.velocity.x += ACC_RUN * TICK;
                                 } else this.velocity.x += ACC_WALK * TICK;
-                            } else if (this.game.left && !this.game.right) {
+                            } else if (this.game.left && !this.game.right && !this.game.down) {
                                 this.velocity.x -= DEC_SKID * TICK;
                                 this.state = 3;
                             } else {
@@ -302,11 +305,11 @@ class Mario {
                             }
                         }
                         if (this.facing === 1) {
-                            if (this.game.left && !this.game.right) {
+                            if (this.game.left && !this.game.right && !this.game.down) {
                                 if (this.game.B) {
                                     this.velocity.x -= ACC_RUN * TICK;
                                 } else this.velocity.x -= ACC_WALK * TICK;
-                            } else if (this.game.right && !this.game.left) {
+                            } else if (this.game.right && !this.game.left && !this.game.down) {
                                 this.velocity.x += DEC_SKID * TICK;
                                 this.state = 3;
                             } else {
