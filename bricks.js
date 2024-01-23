@@ -75,13 +75,11 @@ class Brick { // type 0 = invis, 1 = brick, 2 = question, 3 = block
                     if (this.startTime === 0) this.startTime = Date.now();
                     if (Date.now() - this.startTime < 3000) { 
                         this.game.addEntity(new CoinPop(this.game, this.x, this.BB.top - PARAMS.BLOCKWIDTH));
-                        //playSound("./sound/sfx/coin.wav");
                         break;
                     }
                 case 'Coin':
                     this.game.addEntity(new CoinPop(this.game, this.x, this.BB.top - PARAMS.BLOCKWIDTH));
                     this.type = 3;
-                    //playSound("./sound/sfx/coin.wav");
                     break;
                 case 'Growth':
                     if (this.game.mario.size === 1) {
@@ -91,7 +89,7 @@ class Brick { // type 0 = invis, 1 = brick, 2 = question, 3 = block
                         this.game.addEntity(new Mushroom(this.game, this.x, this.BB.top, this, 'Growth'));
                     }
                     this.type = 3;
-                    //playSound("./sound/sfx/powerup_appears.wav");
+                    ASSET_MANAGER.playAsset("./audio/power-up-appears.mp3");
                     break;
                 case '1up':
                     this.game.addEntity(new Mushroom(this.game, this.x, this.BB.top, this, '1up'));
@@ -101,10 +99,7 @@ class Brick { // type 0 = invis, 1 = brick, 2 = question, 3 = block
             if (this.type === 1) {
                 if (this.game.mario.size === 0) {
                     ASSET_MANAGER.playAsset("./audio/bump.wav");
-                } else {
-                    ASSET_MANAGER.playAsset("./audio/block.mp3");
                 }
-
             }
         }
 
@@ -138,6 +133,7 @@ class Brick { // type 0 = invis, 1 = brick, 2 = question, 3 = block
         this.game.addEntity(new Shard(this.game, this.x + PARAMS.BLOCKWIDTH, this.y - PARAMS.BLOCKWIDTH * 1.5, 150));
         this.game.addEntity(new Shard(this.game, this.x + PARAMS.BLOCKWIDTH, this.y, 150));
         this.removeFromWorld = true;
+        ASSET_MANAGER.playAsset("./audio/block.mp3");
     }
 };
 
@@ -342,9 +338,12 @@ class Flag {
         // draw the pole
         ctx.drawImage(this.spritesheet, 20, 0, 8, 152, this.x - this.game.camera.x, this.y, PARAMS.BLOCKWIDTH / 2, PARAMS.BLOCKWIDTH * 9.5);
         
-        if (this.win) {
+        if (this.win) {          
             let FLAG_SPEED_SCALE = 6;
             let BLOCK_TOP = 13 * PARAMS.BLOCKWIDTH;
+            if (this.flagY === this.y + 27) {
+                ASSET_MANAGER.playAsset("./audio/flagpole.mp3");    
+            }
             // top of the block = 13 * blockwidth - blockwidth
             if (this.flagY < (BLOCK_TOP - PARAMS.BLOCKWIDTH)) {
                 this.flagY += PARAMS.BLOCKWIDTH * TICK * FLAG_SPEED_SCALE;
