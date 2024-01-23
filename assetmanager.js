@@ -79,8 +79,15 @@ class AssetManager {
 
     playAsset(path) {
         let audio = this.cache[path];
-        audio.currentTime = 0;
-        audio.play();
+        if (audio.currentTime != 0) {
+            let bak = audio.cloneNode();
+            bak.currentTime = 0;
+            bak.volume = audio.volume;
+            bak.play();
+        } else {
+            audio.currentTime = 0;
+            audio.play();
+        }
     };
 
     muteAudio(mute) {
