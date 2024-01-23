@@ -154,6 +154,7 @@ class Flower {
         this.velocity = { x: 0, y: -PARAMS.BLOCKWIDTH };
         this.emerging = true;
         this.animation = new Animator(ASSET_MANAGER.getAsset("./sprites/items.png"), 4, 64, 16, 16, 4, 0.15, 14, false, true);
+        ASSET_MANAGER.playAsset("./audio/power-up-appears.mp3");
         this.updateBB();
     };
 

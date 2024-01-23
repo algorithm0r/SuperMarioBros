@@ -30,6 +30,10 @@ ASSET_MANAGER.queueDownload("./audio/super-jump.mp3");
 ASSET_MANAGER.queueDownload("./audio/stomp.mp3");
 ASSET_MANAGER.queueDownload("./audio/block.mp3");
 ASSET_MANAGER.queueDownload("./audio/bump.wav");
+ASSET_MANAGER.queueDownload("./audio/coin.mp3");
+ASSET_MANAGER.queueDownload("./audio/power-up-appears.mp3");
+ASSET_MANAGER.queueDownload("./audio/power-up.mp3");
+ASSET_MANAGER.queueDownload("./audio/flagpole.mp3");
 
 ASSET_MANAGER.downloadAll(function () {
 	var gameEngine = new GameEngine();
