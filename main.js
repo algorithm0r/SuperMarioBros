@@ -34,6 +34,7 @@ ASSET_MANAGER.queueDownload("./audio/coin.mp3");
 ASSET_MANAGER.queueDownload("./audio/power-up-appears.mp3");
 ASSET_MANAGER.queueDownload("./audio/power-up.mp3");
 ASSET_MANAGER.queueDownload("./audio/flagpole.mp3");
+ASSET_MANAGER.queueDownload("./audio/fireball.mp3");
 
 ASSET_MANAGER.downloadAll(function () {
 	var gameEngine = new GameEngine();
