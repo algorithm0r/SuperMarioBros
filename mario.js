@@ -269,6 +269,8 @@ class Mario {
                         this.velocity.x = 240; // need to figure out how to make him jump more
                         this.velocity.y = -50;
                         this.facing = 1;
+                        ASSET_MANAGER.pauseBackgroundMusic();
+                        ASSET_MANAGER.playAsset("./audio/level-clear.mp3");
                     }
                     
                 }

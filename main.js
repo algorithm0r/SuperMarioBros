@@ -23,6 +23,7 @@ ASSET_MANAGER.queueDownload("./music/overworld.mp3");
 ASSET_MANAGER.queueDownload("./music/underworld.mp3");
 ASSET_MANAGER.queueDownload("./music/overworld-hurry.mp3");
 ASSET_MANAGER.queueDownload("./music/underworld-hurry.mp3");
+ASSET_MANAGER.queueDownload("./audio/level-clear.mp3");
 
 // sound effects
 ASSET_MANAGER.queueDownload("./audio/small-jump.mp3");
