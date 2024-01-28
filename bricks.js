@@ -339,7 +339,7 @@ class Flag {
         ctx.drawImage(this.spritesheet, 20, 0, 8, 152, this.x - this.game.camera.x, this.y, PARAMS.BLOCKWIDTH / 2, PARAMS.BLOCKWIDTH * 9.5);
         
         if (this.win) {          
-            let FLAG_SPEED_SCALE = 6;
+            let FLAG_SPEED_SCALE = 9;
             let BLOCK_TOP = 13 * PARAMS.BLOCKWIDTH;
             if (this.flagY === this.y + 27) {
                 ASSET_MANAGER.playAsset("./audio/flagpole.mp3");    
