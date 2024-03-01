@@ -366,6 +366,7 @@ class SceneManager {
     };
 
     addCoin() {
+        ASSET_MANAGER.playAsset("./audio/coin.mp3");
         if (this.coins++ === 100) {
             this.coins = 0;
             this.lives++;

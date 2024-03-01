@@ -269,6 +269,8 @@ class Mario {
                         this.velocity.x = 240; // need to figure out how to make him jump more
                         this.velocity.y = -50;
                         this.facing = 1;
+                        ASSET_MANAGER.pauseBackgroundMusic();
+                        ASSET_MANAGER.playAsset("./audio/level-clear.mp3");
                     }
                     
                 }
@@ -527,6 +529,7 @@ class Mario {
                     }
                     else if (entity instanceof Mushroom && !entity.emerging) {
                         entity.removeFromWorld = true;
+                        ASSET_MANAGER.playAsset("./audio/power-up.mp3");
                         if (entity.type === 'Growth') {
                             that.y -= PARAMS.BLOCKWIDTH;
                             that.size = 1;
@@ -537,6 +540,7 @@ class Mario {
                     }
                     else if (entity instanceof Flower && !entity.emerging) {
                         entity.removeFromWorld = true;
+                        ASSET_MANAGER.playAsset("./audio/power-up.mp3");
                         if (that.size == 1) {
                             that.size = 2;
                         } else if (that.size == 0) {
@@ -579,6 +583,7 @@ class Mario {
                 if (this.game.B) {
                     this.throwFireballTimeElapsed += TICK;
                     if (this.canThrow) {
+                        ASSET_MANAGER.playAsset("./audio/fireball.mp3");
                         if (this.facing == 0) {
                             this.game.addEntity(new Fireball(this.game, this.x + 14 * PARAMS.SCALE, this.y + 12 * PARAMS.SCALE));
                         } else {
