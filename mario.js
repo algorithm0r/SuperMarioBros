@@ -445,7 +445,7 @@ class Mario {
                             that.velocity.y = 0;
 
                             if(that.state === 4) that.state = 0; // set state to idle
-                            //that.updateBB();
+                            that.updateBB(); // Needed for multi-brick collisions
 
                             if (entity instanceof Tube && entity.destination && that.game.down) {
                                 that.game.camera.loadLevel(bonusLevelOne, 2.5 * PARAMS.BLOCKWIDTH, 0 * PARAMS.BLOCKWIDTH, false, false);
@@ -460,7 +460,6 @@ class Mario {
                             that.velocity.y = 0;
 
                             if(that.state === 4) that.state = 0; // set state to idle
-                            //that.updateBB();
                         }
                         else if ((entity instanceof Goomba || entity instanceof Koopa || entity instanceof KoopaParatroopaGreen || entity instanceof KoopaParatroopaRed || entity instanceof KoopaShell) // squish Goomba
                             && (that.lastBB.bottom) <= entity.BB.top // was above last tick
@@ -497,7 +496,7 @@ class Mario {
                                 that.y = entity.BB.top - 2 * PARAMS.BLOCKWIDTH;
                             }
                             that.velocity.y = 0;
-                            //that.updateBB();
+                            that.updateBB();
                         }
                     }
                     if ((entity instanceof Brick && entity.type) // hit a visible brick
@@ -512,7 +511,7 @@ class Mario {
                                 if (that.velocity.x < 0) that.velocity.x = 0;
                             }
                         }
-                        //that.updateBB();
+                        that.updateBB(); // Needed for multi-brick collisions
                     }
                     else if ((entity instanceof Tube || entity instanceof SideTube || entity instanceof Ground || entity instanceof Block)) {
                         if (that.lastBB.right <= entity.BB.left) { // Collided with the left
@@ -525,7 +524,7 @@ class Mario {
                             that.x = entity.BB.right;
                             if (that.velocity.x < 0) that.velocity.x = 0;
                         }
-                        //that.updateBB();
+                        that.updateBB();
                     }
                     else if (entity instanceof Mushroom && !entity.emerging) {
                         entity.removeFromWorld = true;
