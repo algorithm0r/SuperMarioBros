@@ -424,6 +424,13 @@ class Mario {
             // update position
             this.x += this.velocity.x * TICK * PARAMS.SCALE;
             this.y += this.velocity.y * TICK * PARAMS.SCALE;
+
+            // Apply left boundary constraint
+            if (this.x < this.game.camera.x) {
+                this.x = this.game.camera.x;
+                this.velocity.x = Math.max(0, this.velocity.x);
+            }
+
             this.updateLastBB();
             this.updateBB();
 
