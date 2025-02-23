@@ -122,7 +122,12 @@ class Mushroom {
                         that.y = entity.BB.top - PARAMS.BLOCKWIDTH;
                         that.velocity.y = 0;
                         that.updateBB();
-                    } else if (entity !== that && !(entity instanceof Flower)) {
+                    } else if (entity !== that && !(entity instanceof Flower || entity instanceof Goomba
+                                                    || entity instanceof KoopaParatroopaRed || entity instanceof KoopaParatroopaGreen
+                                                    || entity instanceof Koopa || entity instanceof KoopaShell
+                                                    || entity instanceof PirahnaPlant || entity instanceof HammerBro
+                                                    || entity instanceof Hammer || entity instanceof FireBar
+                                                    || entity instanceof FireBar_Fire)) {
                         that.velocity.x = -that.velocity.x;
                     }
                 };
