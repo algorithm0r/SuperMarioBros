@@ -70,6 +70,8 @@ class Brick { // type 0 = invis, 1 = brick, 2 = question, 3 = block
             this.bounce = false;
             this.velocity = - 80;
 
+            this.killEnemiesAbove();
+
             switch (this.prize) {
                 case 'Coins':
                     if (this.startTime === 0) this.startTime = Date.now();
@@ -106,6 +108,20 @@ class Brick { // type 0 = invis, 1 = brick, 2 = question, 3 = block
         if (this.y > this.BB.top) this.y = this.BB.top;
 
     };
+
+    killEnemiesAbove() {
+        const that = this;
+        this.game.entities.forEach(entity => {
+            if (entity.BB && entity.BB.bottom <= this.BB.top && entity.BB.right > this.BB.left && entity.BB.left < this.BB.right) {
+                // Check if the entity is an enemy and kill it
+                if (entity instanceof Goomba || entity instanceof Koopa || entity instanceof PirahnaPlant || entity instanceof KoopaParatroopaGreen || entity instanceof KoopaParatroopaRed) {
+                    entity.dead = true;
+                    that.game.addEntity(new Score(that.game, entity.x, entity.y, 100));
+                    ASSET_MANAGER.playAsset("./audio/stomp.mp3");
+                }
+            }
+        });
+    }
 
     drawMinimap(ctx, mmX, mmY) {
         ctx.fillStyle = this.type === 2 ? "Gold" : "Brown";

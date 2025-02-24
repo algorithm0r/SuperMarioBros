@@ -127,7 +127,7 @@ class Mario {
         else {
             if (this.game.down) // big mario is crouching
                 this.BB = new BoundingBox(this.x, this.y + PARAMS.BLOCKWIDTH, PARAMS.BLOCKWIDTH, PARAMS.BLOCKWIDTH);
-            else 
+            else
                 this.BB = new BoundingBox(this.x, this.y, PARAMS.BLOCKWIDTH, PARAMS.BLOCKWIDTH * 2);
         }
     };
@@ -324,11 +324,11 @@ class Mario {
 
                     if (this.game.A) { // jump
                         if (Math.abs(this.velocity.x) < 16) {
-                            this.velocity.y = -240;
+                            this.velocity.y = -280;
                             this.fallAcc = STOP_FALL;
                         }
                         else if (Math.abs(this.velocity.x) < 40) {
-                            this.velocity.y = -240;
+                            this.velocity.y = -280;
                             this.fallAcc = WALK_FALL;
                         }
                         else {
@@ -424,6 +424,13 @@ class Mario {
             // update position
             this.x += this.velocity.x * TICK * PARAMS.SCALE;
             this.y += this.velocity.y * TICK * PARAMS.SCALE;
+
+            // Apply left boundary constraint
+            if (this.x < this.game.camera.x) {
+                this.x = this.game.camera.x;
+                this.velocity.x = Math.max(0, this.velocity.x);
+            }
+
             this.updateLastBB();
             this.updateBB();
 
@@ -519,7 +526,7 @@ class Mario {
                             that.x = entity.BB.left - PARAMS.BLOCKWIDTH;
                             if (that.velocity.x > 0) that.velocity.x = 0;
                             if (entity instanceof SideTube && that.game.right) {
-                                that.game.camera.loadLevel(levelOne, 162.5 * PARAMS.BLOCKWIDTH, 11 * PARAMS.BLOCKWIDTH) 
+                                that.game.camera.loadLevel(levelOne, 162.5 * PARAMS.BLOCKWIDTH, 11 * PARAMS.BLOCKWIDTH)
                             }
                         } else if (that.lastBB.left >= entity.BB.right) { // Collided with the right
                             that.x = entity.BB.right;
