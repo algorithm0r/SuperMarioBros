@@ -143,9 +143,8 @@ class Mario {
     };
 
     update() {
-
         const TICK = this.game.clockTick;
-
+        
         // I used this page to approximate my constants
         // https://web.archive.org/web/20130807122227/http://i276.photobucket.com/albums/kk21/jdaster64/smb_playerphysics.png
         // I converted these values from hex and into units of pixels and seconds.
@@ -420,159 +419,23 @@ class Mario {
             if (this.velocity.x >= MAX_WALK && !this.game.B) this.velocity.x = MAX_WALK;
             if (this.velocity.x <= -MAX_WALK && !this.game.B) this.velocity.x = -MAX_WALK;
 
-
-            // update position
+            // Collision detection
+            // update X position
             this.x += this.velocity.x * TICK * PARAMS.SCALE;
+            this.updateLastBB();
+            this.updateBB();
+            // Handle horizontal collisions
+            this.handleHorizontalCollisions();
+
+            // Update Y position
             this.y += this.velocity.y * TICK * PARAMS.SCALE;
             this.updateLastBB();
             this.updateBB();
+            // Handle vertical collisions
+            this.handleVerticalCollisions();
 
             // if mario fell of the map he's dead
             if (this.y > PARAMS.BLOCKWIDTH * 16) this.die();
-
-            // collision
-            var that = this;
-            this.game.entities.forEach(function (entity) {
-                if (entity.BB && that.BB.collide(entity.BB)) {
-                    if (that.velocity.y > 0) { // falling
-                        if ((entity instanceof Ground || entity instanceof Brick || entity instanceof Block || entity instanceof Tube || entity instanceof SideTube) // landing
-                            && (that.lastBB.bottom) <= entity.BB.top) { // was above last tick
-                            if (that.size === 0 || that.size === 3) { // small
-                                that.y = entity.BB.top - PARAMS.BLOCKWIDTH;
-                            } else { // big
-                                that.y = entity.BB.top - 2 * PARAMS.BLOCKWIDTH;
-                            }
-                            that.velocity.y = 0;
-
-                            if(that.state === 4) that.state = 0; // set state to idle
-                            that.updateBB(); // Needed for multi-brick collisions
-
-                            if (entity instanceof Tube && entity.destination && that.game.down) {
-                                that.game.camera.loadLevel(bonusLevelOne, 2.5 * PARAMS.BLOCKWIDTH, 0 * PARAMS.BLOCKWIDTH, false, false);
-                            }
-                        }
-                        else if (entity instanceof Lift && that.lastBB.bottom <= entity.BB.top + PARAMS.SCALE * 3) {
-                            if (that.size === 0 || that.size === 3) { // small
-                                that.y = entity.BB.top - PARAMS.BLOCKWIDTH;
-                            } else { // big
-                                that.y = entity.BB.top - 2 * PARAMS.BLOCKWIDTH;
-                            }
-                            that.velocity.y = 0;
-
-                            if(that.state === 4) that.state = 0; // set state to idle
-                        }
-                        else if ((entity instanceof Goomba || entity instanceof Koopa || entity instanceof KoopaParatroopaGreen || entity instanceof KoopaParatroopaRed || entity instanceof KoopaShell) // squish Goomba
-                            && (that.lastBB.bottom) <= entity.BB.top // was above last tick
-                            && !entity.dead) { // can't squish an already squished Goomba
-                            entity.dead = true;
-                            that.velocity.y = -240; // bounce
-                            ASSET_MANAGER.playAsset("./audio/stomp.mp3");
-                        }
-                    }
-                    else if (that.velocity.y < 0) { // jumping
-                        if ((entity instanceof Brick) // hit ceiling
-                            && (that.lastBB.top) >= entity.BB.bottom) { // was below last tick
-
-                            if (that.BB.collide(entity.leftBB) && that.BB.collide(entity.rightBB)) { // collide with the center point of the brick
-                                entity.bounce = true;
-                                that.velocity.y = 0;
-
-                                if(entity.type == 1 && that.size != 0 && that.size != 3){ // if it's a regular brick, and mario is big
-                                    entity.explode();
-                                }
-                            }
-                            else if (that.BB.collide(entity.leftBB)) {
-                                that.x = entity.BB.left - PARAMS.BLOCKWIDTH;
-                            }
-                            else {
-                                that.x = entity.BB.right;
-                            }
-                            
-                        }
-                        else if (entity instanceof Lift && that.lastBB.bottom <= entity.BB.top + PARAMS.SCALE * 3) {
-                            if (that.size === 0 || that.size === 3) { // small
-                                that.y = entity.BB.top - PARAMS.BLOCKWIDTH;
-                            } else { // big
-                                that.y = entity.BB.top - 2 * PARAMS.BLOCKWIDTH;
-                            }
-                            that.velocity.y = 0;
-                            that.updateBB();
-                        }
-                    }
-                    if ((entity instanceof Brick && entity.type) // hit a visible brick
-                        && that.BB.collide(entity.BB)) {
-                        let overlap = that.BB.overlap(entity.BB);
-                        if (overlap.y > 2) { // hit the side
-                            if (that.BB.collide(entity.leftBB) && that.lastBB.right <= entity.BB.left) {
-                                that.x = entity.BB.left - PARAMS.BLOCKWIDTH;
-                                if (that.velocity.x > 0) that.velocity.x = 0;
-                            } else if (that.BB.collide(entity.rightBB) && that.lastBB.left >= entity.BB.right) {
-                                that.x = entity.BB.right;
-                                if (that.velocity.x < 0) that.velocity.x = 0;
-                            }
-                        }
-                        that.updateBB(); // Needed for multi-brick collisions
-                    }
-                    else if ((entity instanceof Tube || entity instanceof SideTube || entity instanceof Ground || entity instanceof Block)) {
-                        if (that.lastBB.right <= entity.BB.left) { // Collided with the left
-                            that.x = entity.BB.left - PARAMS.BLOCKWIDTH;
-                            if (that.velocity.x > 0) that.velocity.x = 0;
-                            if (entity instanceof SideTube && that.game.right) {
-                                that.game.camera.loadLevel(levelOne, 162.5 * PARAMS.BLOCKWIDTH, 11 * PARAMS.BLOCKWIDTH) 
-                            }
-                        } else if (that.lastBB.left >= entity.BB.right) { // Collided with the right
-                            that.x = entity.BB.right;
-                            if (that.velocity.x < 0) that.velocity.x = 0;
-                        }
-                        that.updateBB();
-                    }
-                    else if (entity instanceof Mushroom && !entity.emerging) {
-                        entity.removeFromWorld = true;
-                        ASSET_MANAGER.playAsset("./audio/power-up.mp3");
-                        if (entity.type === 'Growth') {
-                            that.y -= PARAMS.BLOCKWIDTH;
-                            that.size = 1;
-                            that.game.addEntity(new Score(that.game, that.x, that.y, 1000));
-                        } else {
-                            that.game.camera.lives++;
-                        }
-                    }
-                    else if (entity instanceof Flower && !entity.emerging) {
-                        entity.removeFromWorld = true;
-                        ASSET_MANAGER.playAsset("./audio/power-up.mp3");
-                        if (that.size == 1) {
-                            that.size = 2;
-                        } else if (that.size == 0) {
-                            that.size = 1;
-                        }
-                    }
-                    else if (entity instanceof Coin) {
-                        entity.removeFromWorld = true;
-                        that.game.camera.score += 200;
-                        that.game.camera.addCoin();
-                    }
-                    else if (entity instanceof FireBar_Fire) {
-                        that.die();
-                    }
-                    else if (entity instanceof Flag) {
-                        that.x = entity.BB.left - PARAMS.BLOCKWIDTH;
-                        that.velocity.x = 0;
-                        entity.win = true;
-                        that.state = 6;
-                        that.win = true;
-                        if (!that.flagTouchedY) {
-                            that.flagTouchedY = that.y;
-                        }
-                    }
-                }
-
-                // counting the number of fireballs currently in play
-                if (entity instanceof Fireball) {
-                    that.fireballsThrown++;
-                }
-
-                that.updateBB();
-            });
 
             // mario throws fireballs
             if (this.size == 2) {
@@ -602,18 +465,169 @@ class Mario {
                 else if (Math.abs(this.velocity.x) > MAX_WALK) this.state = 2;
                 else if (Math.abs(this.velocity.x) >= MIN_WALK) this.state = 1;
                 else this.state = 0;
-            } else {
-
             }
-
-            
 
             // update direction
             if (this.velocity.x < 0) this.facing = 1;
             if (this.velocity.x > 0) this.facing = 0;
-
         }
     };
+    
+    handleHorizontalCollisions() {
+        const that = this;
+        this.game.entities.forEach(function (entity) {
+            if (entity.BB && that.BB.collide(entity.BB)) {
+                if ((entity instanceof Brick && entity.type) // hit a visible brick
+                    && that.BB.collide(entity.BB)) {
+                    let overlap = that.BB.overlap(entity.BB);
+                    if (that.BB.collide(entity.leftBB) && that.lastBB.right <= entity.BB.left) {
+                        that.x = entity.BB.left - PARAMS.BLOCKWIDTH;
+                        if (that.velocity.x > 0) that.velocity.x = 0;
+                    } else if (that.BB.collide(entity.rightBB) && that.lastBB.left >= entity.BB.right) {
+                        that.x = entity.BB.right;
+                        if (that.velocity.x < 0) that.velocity.x = 0;
+                    }
+                    that.updateBB();
+                }
+                else if ((entity instanceof Tube || entity instanceof SideTube || entity instanceof Ground || entity instanceof Block)) {
+                    if (that.lastBB.right <= entity.BB.left) { // Collided with the left
+                        that.x = entity.BB.left - PARAMS.BLOCKWIDTH;
+                        if (that.velocity.x > 0) that.velocity.x = 0;
+                        if (entity instanceof SideTube && that.game.right) {
+                            that.game.camera.loadLevel(levelOne, 162.5 * PARAMS.BLOCKWIDTH, 11 * PARAMS.BLOCKWIDTH) 
+                        }
+                    } else if (that.lastBB.left >= entity.BB.right) { // Collided with the right
+                        that.x = entity.BB.right;
+                        if (that.velocity.x < 0) that.velocity.x = 0;
+                    }
+                    that.updateBB();
+                }
+                else if (entity instanceof Mushroom && !entity.emerging) {
+                    entity.removeFromWorld = true;
+                    ASSET_MANAGER.playAsset("./audio/power-up.mp3");
+                    if (entity.type === 'Growth') {
+                        that.y -= PARAMS.BLOCKWIDTH;
+                        that.size = 1;
+                        that.game.addEntity(new Score(that.game, that.x, that.y, 1000));
+                    } else {
+                        that.game.camera.lives++;
+                    }
+                }
+                else if (entity instanceof Flower && !entity.emerging) {
+                    entity.removeFromWorld = true;
+                    ASSET_MANAGER.playAsset("./audio/power-up.mp3");
+                    if (that.size == 1) {
+                        that.size = 2;
+                    } else if (that.size == 0) {
+                        that.size = 1;
+                    }
+                }
+                else if (entity instanceof Coin) {
+                    entity.removeFromWorld = true;
+                    that.game.camera.score += 200;
+                    that.game.camera.addCoin();
+                }
+                else if (entity instanceof FireBar_Fire) {
+                    that.die();
+                }
+                else if (entity instanceof Flag) {
+                    that.x = entity.BB.left - PARAMS.BLOCKWIDTH;
+                    that.velocity.x = 0;
+                    entity.win = true;
+                    that.state = 6;
+                    that.win = true;
+                    if (!that.flagTouchedY) {
+                        that.flagTouchedY = that.y;
+                    }
+                }
+            }
+
+            // counting the number of fireballs currently in play
+            if (entity instanceof Fireball) {
+                that.fireballsThrown++;
+            }
+
+            that.updateBB();
+        });
+    }
+
+    handleVerticalCollisions() {
+        const that = this;
+        this.game.entities.forEach(function (entity) {
+            if (entity.BB && that.BB.collide(entity.BB)) {
+                if (that.velocity.y > 0) { // falling
+                    if ((entity instanceof Ground || entity instanceof Brick || entity instanceof Block || entity instanceof Tube || entity instanceof SideTube) // landing
+                        && (that.lastBB.bottom) <= entity.BB.top + 5) { // was above last tick (added tolerance of 5 pixels)
+                        if (that.size === 0 || that.size === 3) { // small
+                            that.y = entity.BB.top - PARAMS.BLOCKWIDTH;
+                        } else { // big
+                            that.y = entity.BB.top - 2 * PARAMS.BLOCKWIDTH;
+                        }
+                        that.velocity.y = 0;
+
+                        if(that.state === 4) that.state = 0; // set state to idle
+                        that.updateBB();
+
+                        if (entity instanceof Tube && entity.destination && that.game.down) {
+                            that.game.camera.loadLevel(bonusLevelOne, 2.5 * PARAMS.BLOCKWIDTH, 0 * PARAMS.BLOCKWIDTH, false, false);
+                        }
+                    }
+                    else if (entity instanceof Lift && that.lastBB.bottom <= entity.BB.top + PARAMS.SCALE * 3) {
+                        if (that.size === 0 || that.size === 3) { // small
+                            that.y = entity.BB.top - PARAMS.BLOCKWIDTH;
+                        } else { // big
+                            that.y = entity.BB.top - 2 * PARAMS.BLOCKWIDTH;
+                        }
+                        that.velocity.y = 0;
+
+                        if(that.state === 4) that.state = 0; // set state to idle
+                    }
+                    else if ((entity instanceof Goomba || entity instanceof Koopa || entity instanceof KoopaParatroopaGreen || entity instanceof KoopaParatroopaRed || entity instanceof KoopaShell) // squish Goomba
+                        && (that.lastBB.bottom) <= entity.BB.top // was above last tick
+                        && !entity.dead) { // can't squish an already squished Goomba
+                        entity.dead = true;
+                        that.velocity.y = -240; // bounce
+                        ASSET_MANAGER.playAsset("./audio/stomp.mp3");
+                    }
+                }
+                else if (that.velocity.y < 0) { // jumping
+                    if ((entity instanceof Brick) // hit ceiling
+                        && (that.lastBB.top) >= entity.BB.bottom - 5) { // was below last tick (added tolerance)
+
+                        // Check for center collision with brick
+                        if (that.BB.collide(entity.leftBB) && that.BB.collide(entity.rightBB)) {
+                            entity.bounce = true;
+                            that.velocity.y = 0;
+
+                            if(entity.type == 1 && that.size != 0 && that.size != 3){ // if it's a regular brick, and mario is big
+                                entity.explode();
+                            }
+                        }
+                        // Check for side collisions
+                        else if (that.BB.collide(entity.leftBB)) {
+                            that.x = entity.BB.left - PARAMS.BLOCKWIDTH;
+                            if (that.velocity.x > 0) that.velocity.x = 0;
+                        }
+                        else if (that.BB.collide(entity.rightBB)) {
+                            that.x = entity.BB.right;
+                            if (that.velocity.x < 0) that.velocity.x = 0;
+                        }
+                        
+                    }
+                    else if (entity instanceof Lift && that.lastBB.bottom <= entity.BB.top + PARAMS.SCALE * 3) {
+                        if (that.size === 0 || that.size === 3) { // small
+                            that.y = entity.BB.top - PARAMS.BLOCKWIDTH;
+                        } else { // big
+                            that.y = entity.BB.top - 2 * PARAMS.BLOCKWIDTH;
+                        }
+                        that.velocity.y = 0;
+                        that.updateBB();
+                    }
+                }
+            }
+            that.updateBB();
+        });
+    }
 
     drawMinimap(ctx, mmX, mmY) {
         ctx.fillStyle = "Red";
